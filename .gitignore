@@ -1,4 +1,12 @@
-/.idea
+__pycache__/
+*.py[cod]
 *.pyc
-/.env
+*.pyo
+*.pyd
+*.swp
+venv/
+ENV/
+env/
+.venv/
+.vscode/
 /databaze.db
