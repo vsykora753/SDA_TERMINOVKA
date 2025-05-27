@@ -61,7 +61,7 @@ Termínovka je webová aplikace, která slouží k evidenci a správě závodů 
 
 ## Databáze
 
-#### 1. Uživatelé
+#### 1. Uživatelé (users)
     -[] fields:
     -[] id,         IntegerField,primary_key=True,auto_created=True
     -[] email,      CharField,unique=True,max_length=60,not null,blank=False
@@ -75,9 +75,10 @@ Termínovka je webová aplikace, která slouží k evidenci a správě závodů 
                     ('R', 'Runner'), ('O', 'Organizer'), ('A', 'Admin')],max_length=1,not null,blank=False
 
     
-#### 2. Události   
+#### 2. Události (events)  
     -[] fields:
-    -[] idevent,        IntegerField,primary_key=True,auto_created=True
+    -[] id,             IntegerField,primary_key=True,auto_created=True
+    -[] date,           DateField,not null,blank=False
     -[] name_event,     CharField,max_length=30,not null,blank=False 
     -[] description,    TextField,not null,blank=False 
     -[] start_time,     DateTimeField,not null,blank=False
@@ -91,20 +92,33 @@ Termínovka je webová aplikace, která slouží k evidenci a správě závodů 
     -[] start_fee,      IntegerField,null,blank=False
     -[] organizer,      ForeignKey,Organizer,on_delete=models.CASCADE,not null,blank=False
   
-
-
-#### 3. Výsledky
-    -[] id
-    -[] závodník
-    -[] událost
-    -[] čas
+#### 3. Registrace (registrations)
+    -[] fields:
+    -[] id,            IntegerField,primary_key=True,auto_created=True
+    -[] id_user,       ForeignKey,User,on_delete=models.CASCADE,not null,blank=False
+    -[] id_event,      ForeignKey,Event,on_delete=models.CASCADE,not null,blank=False   
+    -[] registration_date, DateTimeField,auto_now_add=True,not null,blank=False 
+    -[] category,      CharField,choices=[('M40', 'Muži 40 +'), ('M50', 'Muži 50 +'), ('M60', 'Muži 60 +'), ('W40', 'Ženy 40 +'), ('W50', 'Ženy 50 +'), ('W60', 'Ženy 60 +'), ('Junior', 'Dorostenci'), ('Veteran', 'Veteráni')],max_length=7,not null,blank=False
     
-#### 4. Organizátoři
-    -[] id
-    -[] jméno
-    -[] příjmení
-    -[] email
-    -[] heslo
-    -[] role (závodník, organizátor, admin);
+
+
+#### 4. Výsledky (results)
+    -[] fields:
+    -[] id,            IntegerField,primary_key=True,auto_created=True
+    -[] id_user,       ForeignKey,User,on_delete=models.CASCADE,not null,blank=False
+    -[] id_event,      ForeignKey,Event,on_delete=models.CASCADE,not null,blank=False      
+    -[] result_time,   TimeField,not null,blank=False
+
+
+#### 5. Platby (payments)
+    -[] fields:
+    -[] id,            IntegerField,primary_key=True,auto_created=True
+    -[] id_user,       ForeignKey,User,on_delete=models.CASCADE,not null,blank=False
+    -[] id_event,      ForeignKey,Event,on_delete=models.CASCADE,not null,blank=False
+    -[] payment_amount,DecimalField,max_digits=10,decimal_places=2,not null,blank=False
+    -[] payment_status, CharField,choices=[('Paid', 'Zaplaceno'), ('Unpaid', 'Nezaplaceno')],max_length=15,not null,blank=False
+    -[] payment_date,  DateField,not null,blank=False
+    -[] QR_code,       CharField,max_length=255,not null,blank=False
+
 
 
