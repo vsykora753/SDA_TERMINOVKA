@@ -9,4 +9,3 @@ ENV/
 env/
 .venv/
 .vscode/
-/databaze.db

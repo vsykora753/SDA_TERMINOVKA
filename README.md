@@ -63,62 +63,69 @@ Termínovka je webová aplikace, která slouží k evidenci a správě závodů 
 
 #### 1. Uživatelé (users)
     -[] fields:
-    -[] id,         IntegerField,primary_key=True,auto_created=True
-    -[] email,      CharField,unique=True,max_length=60,not null,blank=False
-    -[] first_name, CharField,max_length=30,not null,blank=False
-    -[] last_name,  CharField,max_length=30,not null,blank=False
-    -[] birth_date, DateField,not null,blank=False
-    -[] sex,        CharField,choices=[
-                    ('M', 'Male'), ('F', 'Female')],max_length=1,not null,blank=False
-    -[] password,   CharField,max_length=128,not null,blank=False
-    -[] role,       CharField,choices=[
-                    ('R', 'Runner'), ('O', 'Organizer'), ('A', 'Admin')],max_length=1,not null,blank=False
+
+    -[x] id,                 IntegerField,primary_key=True,auto_created=True
+    -[x] last_login          datetime
+    -[x] is_superuser        bool    
+    -[x] email               varchar(254)
+    -[x] password            varchar(128)
+    -[x] role                varchar(1)
+    -[x] first_name          varchar(30)
+    -[x] last_name           varchar(60)
+    -[x] birth_date          date
+    -[x] sex                 varchar(1)
+    -[x] organization_name   varchar(100)
+    -[x] website             varchar(200)
+    -[x] is_active           bool
+    -[x] is_staff            bool
 
     
 #### 2. Události (events)  
-    -[] fields:
-    -[] id,             IntegerField,primary_key=True,auto_created=True
-    -[] date,           DateField,not null,blank=False
-    -[] name_event,     CharField,max_length=30,not null,blank=False 
-    -[] description,    TextField,not null,blank=False 
-    -[] start_time,     DateTimeField,not null,blank=False
-    -[] distance,       IntegerField,not null,blank=False
-    -[] country,        CharField,max_length=50,not null,blank=False
-    -[] city,           CharField,max_length=50,not null,blank=False      
-    -[] region,         CharField,max_length=100,not null,blank=False
-    -[] typ_race,       CharField,choices=[
-                        ('Silnice', 'Silnice'), ('Trail', 'Trail'), , ('Mix', 'Smíšený')],max_length=7,not null,blank=False
-    -[] propozition,    charfield, max_length=100,null,blank=False
-    -[] start_fee,      IntegerField,null,blank=False
-    -[] organizer,      ForeignKey,Organizer,on_delete=models.CASCADE,not null,blank=False
+    -[x] fields:
+    -[x] id,             IntegerField,primary_key=True,auto_created=True
+    -[x] date_event,     date
+    -[x] name_event,     varchar(30) 
+    -[x] description,    text not null 
+    -[x] start_time,     datetime
+    -[x] distance,       integer
+    -[x] country,        varchar(50)
+    -[x] city,           varchar(50)     
+    -[x] region,         varchar(100)
+    -[x] typ_race,       varchar(7)
+    -[x] propozition,    varchar(100)
+    -[x] start_fee,      integer
+    -[x] organizer,      integer (references to user_user.id table)
   
 #### 3. Registrace (registrations)
-    -[] fields:
-    -[] id,            IntegerField,primary_key=True,auto_created=True
-    -[] id_user,       ForeignKey,User,on_delete=models.CASCADE,not null,blank=False
-    -[] id_event,      ForeignKey,Event,on_delete=models.CASCADE,not null,blank=False   
-    -[] registration_date, DateTimeField,auto_now_add=True,not null,blank=False 
-    -[] category,      CharField,choices=[('M40', 'Muži 40 +'), ('M50', 'Muži 50 +'), ('M60', 'Muži 60 +'), ('W40', 'Ženy 40 +'), ('W50', 'Ženy 50 +'), ('W60', 'Ženy 60 +'), ('Junior', 'Dorostenci'), ('Veteran', 'Veteráni')],max_length=7,not null,blank=False
+    -[x] fields:
+    -[x] id,                 integer
+    -[x] id_user,            integer (references to user_user.id table)
+    -[x] id_event,           integer (references to events_event.id table)  
+    -[x] registration_date,  datetime     
+    -[x] category,           varchar(7)
     
 
 
 #### 4. Výsledky (results)
-    -[] fields:
-    -[] id,            IntegerField,primary_key=True,auto_created=True
-    -[] id_user,       ForeignKey,User,on_delete=models.CASCADE,not null,blank=False
-    -[] id_event,      ForeignKey,Event,on_delete=models.CASCADE,not null,blank=False      
-    -[] result_time,   TimeField,not null,blank=False
+    -[x] fields:
+    -[x] id,            integer
+    -[x] id_user,       integer (references to user_user.id table)
+    -[x] id_event,      integer (references to events_event.id table)
+    -[x] result_time,   time
+
+
 
 
 #### 5. Platby (payments)
-    -[] fields:
-    -[] id,            IntegerField,primary_key=True,auto_created=True
-    -[] id_user,       ForeignKey,User,on_delete=models.CASCADE,not null,blank=False
-    -[] id_event,      ForeignKey,Event,on_delete=models.CASCADE,not null,blank=False
-    -[] payment_amount,DecimalField,max_digits=10,decimal_places=2,not null,blank=False
-    -[] payment_status, CharField,choices=[('Paid', 'Zaplaceno'), ('Unpaid', 'Nezaplaceno')],max_length=15,not null,blank=False
-    -[] payment_date,  DateField,not null,blank=False
-    -[] QR_code,       CharField,max_length=255,not null,blank=False
+    -[x] fields:
+    -[x] id,                 integer
+    -[x] id_user,            integer (references to user_user.id table)
+    -[x] id_event,           integer (references to events_event.id table)
+    -[x] id_registration,    integer (references to registrations_registration.id table)   
+    -[x] payment_amount,     decimal
+    -[x] payment_status,     varchar(15)
+    -[x] payment_date,       date
+    -[x] QR_code,            varchar(255)
 
 
 
