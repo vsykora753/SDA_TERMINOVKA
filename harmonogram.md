@@ -27,6 +27,7 @@ Postup prací:
 
 5. Vytvoření šablon
 
+    -[] vytvoření šablony base.html,head.html
 
     -[] vytvoření šablony pro registraci
     -[] vytvoření šablony pro přihlášení
