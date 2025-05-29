@@ -17,7 +17,22 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
+from events.views import EventListView,TerminovkaView,EventDetailView
+from users.views import RegisterView,  LoginView as UserLoginView
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+
+    # Události
+    path('', EventListView.as_view(), name='events_list'),
+    path('terminovka/', TerminovkaView.as_view(), name='events_search'),
+    path('<int:pk>/', EventDetailView.as_view(), name='event_details'),
+
+
+    # Uživatelské účty
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', UserLoginView.as_view(), name='login'),
+    
+    
 ]

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main>
+  <h2>Přihlášení jako uživatel</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+      <div class="form-errors">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Přihlásit se</button>
+  </form>
+</main>
+{% endblock %}
