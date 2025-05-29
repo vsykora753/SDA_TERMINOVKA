@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+{% include "includes/head.html" %}
+<body>
+
+<main>
+
+<div class="container">
+    <div class="top-right">
+        {% if user.is_authenticated %}
+            <div class="dropdown">
+                <button class="dropbtn" type="button">
+                    <div class="user-info">Přihlášen uživatel: {{ user.first_name }} {{ user.last_name }}</div>
+                    <span class="arrow">▼</span>
+                </button>
+                <div class="link_submenu" style="display: none;">
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-button">Odhlásit se</button>
+                    </form>
+                    <a href="#">další položka1</a>
+                    <a href="#">další položka2</a>
+                </div>
+            </div>
+    
+    {% elif logged_organizer %}
+        <div class="dropdown">
+            <button class="dropbtn" type="button">
+                <div class="user-info">Přihlášen organizátor: {{ logged_organizer.company_name }}</div>
+                <span class="arrow">▼</span>
+            </button>
+            <div class="link_submenu" style="display: none;">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="logout-button">Odhlásit se</button>
+                </form>
+            </div>
+        </div>
+
+    {% else %}
+        <a href="">Registrace</a>
+        <a href="">Přihlášení</a>
+        
+    {% endif %}
+    </div>
+    <h1 class="h1">Termínovka běžeckých závodů</h1>
+    {% include "includes/nav_bar.html" %} 
+
+    {% block content %}
+    {% endblock %}
+</div>
+</div>
+</main>
+</body>
+</html>

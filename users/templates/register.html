@@ -1,0 +1,71 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="cs">
+{% include "head.html" %}
+
+<body>
+<main>
+    <div class="container">
+        <div class="top-right">
+            <a href="{% url 'register' %}" id="register-link">Registrace</a>
+            <a href="{% url 'login' %}">Přihlášení</a>
+        </div>
+
+        <h1 class="h1">Registrace uživatele</h1>
+
+        {% include "nav_bar.html" %}
+
+        <div class="back-link-bar">
+            <a href="{% url 'events_list' %}" class="back-link">↵ Zpět na úvodní stránku</a>
+        </div>
+
+        <div class="form_user_register">
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                {{ form.username.errors }}
+                {{ form.username }}
+
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                {{ form.email.errors }}
+                {{ form.email }}
+
+                <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                {{ form.first_name.errors }}
+                {{ form.first_name }}
+
+                <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                {{ form.last_name.errors }}
+                {{ form.last_name }}
+
+                <label for="{{ form.birth_date.id_for_label }}">{{ form.birth_date.label }}</label>
+                {{ form.birth_date.errors }}
+                {{ form.birth_date }}
+
+                <label for="{{ form.sex.id_for_label }}">{{ form.sex.label }}</label>
+                {{ form.sex.errors }}
+                {{ form.sex }}
+
+                <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+                {{ form.password1.errors }}
+                {{ form.password1 }}
+
+                <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+                {{ form.password2.errors }}
+                {{ form.password2 }}
+
+                <button type="submit">Registrovat</button>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

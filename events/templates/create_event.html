@@ -1,0 +1,15 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vytvořit událost</title>
+</head>
+<body>
+    <h1>Vytvořit událost</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Vytvořit</button>
+    </form>
+</body>
+</html>
