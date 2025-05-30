@@ -33,10 +33,6 @@
     -[X] vytvoření šablony MAIN base, head, nav_bar.
     -[X] vytvoření šablony app. EVENT event_details,events_list,terminovka
 
-    -[] vytvoření šablony pro zobrazení registrace
-    -[] vytvoření šablony pro zobrazení platby
-    -[] vytvoření šablony pro zobrazení výsledku
-
 
     -[] vytvoření šablony pro registraci
     -[] vytvoření šablony pro přihlášení
@@ -45,6 +41,11 @@
     -[] vytvoření šablony pro úpravu registrace
     -[] vytvoření šablony pro úpravu platby
     -[] vytvoření šablony pro úpravu výsledku
+
+    -[] vytvoření šablony pro zobrazení registrace
+    -[] vytvoření šablony pro zobrazení platby
+    -[] vytvoření šablony pro zobrazení výsledku
+
 
 ### 5. Vytvoření formulářů
 
