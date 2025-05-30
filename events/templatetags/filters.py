@@ -15,3 +15,10 @@ def m_2_km(value):
         return value / 1000
     except (ValueError, TypeError):
         return value
+
+@register.filter   # zobrazit formát času
+def format_HHMM(value):   
+    if value is not None:
+        return value.strftime('%H:%M')
+    return 'No time provided'
+
