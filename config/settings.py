@@ -32,7 +32,14 @@ SECRET_KEY = os.getenv('SECRET_KEY', default='django-insecure-m*%8ou9_)sh(u%!z9v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '8000-vsykora753-sda-terminovk-6k4ljivb0o.app.codeanywhere.com',
+    # může se přidat i jiné
+]
+
 
 
 # Application definition
@@ -120,7 +127,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = 'cs'
+TIME_ZONE = 'Europe/Prague'
+
 
 TIME_ZONE = "UTC"
 
