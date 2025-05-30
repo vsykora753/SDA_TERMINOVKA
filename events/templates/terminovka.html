@@ -31,7 +31,7 @@
             <div class="date_event">{{ event.date_event|date:"l, j. F Y" }},  {{ event.city }}</div><br>
             <div class="name_event">{{ event.name_event }}</div>
             <div class="description">{{ event.description|truncate_without_ellipsis:100 }}</div>
-            <div class="date_event basic_info">► Start:  {{event.start_time}} ↔ délka tratě:   {{event.distance}} km ► Kraj:  {{event.region}} ► Startovné: {{event.start_fee|floatformat:0}} ,-</div>              
+            <div class="date_event basic_info">► Start:  {{event.start_time}} ↔ délka tratě:   {{event.distance|m_2_km}} km ► Kraj:  {{event.region}} ► Startovné: {{event.start_fee|floatformat:0}} ,-</div>              
         </div>
         </a>
 
