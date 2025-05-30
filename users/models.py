@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from datetime import date
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -36,7 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     birth_date = models.DateField(null=False, blank=False)
     sex = models.CharField(max_length=1, choices=[('M', 'Muž'), ('F', 'Žena')], null=False, blank=False)
 
-    # pole specifické pro organizátory (povětšinou právniké osoby, sdružení)
+    # pole specifické pro organizátory (povětšinou právniké osoby, sdružení)    
     organization_name = models.CharField(max_length=100, null=False, blank=False)
     website = models.URLField(null=False, blank=False)
 
@@ -54,4 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         verbose_name = "uživatel"
-        verbose_name_plural = "uživatelé"
+        verbose_name_plural = "uživatelé"        
+        constraints = [
+            models.UniqueConstraint(fields=['email', 'role'], name='unique_email_role')
+        ]
