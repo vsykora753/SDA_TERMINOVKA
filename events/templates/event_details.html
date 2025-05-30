@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load filters %}
 {% block content %}
 
 <div class="back-link-bar">
@@ -9,7 +9,7 @@
 <div class="writing-container_detail">
     <div class="name_event_detail">{{ event.name_event }}</div><br>
     <div class="date_event_detail">{{ event.date_event|date:"l, j. F Y" }}
-    <div class="date_event basic_info_detail">Start:  {{event.start_time}} </div>
+    <div class="date_event basic_info_detail">Start:  {{event.start_time|format_HHMM}} </div>
     <div class="date_event basic_info_detail">Délka tratě:   {{event.distance|m_2_km}} km</div>
     <div class="date_event basic_info_detail">Typ závodu:   {{event.typ_race}}
     <div class="date_event basic_info_detail">Kraj:  {{event.region}}</div>
