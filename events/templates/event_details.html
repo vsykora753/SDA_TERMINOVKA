@@ -10,7 +10,7 @@
     <div class="name_event_detail">{{ event.name_event }}</div><br>
     <div class="date_event_detail">{{ event.date_event|date:"l, j. F Y" }}
     <div class="date_event basic_info_detail">Start:  {{event.start_time}} </div>
-    <div class="date_event basic_info_detail">Délka tratě:   {{event.distance}} km</div>
+    <div class="date_event basic_info_detail">Délka tratě:   {{event.distance|m_2_km}} km</div>
     <div class="date_event basic_info_detail">Typ závodu:   {{event.typ_race}}
     <div class="date_event basic_info_detail">Kraj:  {{event.region}}</div>
     <div class="date_event basic_info_detail">Startovné: {{event.start_fee|floatformat:0}} ,-</div> 
