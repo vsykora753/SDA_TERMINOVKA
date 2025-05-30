@@ -13,7 +13,13 @@ class RegisterForm(UserCreationForm):
         label='Datum narození',
         widget=forms.DateInput(attrs={'type': 'date'})
     )
-
+    organization_name=forms.CharField(
+        label='Název organizace',
+        required=False
+        )
+    website=forms.URLField(
+        label='Webová stránka',
+        required=False)
     class Meta:
         model = User
         fields = [
@@ -21,7 +27,9 @@ class RegisterForm(UserCreationForm):
             'first_name',
             'last_name',
             'birth_date',
-            'sex',
+            'sex',            
+            'organization_name',
+            'website'
             'password1',
             'password2',
         ]
@@ -31,6 +39,8 @@ class RegisterForm(UserCreationForm):
             'last_name': 'Příjmení',
             'birth_date': 'Datum narození',
             'sex': 'Pohlaví',
+            'organization_name':'Název organizace',
+            'website':'Webová stránka',
             'password1': 'Heslo',
             'password2': 'Potvrzení hesla',
         }
