@@ -17,7 +17,7 @@ VALUES
   '2025-10-23',
   'Běh pro zdraví Plzeň',
   'Noční závod s čelovkami v krásném prostředí.',
-  '2025-10-23 14:30:00',
+  '14:30:00',
   21097,
   'Česká republika',
   'Plzeň',
