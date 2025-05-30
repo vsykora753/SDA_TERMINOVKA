@@ -1,5 +1,6 @@
-Postup prací:
-1. Vytvoření databáze
+## Harmonogram Postup prací:
+
+### 1. Vytvoření databáze
 
     -[x] vytvoření tabulky users                ---> ok
     -[x] vytvoření tabulky events               ---> ok
@@ -7,7 +8,7 @@ Postup prací:
     -[x] vytvoření tabulky payments             ---> ok
     -[x] vytvoření tabulky results
 
-2. Vytvoření modelů
+### 2. Vytvoření modelů
 
     -[x] vytvoření modelu users                 ---> ok
     -[x] vytvoření modelu events                ---> ok        
@@ -15,19 +16,27 @@ Postup prací:
     -[x] vytvoření modelu payments              ---> ok
     -[x] vytvoření modelu results               ---> ok
 
-3. vytvoření struktury adresářů - ok            
+### 3. vytvoření struktury adresářů - ok            
 
 
-4. vytvoření sql scriptu pro naplnění databáze
+### 4. vytvoření sql scriptu pro naplnění databáze
 
     -[x] events_import_examples.sql
     -[x] users_import_examples.sql
     -[x] create develop branche
 
 
-5. Vytvoření šablon
 
-    -[] vytvoření šablony base.html,head.html
+
+ ### 5. Vytvoření šablon pro zobrazení dat
+
+    -[X] vytvoření šablony MAIN base, head, nav_bar.
+    -[X] vytvoření šablony app. EVENT event_details,events_list,terminovka
+
+    -[] vytvoření šablony pro zobrazení registrace
+    -[] vytvoření šablony pro zobrazení platby
+    -[] vytvoření šablony pro zobrazení výsledku
+
 
     -[] vytvoření šablony pro registraci
     -[] vytvoření šablony pro přihlášení
@@ -37,7 +46,7 @@ Postup prací:
     -[] vytvoření šablony pro úpravu platby
     -[] vytvoření šablony pro úpravu výsledku
 
-4. Vytvoření formulářů
+### 5. Vytvoření formulářů
 
     -[] vytvoření formuláře pro registraci
          -[] vytvoření testu pro registraci
@@ -50,7 +59,7 @@ Postup prací:
     -[] vytvoření formuláře pro úpravu platby
     -[] vytvoření formuláře pro úpravu výsledku
 
-5. Vytvoření pohledů
+### 6. Vytvoření pohledů
 
     -[] vytvoření pohledu pro registraci
     -[] vytvoření pohledu pro přihlášení
@@ -62,7 +71,7 @@ Postup prací:
 
 
 
-6. Vytvoření testů
+### 7. Vytvoření testů
 
    
     -[] vytvoření testu pro přihlášení
@@ -72,6 +81,6 @@ Postup prací:
     -[] vytvoření testu pro úpravu platby
     -[] vytvoření testu pro úpravu výsledku
     
-7. Vytvoření dokumentace
+
 
 
