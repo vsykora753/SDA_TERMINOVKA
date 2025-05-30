@@ -6,7 +6,7 @@ class Event(models.Model):
     date_event = models.DateField(verbose_name='Datum události')
     name_event = models.CharField(max_length=30, verbose_name='Název události')
     description = models.TextField(verbose_name='Popis události')
-    start_time = models.DateTimeField(verbose_name='Čas startu')
+    start_time = models.TimeField(verbose_name='Čas startu')
     distance = models.IntegerField(verbose_name='Vzdálenost')
     country = models.CharField(max_length=50, verbose_name='Země')
     city = models.CharField(max_length=50, verbose_name='Město')
