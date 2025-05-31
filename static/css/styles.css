@@ -1,0 +1,112 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Pro malé obrazovky (mobil) */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+
+/* Pro střední obrazovky (tablety) */
+@media (max-width: 900px) {
+    .container {
+        width: 80%;
+    }
+}
+
+/* Pro velké obrazovky */
+@media (max-width: 1200px) {
+    .container {
+        width: 70%;
+    }
+}
+body {
+    background-color: #fffcf2; 
+    margin: 0;
+    padding: 0;
+}
+
+.h1 {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: x-large;
+    color: #4682b4;
+    margin-left: 20px;
+}
+
+p {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: x-large;
+    color: rgb(87, 80, 80);
+}
+
+.container {
+    position: relative; /* Nastavení referenčního bodu pro absolutní pozicování */
+    max-width: 70%; /* Dynamická šířka */
+    width: 100%; /* Šířka bude automaticky přizpůsobena */
+    height: auto; /* Zabrání fixní výšce *
+    display: flex;
+    flex-direction: column; /* Uspořádání řádků pod sebe */
+    justify-content: flex-start; /* Zarovnání nahoře */
+    align-items: center; /* Zarovnání na střed */
+    border: #4682b4 10px double;
+    background-clip: content-box;
+    background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('/static/img/background.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 20px; /* Zakulacení rohů */
+    padding: 5px;
+    margin: 2% auto; /* Zarovnání na střed horizontálně */
+}
+
+.top-right {
+    position: absolute; /* Umístění relativně k containeru */
+    top: 10px; /* Vzdálenost od horního okraje containeru */
+    right: 10px; /* Zarovnání na pravý okraj containeru */
+    font-size: 14px; /* Velikost textu */
+    font-weight:lighter;
+    text-decoration: none; /* Zrušení podtržení */
+    display: flex; /* Popisky vedle sebe */
+    gap: 15px; /* Mezera mezi popisky */
+    list-style: none;
+    padding:0rem;
+    margin: 0;
+    text-transform: uppercase;   
+    align-items: center; 
+}    
+
+.top-right a {
+    color: #4682b4; /* Barva textu */
+    text-decoration: none; /* Zrušení podtržení */
+}
+
+.top-right a:hover {
+    text-decoration: underline; /* Zvýraznění při najetí myší */
+}
+.p {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #4682b4; /* Barva textu */
+}
+.user-info {
+    margin: 0;
+    white-space: nowrap;  /* Zabrání zalomení na nový řádek */
+}
+
+img {
+    opacity: 0.5; /* Poloprůhlednost */
+    filter: brightness(1.3); /* Zesvětlení */
+    width: 100%; /* Zajistí správnou velikost */
+    max-width: 600px; /* Omezí maximální velikost */
+    height: auto;
+} 

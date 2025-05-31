@@ -1,0 +1,100 @@
+
+.dash-container {
+    background-color: rgba(255, 255, 255, 0.1); /* Průhledné bílé pozadí */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    margin: 20px auto;
+    max-width: 750px;
+    transition: transform 0.3s ease;
+    
+}
+.dash-container-link {
+    text-decoration: none;  /* odstraní podtržení */
+    color: inherit;         /* zachová barvu vnitřních prvků */
+    display: block;         /* důležité – aby šel obalit celý blok */
+}
+
+
+.date_event {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.9em;
+    font-weight: bold;
+    color:lightslategrey;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+.date_event a {
+    text-decoration: none;
+    color: #4682b4;    
+    gap: 10px;
+    text-align: right;
+    align-items: right; padding: 8px 0;
+
+}
+
+.basic_info {
+    font-family: 'Open Sans', sans-serif;
+    color:lightslategrey;
+    text-transform:uppercase;  
+}
+
+.name_event {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #4682b4;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.description {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1em;
+    color: #4682b4;
+    line-height: 1.5;
+}
+
+.description a {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.description a:hover {
+    text-decoration: none;
+}
+
+/*níže css pro navigaci mezi stránkami událostí */
+
+.pagination {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.page-square {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    margin: 0 4px;
+    border: 2px solid #4682b4;
+    border-radius: 4px;
+    color: #4682b4;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.page-square:hover {
+    background-color: #4682b4;
+    color: white;
+}
+
+.page-square.active {
+    background-color: #4682b4;
+    color: white;
+    pointer-events: none;
+    border-color: #4682b4;
+}

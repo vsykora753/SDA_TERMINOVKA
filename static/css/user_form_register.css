@@ -1,0 +1,54 @@
+.form_user_register {
+    background-color: rgba(255, 255, 255, 0.1); /* Průhledné bílé pozadí */
+    border-radius: 8px;
+    border: 0.1px    #161616;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    margin: 20px auto;
+    max-width: 700px;
+    transition: transform 0.3s ease;
+}
+.form_user_register-link {
+    text-decoration: none;  /* odstraní podtržení */
+    color: inherit;         /* zachová barvu vnitřních prvků */
+    display: block;         /* důležité – aby šel obalit celý blok */
+}
+
+.form_user_register form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Vzdálenost mezi poli */
+}
+
+.form_user_register label {
+    font-size: 1rem; /* Velikost písma pro label */
+    color: #4682b4; /* Modrá barva textu */
+}
+
+.form_user_register input, select {
+    background-color: rgba(255, 255, 255, 0.7); /* Průhledné bílé pozadí */
+    padding: 10px;
+    border: 0.4px solid #dbd9d9;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%; /* Celá šířka pole */
+    box-sizing: border-box;
+    
+}
+
+
+button {
+    padding: 10px;
+    background-color: #4682b4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: #5a9bd5; /* Světlejší modrá při hoveru */
+}
+
+

@@ -1,0 +1,64 @@
+
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    /*background-color: rgba(243, 246, 248, 0.5); /* Poslední hodnota (0.5) nastaví průhlednost */
+    padding: 0.3rem;
+    margin-top: 20px;
+    /*border-radius: 5px;
+    border: 1px solid #4682b4; */
+    max-width: 100%; /* Dynamická šířka */
+    width: 100%; /* Šířka bude automaticky přizpůsobena */
+    height: auto; /* Zabrání fixní výšce *
+    min-height: 10px; /* Minimální výška, ale umožní zvětšení podle obsahu */ 
+    margin-left: auto;
+}
+.nav-links {
+    display: flex;
+    gap: 15px;
+    list-style: none;
+    padding:0rem;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.nav-links li {
+    position: relative;
+}
+.nav-links li a {
+    text-decoration: none;
+    color: #4682b4;
+    font-weight:lighter;
+    display: flex;
+    gap: 8px; /* Mezera mezi textem a šipkou */
+}
+
+.link_submenu {
+    position: absolute;
+    top: 100%; /* Zarovnání přesně pod Termínovka */
+    left: 0;
+    display: none;
+    background-color: rgba(243, 246, 248, 1); /* Poslední hodnota (0.5) nastaví průhlednost */
+    border-radius: 0.3em;
+    border: 1px solid #4682b4;
+    padding: 10px;
+    min-width: 150px;
+    white-space: nowrap;
+    z-index: 10;
+}
+.link_submenu a {
+    color: rgb(102, 167, 167);
+    padding: 8px;
+    display: block;
+    text-decoration: none;
+}    
+.arrow {
+    font-size: 14px;
+    color: #4682b4;
+    cursor: pointer;
+}
+.submenu-item a:hover {
+    background-color: #ddd2d2;
+    opacity: 0.8;
+}
