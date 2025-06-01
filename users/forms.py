@@ -29,7 +29,7 @@ class RegisterForm(UserCreationForm):
             'birth_date',
             'sex',            
             'organization_name',
-            'website'
+            'website',
             'password1',
             'password2',
         ]
