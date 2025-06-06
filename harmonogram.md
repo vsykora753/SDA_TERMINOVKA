@@ -34,10 +34,22 @@
     -[X] vytvoření šablony app. EVENT event_details,events_list,terminovka
 
 
-    -[] vytvoření šablony pro registraci
+    -[x] vytvoření šablony pro registraci
+        [x] šablona pro registraci uživatele     
+            [x] user_register.html
+            [] user_dashboard.html  ->> vytvořena zbývá doplnit
+            [x] user_login.html ->> hotovo
+            [x] registration_success.html ->> hotovo 
+        
+    -[x] šablona pro registraci organizátora  
+            []
+
+
+
     -[] vytvoření šablony pro přihlášení
     -[] vytvoření šablony pro úpravu uživatele
     -[] vytvoření šablony pro úpravu události
+
     -[] vytvoření šablony pro úpravu registrace
     -[] vytvoření šablony pro úpravu platby
     -[] vytvoření šablony pro úpravu výsledku
@@ -49,12 +61,13 @@
 
 ### 5. Vytvoření formulářů
 
-    -[] vytvoření formuláře pro registraci
+    -[X] vytvoření formuláře pro registraci
          -[] vytvoření testu pro registraci
     -[] vytvoření formuláře pro přihlášení
          -[] vytvoření testu pro přihlášení
     -[] vytvoření formuláře pro úpravu uživatele
          -[] vytvoření testu pro úpravu uživatele
+         
     -[] vytvoření formuláře pro úpravu události
     -[] vytvoření formuláře pro úpravu registrace
     -[] vytvoření formuláře pro úpravu platby
@@ -62,8 +75,9 @@
 
 ### 6. Vytvoření pohledů
 
-    -[] vytvoření pohledu pro registraci
-    -[] vytvoření pohledu pro přihlášení
+    -[X] vytvoření pohledu pro registraci
+    -[X] vytvoření pohledu pro přihlášení
+    
     -[] vytvoření pohledu pro úpravu uživatele
     -[] vytvoření pohledu pro úpravu události
     -[] vytvoření pohledu pro úpravu registrace
