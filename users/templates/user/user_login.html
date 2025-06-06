@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main>
+<h2>Přihlášení jako uživatel</h2>
+
+        <div class="form_user_register">
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                {{ form.email.errors }}
+                {{ form.email }}
+
+                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                {{ form.password1.errors }}
+                {{ form.passwor }}
+
+                
+                <button type="submit">Přihlášení</button>
+
+            </form>
+        </div>
+</main>
+{% endblock %}
