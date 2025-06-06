@@ -15,10 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+
 from django.contrib import admin
 from django.urls import path
 from events.views import EventListView,TerminovkaView,EventDetailView
-from users.views import RegisterView,  LoginView as UserLoginView
+from users.views import UserRegisterView, OrganizerRegisterView, user_dashboard, organizer_dashboard, UserLoginView, OrganizerLoginView, UserRegistrationSuccessView, OrganizerRegistrationSuccessView,UserLogoutView
+
 
 
 urlpatterns = [
@@ -31,8 +33,19 @@ urlpatterns = [
 
 
     # Uživatelské účty
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', UserLoginView.as_view(), name='login'),
+    path('register/user/', UserRegisterView.as_view(), name='user_register'),
+    path('registrace/uzivatel/uspesna/', UserRegistrationSuccessView.as_view(), name='user_registration_success'),
+    path('login/user/', UserLoginView.as_view(), name='user_login'),
+    path('user/dashboard/', user_dashboard, name='user_dashboard'),    
+    path('user/logout/', UserLogoutView.as_view(), name='user_logout'),
+
     
-    
+
+    # Organizátoři
+    path('register/organizer/', OrganizerRegisterView.as_view(), name='organizer_register'),
+    path('login/organizer/', OrganizerLoginView.as_view(), name='organizer_login'), 
+    path('registrace/organizator/uspesna/', OrganizerRegistrationSuccessView.as_view(), name='organizer_registration_success'),
+    path('organizer/dashboard/', organizer_dashboard, name='organizer_dashboard'),
+
 ]
+
