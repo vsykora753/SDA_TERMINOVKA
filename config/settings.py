@@ -152,13 +152,10 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/login_success/'
-#LOGOUT_REDIRECT_URL ='/events_list/
-
+LOGIN_REDIRECT_URL = '/' 
 
 AUTH_USER_MODEL = 'users.User'
 AUTHENTICATION_BACKENDS = [
-    'users.backends.EmailBackend',  
+    'django.contrib.auth.backends.ModelBackend',
+
 ]
-
-
