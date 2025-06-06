@@ -1,25 +1,16 @@
+{% extends "base.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="cs">
-{% include "head.html" %}
 
-<body>
+{% block content %}
+
 <main>
-    <div class="container">
-        <div class="top-right">
-            <a href="{% url 'register' %}" id="register-link">Registrace</a>
-            <a href="{% url 'login' %}">Přihlášení</a>
-        </div>
-
-        <h1 class="h1">Registrace uživatele</h1>
-
-        {% include "nav_bar.html" %}
-
+<h1 class="h1">Registrace organizátora</h1>
         <div class="back-link-bar">
             <a href="{% url 'events_list' %}" class="back-link">↵ Zpět na úvodní stránku</a>
         </div>
 
+        
         <div class="form_user_register">
             <form method="post">
                 {% csrf_token %}
@@ -34,21 +25,9 @@
                 {{ form.email.errors }}
                 {{ form.email }}
 
-                <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
-                {{ form.first_name.errors }}
-                {{ form.first_name }}
-
-                <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
-                {{ form.last_name.errors }}
-                {{ form.last_name }}
-
-                <label for="{{ form.birth_date.id_for_label }}">{{ form.birth_date.label }}</label>
-                {{ form.birth_date.errors }}
-                {{ form.birth_date }}
-
-                <label for="{{ form.sex.id_for_label }}">{{ form.sex.label }}</label>
-                {{ form.sex.errors }}
-                {{ form.sex }}
+                <label for="{{ form.organization_name.id_for_label }}">{{ form.organization_name.label }}</label>
+                {{ form.organization_name.errors }}
+                {{ form.organization_name }}
 
                 <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
                 {{ form.password1.errors }}
@@ -62,6 +41,10 @@
             </form>
         </div>
     </div>
+
+
+    
+
+        
 </main>
-</body>
-</html>
+{% endblock %}
