@@ -15,12 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-
+import debug_toolbar
 from django.contrib import admin
-from django.urls import path
+from django.conf import settings
+from django.urls import path,include
 from events.views import EventListView,TerminovkaView,EventDetailView
-from users.views import UserRegisterView, OrganizerRegisterView, user_dashboard, organizer_dashboard, UserLoginView, OrganizerLoginView, UserRegistrationSuccessView, OrganizerRegistrationSuccessView,UserLogoutView
+from users.views import UserRegisterView, OrganizerRegisterView, user_dashboard, organizer_dashboard, UserLoginView, OrganizerLoginView
+from users.views import UserRegistrationSuccessView, OrganizerRegistrationSuccessView,UserLogoutView,OrganizerEventListView,OrganizerEventCreateView,OrganizerEventEditView,OrganizerEventDeleteView
 
+if settings.DEBUG:
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] 
 
 
 urlpatterns = [
@@ -39,13 +45,18 @@ urlpatterns = [
     path('user/dashboard/', user_dashboard, name='user_dashboard'),    
     path('user/logout/', UserLogoutView.as_view(), name='user_logout'),
 
-    
 
     # Organizátoři
     path('register/organizer/', OrganizerRegisterView.as_view(), name='organizer_register'),
     path('login/organizer/', OrganizerLoginView.as_view(), name='organizer_login'), 
     path('registrace/organizator/uspesna/', OrganizerRegistrationSuccessView.as_view(), name='organizer_registration_success'),
     path('organizer/dashboard/', organizer_dashboard, name='organizer_dashboard'),
+
+    # Udalosti organizátora
+    path('organizer/events/',OrganizerEventListView.as_view(), name='organizer_event_list'),
+    path('organizer/events/create/', OrganizerEventCreateView.as_view(), name='organizer_event_create'),
+    path('organizer/events/<int:pk>/update/', OrganizerEventEditView.as_view(), name='organizer_event_update'), 
+    path('organizer/events/<int:pk>/delete/', OrganizerEventDeleteView.as_view(), name='organizer_event_delete'),
 
 ]
 
