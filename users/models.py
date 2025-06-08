@@ -9,30 +9,42 @@ from datetime import date
 
 class UserManager(BaseUserManager):
     """
-    Správce uživatelských účtů rozšiřující Django BaseUserManager.
+    Manages user creation and administration tasks.
 
-    Tato třída poskytuje metody pro vytváření běžných uživatelů a
-    superuživatelů s e-mailovou adresou jako hlavním identifikátorem místo
-    tradičního uživatelského jména.
+    This class provides methods for creating regular users and superusers
+    with specific attributes required for managing accounts. It ensures
+    that all required attributes, including default and additional values,
+    are properly configured and saved to the database.
 
     Attributes:
-        Dědí všechny atributy z BaseUserManager
+        model (Model): The user model that the manager works with.
+
+    Methods:
+        create_user(email: str, password: str | None = None, **extra_fields) -> User:
+            Creates and saves a regular user with the provided email and password.
+        create_superuser(email: str, password: str | None = None, **extra_fields) -> User:
+            Creates and saves a superuser with full administrative permissions.
     """
 
     def create_user(self, email, password=None, **extra_fields):
         """
-        Vytvoří a uloží nového běžného uživatele s daným emailem a heslem.
+        Creates and saves a new user with the provided email and password.
+
+        This function validates that an email is provided, normalizes the email
+        address, hashes the password, and saves the user object to the database.
+        Additional fields can also be passed as keyword arguments to be included
+        during user creation.
 
         Args:
-            email: Emailová adresa uživatele
-            password: Heslo uživatele (volitelné)
-            **extra_fields: Další pole pro uživatele
+            email: User's email address. This is required.
+            password: User's raw password. Defaults to None.
+            **extra_fields: Additional fields to include in the user object.
 
         Returns:
-            User: Nově vytvořený uživatelský účet
+            The created user object.
 
         Raises:
-            ValueError: Pokud není zadán email
+            ValueError: If the email is not provided.
         """
         if not email:
             raise ValueError("Uživatel musí mít emailovou adresu.")
@@ -44,31 +56,19 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, email, password=None, **extra_fields):
         """
-        Vytvoří a uloží nového superuživatele s administrátorskými právy.
-
-        Automaticky nastaví výchozí hodnoty pro povinná pole a administrativní
-        oprávnění.
+        Creates and returns a superuser with the specified email, password, and additional
+        fields. This method ensures that the user has administrative permissions by setting
+        default values for these permissions and other required attributes.
 
         Args:
-            email (str): E-mailová adresa superuživatele
-            password (str, optional): Heslo superuživatele. Výchozí None.
-            **extra_fields: Dodatečná pole pro model uživatele
+            email: The email address of the superuser. It is required for user creation.
+            password: The password for the superuser. Defaults to None if not provided.
+            **extra_fields: Additional fields for customizing the superuser, such as
+                'first_name', 'last_name', 'organization_name', etc. These may include
+                permissions and other attributes essential for the superuser role.
 
         Returns:
-            User: Nově vytvořený superuživatelský objekt
-
-        Example:
-            >>> UserManager().create_superuser('admin@example.com', 'admin123')
-            <User: admin@example.com>
-
-        Note:
-            Automaticky nastavuje následující výchozí hodnoty:
-
-            - is_staff = True
-            - is_superuser = True
-            - birth_date = date(2000, 1, 1)
-            - role = 'A' (Admin)
-            - další povinná pole pro profil
+            User: The created superuser instance.
         """
 
         extra_fields.setdefault("is_staff", True)
@@ -85,32 +85,42 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """
-    Vlastní uživatelský model rozšiřující Django AbstractBaseUser a
-    PermissionsMixin.
+    Represents a user with authentication and role-based privileges.
 
-    Model reprezentuje uživatele v systému s různými rolemi (běžec,
-    organizátor, admin). Používá email jako primární způsob přihlášení místo
-    uživatelského jména.
+    This class represents a user model that inherits from the AbstractBaseUser
+    and PermissionsMixin to handle user authentication, role assignment, and
+    permissions. It uses an email address as the unique identifier for the user
+    and includes additional fields for personal and organizational information.
+    The model is intended to support role-based access control and is managed
+    through an external UserManager class.
 
     Attributes:
-        email (EmailField): Unikátní emailová adresa uživatele
-        role (CharField): Role uživatele (R-běžec, O-organizátor, A-admin)
-        first_name (CharField): Křestní jméno uživatele
-        last_name (CharField): Příjmení uživatele
-        birth_date (DateField): Datum narození
-        sex (CharField): Pohlaví uživatele (M-muž, F-žena)
-        organization_name (CharField): Název organizace (volitelné)
-        website (URLField): Webová stránka (volitelné)
-        is_active (BooleanField): Indikátor aktivního účtu
-        is_staff (BooleanField): Příznak pro přístup do admin rozhraní
-
-    Note:
-        Model používá vlastní UserManager pro vytváření uživatelů a
-        superuživatelů.
-
-        Vyžadována jsou pole: role, first_name, last_name, birth_date a sex.
+        ROLE_CHOICES (list): A list of tuples defining the possible user roles.
+            Each tuple contains a short code for the role and its verbose name.
+        email (models.EmailField): The email address of the user, used as the
+            unique identifier.
+        role (models.CharField): The role of the user, chosen from ROLE_CHOICES.
+        first_name (models.CharField): The first name of the user.
+        last_name (models.CharField): The last name of the user.
+        birth_date (models.DateField): The birth date of the user, nullable and
+            optional.
+        sex (models.CharField): The gender of the user, chosen from predefined
+            options.
+        organization_name (models.CharField): The name of the organization the
+            user is affiliated with, nullable and optional.
+        website (models.URLField): A URL representing the user's or organization's
+            website, nullable and optional.
+        is_active (models.BooleanField): Specifies whether the account is active
+            or deactivated.
+        is_staff (models.BooleanField): Indicates whether the user has staff
+            privileges.
+        objects (UserManager): A custom user manager for handling user-related
+            queries and operations.
+        USERNAME_FIELD (str): The field used as the username for authentication,
+            which is set to 'email'.
+        REQUIRED_FIELDS (list): A list of fields required for creating a user,
+            excluding the username and password.
     """
-
     ROLE_CHOICES = [
         ("R", "Runner"),
         ("O", "Organizátor"),
@@ -138,20 +148,29 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         """
-        Vrací string reprezentaci uživatelského objektu.
+        Returns the string representation of the instance.
+
+        This method provides a human-readable string representation of the object,
+        typically used for debugging or displaying the instance in a user-friendly
+        format.
 
         Returns:
-            str: Emailová adresa uživatele
+            str: A string that represents the instance, specifically the email
+            attribute.
         """
         return self.email
 
     class Meta:
         """
-        Metadata pro model User.
+        Represents a user entity.
+
+        Represents the user model in the application. It defines the properties related
+        to a user and is used for data management and user representation in the system.
 
         Attributes:
-            verbose_name (str): Název modelu v jednotném čísle pro admin rozhraní
-            verbose_name_plural (str): Název modelu v množném čísle pro admin rozhraní
+            verbose_name (str): Singular name for the user, used for presentation.
+            verbose_name_plural (str): Plural name for the user, used for presentation
+                of multiple users.
         """
         verbose_name = "uživatel"
         verbose_name_plural = "uživatelé"
