@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Event
 from datetime import datetime
@@ -44,10 +43,14 @@ class EventListView(ListView):
                 pass  
 
         return queryset 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['regions'] = Event.objects.values_list('region', flat=True).distinct().order_by('region')
+        context['regions'] = Event.objects.values_list(
+        'region', flat=True
+        ).distinct().order_by('region')
         return context
+
     
 class TerminovkaView(EventListView):
     template_name = "terminovka.html" 
