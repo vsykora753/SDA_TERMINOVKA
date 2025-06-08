@@ -46,11 +46,11 @@
 
 
 
-    -[] vytvoření šablony pro přihlášení
-    -[] vytvoření šablony pro úpravu uživatele
-    -[] vytvoření šablony pro úpravu události
+    -[x] vytvoření šablony pro přihlášení
+    -[x] vytvoření šablony pro úpravu uživatele
+    -[x] vytvoření šablony pro úpravu události
 
-    -[] vytvoření šablony pro úpravu registrace
+    -[x] vytvoření šablony pro úpravu registrace
     -[] vytvoření šablony pro úpravu platby
     -[] vytvoření šablony pro úpravu výsledku
 
