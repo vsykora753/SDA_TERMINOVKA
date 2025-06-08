@@ -3,7 +3,8 @@
 
 {% block content %}
 <main>
-<h2>Přihlášení jako uživatel</h2>
+<h1 class="h1">Přihlášení jako uživatel</h1>
+
 
         <div class="form_user_register">
             <form method="post">
@@ -20,8 +21,8 @@
                 {{ form.email }}
 
                 <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
-                {{ form.password1.errors }}
-                {{ form.passwor }}
+                {{ form.password.errors }}
+                {{ form.password }}
 
                 
                 <button type="submit">Přihlášení</button>

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<main>
+<h1 class="h1">Vytvoření události</h1>
+        <div class="back-link-bar">
+            <a href="{% url 'organizer_dashboard' %}" class="back-link">↵ Zpět na výpis událostí</a>
+        </div>
+
+    <div class="form_user_register">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Uložit změny</button>
+        </form>
+    </div>
+</main>
+{% endblock %}
+

@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+
+
 {% load filters %}
 
 {% block content %}
@@ -6,44 +8,11 @@
 
 <div class="date_event">Vítejte, {{ organizer.company_name }}</div>
 
+{% include "organizer/include/organizer_event_list.html" %}
 
-
-<div class="date_event" style="display: flex;font-family: 'Open Sans', sans-serif;color: #4682b4;align-items: center   ;text-transform:uppercase; ">Seznam pořádaných událostí:</div>
-
-<div class="">        
-    <div class="date_event">
-        <a href="{% url 'event_create' %}" class="date_event a"> + Přidat událost</a>
-    </div>         
-</div>
-
-        {% for event in events %}
-        
-        <div class="dash-container">        
-            <div class="date_event">{{ event.date_event|date:"l, j. F Y" }},  {{ event.city }}</div>
-            <div class="name_event">{{ event.name_event }}</div>
-            <div class="description">{{ event.description|truncate_without_ellipsis:100 }}</div>
-            <div class="date_event basic_info">► Start:  {{event.start_time}} ↔ délka tratě:   {{event.distance}} km ► Kraj:  {{event.region}} ► Startovné: {{event.start_fee|floatformat:0}} ,-</div> 
-            <div class="date_event">
-                <a href="#" class="date_event a">✏️ Editovat</a><a href="#"class="date_event a">🗑️ Smazat</a>
-            </div>             
-        </div>
-        
-
-        {% empty %}
-        
-            <li>Žádné události nebyly nalezeny.</li>
-        {% endfor %}
-        {% if is_paginated %}
-        <div class="pagination">
-            {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-                <span class="page-square active">{{ num }}</span>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                <a href="?page={{ num }}" class="page-square">{{ num }}</a>
-            {% endif %}
-            {% endfor %}
-        </div>
-        {% endif %}
+{% include "includes/pagination.html" %}
         
 
 {% endblock %}
+
+
