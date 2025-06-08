@@ -39,16 +39,5 @@
             <li>Žádné události nebyly nalezeny.</li>
         {% endfor %}
 
-
-        {% if is_paginated %}
-        <div class="pagination">
-            {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-                <span class="page-square active">{{ num }}</span>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                <a href="?page={{ num }}" class="page-square">{{ num }}</a>
-            {% endif %}
-            {% endfor %}
-        </div>
-        {% endif %}
+    {% include "includes/pagination.html" %}
 {% endblock %}
