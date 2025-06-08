@@ -19,14 +19,22 @@ import debug_toolbar
 from django.contrib import admin
 from django.conf import settings
 from django.urls import path,include
+
+# importy pohledu pro  zobrazení událostí, registrace uživatelů a organizátorů
+
 from events.views import EventListView,TerminovkaView,EventDetailView
-from users.views import UserRegisterView, OrganizerRegisterView, user_dashboard, organizer_dashboard, UserLoginView, OrganizerLoginView
-from users.views import UserRegistrationSuccessView, OrganizerRegistrationSuccessView,UserLogoutView,OrganizerEventListView,OrganizerEventCreateView,OrganizerEventEditView,OrganizerEventDeleteView
+from users.views import UserRegisterView, OrganizerRegisterView
+from users.views import user_dashboard, organizer_dashboard
+from users.views import UserLoginView, OrganizerLoginView
+from users.views import UserRegistrationSuccessView
+from users.views import OrganizerRegistrationSuccessView,UserLogoutView
+from users.views import OrganizerEventListView,OrganizerEventCreateView
+from users.views import OrganizerEventEditView,OrganizerEventDeleteView
 
 if settings.DEBUG:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
-    ] 
+] 
 
 
 urlpatterns = [
@@ -51,6 +59,7 @@ urlpatterns = [
     path('login/organizer/', OrganizerLoginView.as_view(), name='organizer_login'), 
     path('registrace/organizator/uspesna/', OrganizerRegistrationSuccessView.as_view(), name='organizer_registration_success'),
     path('organizer/dashboard/', organizer_dashboard, name='organizer_dashboard'),
+    path('organizer/logout/', UserLogoutView.as_view(), name='organizer_logout'),
 
     # Udalosti organizátora
     path('organizer/events/',OrganizerEventListView.as_view(), name='organizer_event_list'),
