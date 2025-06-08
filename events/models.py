@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
 # Create your models here.
@@ -47,4 +48,12 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name_event
+
+
+class Registration(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    event = models.ForeignKey('events.Event', on_delete=models.CASCADE)
+    registered_at = models.DateTimeField(auto_now_add=True)
+
+
     

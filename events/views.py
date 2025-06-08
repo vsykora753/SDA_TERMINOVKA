@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
+from django.views import View
 from django.views.generic import ListView, DetailView
-from .models import Event
+from .models import Event,Registration
 from datetime import datetime
 
 # Create your views here.
@@ -55,4 +56,12 @@ class TerminovkaView(EventListView):
 class EventDetailView(DetailView):
     model = Event
     template_name = 'event_details.html'
-    context_object_name = 'event'    
+    context_object_name = 'event'
+
+
+class EventRegisterView(View):
+    def post(self, request, pk):
+        event = Event.objects.get(pk=pk)
+        if not Registration.objects.filter(user=request.user, event=event).exists():
+            Registration.objects.create(user=request.user, event=event)
+        return redirect('event_details', pk=pk)

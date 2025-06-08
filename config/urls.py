@@ -18,7 +18,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from events.views import EventListView,TerminovkaView,EventDetailView
+from events.views import EventListView,TerminovkaView,EventDetailView,EventRegisterView
 from users.views import UserRegisterView, OrganizerRegisterView, user_dashboard, organizer_dashboard, UserLoginView, OrganizerLoginView, UserRegistrationSuccessView, OrganizerRegistrationSuccessView,UserLogoutView
 
 
@@ -30,6 +30,7 @@ urlpatterns = [
     path('', EventListView.as_view(), name='events_list'),
     path('terminovka/', TerminovkaView.as_view(), name='events_search'),
     path('<int:pk>/', EventDetailView.as_view(), name='event_details'),
+    path('<int:pk>/prihlasit/', EventRegisterView.as_view(), name='event_register'),
 
 
     # Uživatelské účty

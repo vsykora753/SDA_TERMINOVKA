@@ -16,7 +16,7 @@
     <div class="date_event basic_info_detail">Startovné: {{event.start_fee|floatformat:0}} ,-</div> 
     <div class="description_detail">{{ event.description }}</div> 
     <div class="date_event basic_info_detail">Propozice: {{ event.propozition }}</div>    
-    
+    <a href="{% url 'event_register' event.pk %}" class="btn btn-primary">Přihlásit se do závodu</a>
 
 </div>
 {% endblock %}
