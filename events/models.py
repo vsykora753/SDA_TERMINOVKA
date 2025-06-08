@@ -4,7 +4,10 @@ from django.conf import settings
 
 class Event(models.Model):
     date_event = models.DateField(verbose_name='Datum události')
-    name_event = models.CharField(max_length=100, verbose_name='Název události')
+    name_event = models.CharField(
+    max_length=100,    
+    verbose_name='Název události'
+    )
     description = models.TextField(verbose_name='Popis události')
     start_time = models.TimeField(verbose_name='Čas startu')
     distance = models.IntegerField(verbose_name='Vzdálenost')
