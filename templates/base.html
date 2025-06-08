@@ -9,37 +9,32 @@
 
 <div class="container">
     <div class="top-right">
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user.role == 'R'%}
             <div class="dropdown">
                 <button class="dropbtn" type="button">
                     <div class="user-info">Přihlášen uživatel: {{ user.first_name }} {{ user.last_name }}</div>
                     <span class="arrow">▼</span>
                 </button>
-                <div class="link_submenu" style="display: none;">
-                    <form method="post" action="">
-                        {% csrf_token %}
-                        <a href="{% url 'user_logout' %}" class="logout-button">Odhlásit se</a>
-                    </form>
-                    <a href="#">další položka1</a>
+                <div class="link_submenu" style="display: none;">             
+                    <a href="{% url 'user_logout' %}" class="logout-button">Odhlásit se</a>
+                    
+                    <a href="#">nejlepší výkony</a>
                     <a href="#">další položka2</a>
                 </div>
             </div>
     
-    {% elif logged_organizer %}
+    {% elif user.is_authenticated and user.role == 'O' %}
         <div class="dropdown">
             <button class="dropbtn" type="button">
-                <div class="user-info">Přihlášen organizátor: {{ logged_organizer.company_name }}</div>
+                <div class="user-info">Přihlášen organizátor: {{ user.organization_name }}</div>
                 <span class="arrow">▼</span>
             </button>
             <div class="link_submenu" style="display: none;">
-                <form method="post" action="">
-                    {% csrf_token %}
-                    <button type="submit" class="logout-button">Odhlásit se</button>
-                </form>
+                <a href="{% url 'organizer_logout' %}" class="logout-button">Odhlásit se</a>
             </div>
         </div>
 
-    {% elif not user.is_authenticated and not logged_organizer %}
+    {% elif not user.is_authenticated  %}
     <div class="dropdown">
         <button class="dropbtn" type="button">
             Registrace <span class="arrow">▼</span>

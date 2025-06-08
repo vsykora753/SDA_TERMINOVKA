@@ -2,13 +2,16 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, ListView, UpdateView
 from django.views.generic.edit import FormView
+from django.core.paginator import Paginator
 from .mixins import OrganizerEventQuerysetMixin
 from .forms import OrganizerEventForm 
+
+
 
 # formuláře a modely v projektu vytvořené
 
@@ -135,21 +138,32 @@ class OrganizerLoginView(UserLoginView):
 
 @login_required(login_url='/login/')
 def organizer_dashboard(request):
-    if request.user.role != 'O':  # pokud uživatel není organizátor, přesměrujeme ho
+    if request.user.role != 'O':  
         return redirect('events_list')  
 
     events = Event.objects.filter(organizer=request.user)
+    paginator = Paginator(events, 6) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, 'organizer/organizer_dashboard.html', {
         'user': request.user,
-        'organizer': request.user,  # pokud šablona používá {{ organizer.company_name }}
-        'events': events
+        'organizer': request.user,  
+        'events': events,
+        'page_obj': page_obj,
+        'paginator': paginator,
+        'is_paginated': page_obj.has_other_pages()
     })
+
+
 #============ Přehled  událostí organizátora ============
 class OrganizerEventListView(OrganizerEventQuerysetMixin, ListView):
     model = Event
     template_name = 'organizer/include/organizer_event_list.html'
     context_object_name = 'events'
+    ordering = ['start_date']  
+    paginate_by = 6
+    
 
 #============ Editace události organizátora ============
 
@@ -164,11 +178,9 @@ class OrganizerEventEditView(OrganizerEventQuerysetMixin, UpdateView):
 class OrganizerEventDeleteView(OrganizerEventQuerysetMixin, View):
     def post(self, request, pk):
         event = Event.objects.get(pk=pk)
-        if event.organizer == request.user:
-            event.delete()
-            return redirect('organizer_event_list')
-        else:
-            return redirect('organizer_event_list') 
+        event = get_object_or_404(Event, pk=pk, organizer=request.user)
+        event.delete()
+        return redirect('organizer_event_list')
 
 #============ Vytvoření události organizátora ============      
 
@@ -184,8 +196,7 @@ class OrganizerEventCreateView(OrganizerEventQuerysetMixin, FormView):
         event.organizer = self.request.user
         event.save()
         return super().form_valid(form)
-
     
-# ? jak vyřešit aby se stejná akce nevložila 2x ?
+
 
 
