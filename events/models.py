@@ -5,7 +5,7 @@ from django.conf import settings
 class Event(models.Model):
     date_event = models.DateField(verbose_name='Datum události')
     name_event = models.CharField(
-    max_length=100,    
+    max_length=255,    
     verbose_name='Název události'
     )
     description = models.TextField(verbose_name='Popis události')
@@ -51,27 +51,29 @@ class Event(models.Model):
     verbose_name='Propozice'
 )
 
-start_fee = models.IntegerField(
+    start_fee = models.IntegerField(
     null=True,
     blank=True,
     verbose_name='Startovné'
 )
 
-organizer = models.ForeignKey(
+    organizer = models.ForeignKey(
     settings.AUTH_USER_MODEL,
     on_delete=models.CASCADE,
-    limit_choices_to={'role': 'O'}
+    limit_choices_to={'role': 'O'},
+    related_name='organized_events'
 )
 
-class Meta:
-    """
-    Meta class for Event model.
-    defines ordering of the model.
-    1. date_event - sorts events by date
-    
-    """
-    ordering = ['date_event']
 
-    def __str__(self):
-        return self.name_event
-    
+    class Meta:
+        """
+        Meta class for Event model.
+        defines ordering of the model.
+        1. date_event - sorts events by date
+        
+        """
+        ordering = ['date_event']
+
+        def __str__(self):
+            return self.name_event
+        
