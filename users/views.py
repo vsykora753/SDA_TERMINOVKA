@@ -167,51 +167,179 @@ class UserLoginView(FormView):
 
 @login_required(login_url='/login/')
 def user_dashboard(request):
-    # TODO Dodělat docstrings a formátovaní kódu
+    """
+    Renders the user dashboard page for users with a specific role. If the
+    user does not have the required role, they are redirected to the events
+    list page.
+
+    Args:
+        request: The HTTP request object containing metadata about the request.
+
+    Returns:
+        HttpResponse: The HTTP response object with the rendered dashboard
+        page for authorized users, or a redirect to the events list for others.
+    """
+
     if request.user.role != 'R':
         return redirect('events_list') 
-    return render(request, 'user/user_dashboard.html', {'user': request.user})
+    return render(
+        request,
+        'user/user_dashboard.html',
+        {'user': request.user}
+    )
 
 
 class UserLogoutView(View):
+    """
+    Handles user logout functionality.
+
+    This class defines the behavior for logging out a user from the system and
+    redirecting them to a specified page afterward. It extends from the base
+    View class and provides a specific implementation for the GET HTTP method.
+    """
+
     def get(self, request, *args, **kwargs):
+        """
+        Handles user logout and redirects them to the events list page.
+
+        This method is responsible for ending a user session by invoking the
+        logout function. After successfully logging out the user, it redirects
+        them to the 'events_list' page, providing a clean user experience and
+        ensuring proper session management.
+
+        Args:
+            request: The HTTP request object containing metadata about the
+                current request.
+            *args: Additional positional arguments passed to the method.
+            **kwargs: Additional keyword arguments passed to the method.
+
+        Returns:
+            HttpResponse: A redirect response that navigates the user to the
+                'events_list' page after logout.
+        """
+
         logout(request)
         return redirect('events_list')  # přesměrování po odhlášení
-    
 
-#============ Organizátor Registrace a Úspěch ============
 
 class OrganizerRegisterView(FormView):
+    """
+    Handles the registration process for organizers.
+
+    This class represents a view that provides the registration functionality
+    for organizers. It renders a registration form, processes form
+    submissions, and logs in the newly registered user upon successful
+    registration. This view inherits from Django's FormView, leveraging its
+    built-in mechanics for form handling and redirection.
+
+    Attributes:
+        template_name (str): The template used to render the registration form.
+        form_class (type): The form class used to handle organizer
+            registration.
+        success_url (str): The URL to redirect to upon successful form
+            submission.
+    """
+
     template_name = 'organizer/organizer_register.html'
     form_class = OrganizerRegisterForm
     success_url = reverse_lazy('organizer_registration_success')
 
     def form_valid(self, form):
+        """
+        Handles the validation and login process when a form submission is
+        successful.
+
+        The method saves the form, logs in the newly created user, and then
+        proceeds with the default behavior of the parent class's form_valid
+        method.
+
+        Args:
+            form: A valid form instance that has passed all validations.
+
+        Returns:
+            HttpResponse: The HTTP response indicating form submission was
+            successful.
+        """
+
         user = form.save()
         login(self.request, user)
         return super().form_valid(form)
-    
-#============ úspěšná registrace organizátora ============
+
 
 class OrganizerRegistrationSuccessView(TemplateView):
+    """View for displaying a success message after an organizer's registration.
+
+    This class-based view is intended to provide feedback to users upon the
+    successful registration of an organizer. It renders a specific template
+    with a context that includes a success message.
+
+    Attributes:
+        template_name (str): Path to the template used for rendering the view.
+    """
+
     template_name = 'organizer/registration_success.html'
 
     def get_context_data(self, **kwargs):
+        """
+        Retrieves the context data for a template, enhancing it with
+        additional information specific to the view.
+
+        This method extends the default context data with a custom message
+        that indicates successful registration of the organizer.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments passed to the view to help
+                in generating the context data.
+
+        Returns:
+            dict: A dictionary containing the context data, including a
+            custom message for successful registration.
+        """
+
         context = super().get_context_data(**kwargs)
-        context['message'] = 'Registrace organizátora byla úspěšná! Nyní se můžete přihlásit.'
+        context['message'] = ('Registrace organizátora byla úspěšná! '
+                              'Nyní se můžete přihlásit.')
         return context
-    
-#============ Organizátor Login ============
+
 
 class OrganizerLoginView(UserLoginView):
+    """
+    Handles the login view for organized users.
+
+    This class provides a custom login view specifically tailored for
+    organized users, inheriting from a generic user login view. It applies a
+    specific template for the login functionality of organizers.
+
+    Attributes:
+        template_name (str): Path to the HTML template used to render the
+            login page for organizers.
+    """
+
     template_name = 'organizer/organizer_login.html'
-        
-# =========== dashboard organizátora ==========
+
 
 @login_required(login_url='/login/')
 def organizer_dashboard(request):
-    if request.user.role != 'O':  # pokud uživatel není organizátor, přesměrujeme ho
+    """
+    Renders the organizer dashboard view if the requesting user has the role
+    of an organizer ('O'). If the user is not an organizer, they are
+    redirected to the events list page instead.
+
+    Args:
+        request: The HTTP request object containing metadata about the request.
+
+    Returns:
+        HttpResponse: Rendered HTML response for the organizer dashboard if
+        the user is an organizer or a redirect response to the events list
+        page otherwise.
+    """
+
+    if request.user.role != 'O':
         return redirect('events_list')  
-    return render(request, 'organizer/organizer_dashboard.html', {'user': request.user})
+    return render(
+        request,
+        'organizer/organizer_dashboard.html',
+        {'user': request.user}
+    )
 
 
