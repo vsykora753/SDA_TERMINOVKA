@@ -22,7 +22,7 @@ from django.urls import path,include
 
 # importy pohledu pro  zobrazení událostí, registrace uživatelů a organizátorů
 
-from events.views import EventListView,TerminovkaView,EventDetailView
+from events.views import EventListView,TerminovkaView,EventDetailView,EventRegisterView
 from users.views import UserRegisterView, OrganizerRegisterView
 from users.views import user_dashboard, organizer_dashboard
 from users.views import UserLoginView, OrganizerLoginView
@@ -39,11 +39,12 @@ if settings.DEBUG:
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-
+   
     # Události
     path('', EventListView.as_view(), name='events_list'),
     path('terminovka/', TerminovkaView.as_view(), name='events_search'),
     path('<int:pk>/', EventDetailView.as_view(), name='event_details'),
+     path('<int:pk>/prihlasit/', EventRegisterView.as_view(), name='event_register'),
 
 
     # Uživatelské účty
