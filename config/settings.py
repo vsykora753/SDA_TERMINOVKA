@@ -27,7 +27,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 load_dotenv()
-SECRET_KEY = os.getenv('SECRET_KEY', default='django-insecure-m*%8ou9_)sh(u%!z9vxdk%ru&2mh0$w_701l04p^apq1g1^7^*')
+SECRET_KEY = os.getenv(
+'SECRET_KEY', default='django-insecure-m*%8ou9_)sh(u%!z9vxdk%ru&2mh0$w_701l04p^apq1g1^7^*')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -89,6 +90,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "users.context_processors.user_events_context",
+                "users.context_processors.organizer_events",
             ],
         },
     },
