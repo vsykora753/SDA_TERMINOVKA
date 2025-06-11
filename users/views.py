@@ -395,26 +395,19 @@ class OrganizerEventDeleteView(OrganizerEventQuerysetMixin, View):
         model (Model): The model class for the event being deleted.
         template_name (str): The template used to confirm the deletion.
     """
+    template_name = 'organizer/event_confirm_delete.html'
+
+    def get(self, request, pk):
+        
+        event = get_object_or_404(self.get_queryset(), pk=pk)
+        return render(request, self.template_name, {'event': event})
+
     def post(self, request, pk):
-        """
-        Handles the POST request to delete an event.
-        This method retrieves the event by its primary key (pk) and checks if
-        the event exists and belongs to the logged-in organizer. If the event
-        is found, it is deleted, and the user is redirected to the event list
-        page. If the event does not exist or does not belong to the organizer,
-        a 404 error is raised.
-        Args:
-            request: The HTTP request object containing metadata about the
-                request.
-            pk (int): The primary key of the event to be deleted.
-        Returns:
-            HttpResponseRedirect: Redirects to the organizer event list page
-            after successful deletion of the event.
-        """
-        event = Event.objects.get(pk=pk)
-        event = get_object_or_404(Event, pk=pk, organizer=request.user)
+        event = get_object_or_404(self.get_queryset(), pk=pk)
         event.delete()
         return redirect('organizer_event_list')
+    
+
 
 #============ Vytvoření události organizátora ============      
 
