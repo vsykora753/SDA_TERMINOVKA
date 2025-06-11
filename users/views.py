@@ -119,7 +119,7 @@ class UserRegistrationSuccessView(TemplateView):
 
 
 
-class UserLoginView(FormView):
+class RoleBasedLoginView(FormView):
     """
     Handles user login functionality.
 
@@ -136,7 +136,7 @@ class UserLoginView(FormView):
     """
     template_name = 'user/user_login.html'
     form_class = LoginForm
-    success_url = reverse_lazy('user_dashboard')
+
 
     def form_valid(self, form):
         """
@@ -293,36 +293,6 @@ class OrganizerRegistrationSuccessView(TemplateView):
     
 
 
-class OrganizerLoginView(UserLoginView):
-    """
-    Handles the login view for organized users.
-
-    This class provides a custom login view specifically tailored for
-    organized users, inheriting from a generic user login view. It applies a
-    specific template for the login functionality of organizers.
-
-    Attributes:
-        template_name (str): Path to the HTML template used to render the
-            login page for organizers.
-    """
-
-    template_name = 'organizer/organizer_login.html'
-    form_class = LoginForm
-    success_url = reverse_lazy('organizer_dashboard')
-
-    def form_valid(self, form):
-        user = form.user  # získání autentizovaného uživatele z formuláře
-        login(self.request, user)
-        
-        if user.role == 'R':
-            return HttpResponseRedirect(reverse('user_dashboard'))
-        elif user.role == 'O':
-            return HttpResponseRedirect(reverse('organizer_dashboard'))
-        else:
-            return HttpResponseRedirect(reverse('events_list'))   
-
-
-
 
 
 @login_required(login_url='/login/')
@@ -340,21 +310,16 @@ def organizer_dashboard(request):
         the user is an organizer or a redirect response to the events list
         page otherwise.
     """
-    if request.user.role != 'O':  
-        return redirect('events_list')  
+    if request.user.role != 'O':
+        return redirect('no_access')  # nebo 403
 
-    events = Event.objects.filter(organizer=request.user)
-    paginator = Paginator(events, 6) 
-    page_number = request.GET.get('page')
+    events = Event.objects.filter(organizer=request.user).order_by('-date_event')
+    paginator = Paginator(events, 5)
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'organizer/organizer_dashboard.html', {
-        'user': request.user,
-        'organizer': request.user,  
-        'events': events,
-        'page_obj': page_obj,
-        'paginator': paginator,
-        'is_paginated': page_obj.has_other_pages()
+    return render(request, "organizer/dashboard_organizer.html", {
+        "page_obj": page_obj,
     })
 
 
