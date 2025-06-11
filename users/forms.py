@@ -34,7 +34,7 @@ class LoginForm(forms.Form):
 
         Raises:
         forms.ValidationError: If authentication fails due to invalid
-            email or password credentials.
+        email or password credentials.
 
         Returns:
         dict: A dictionary with the cleaned and validated data.
@@ -43,12 +43,13 @@ class LoginForm(forms.Form):
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
 
-        if email and password:
-                user = authenticate(email=email, password=password)
-                if user is None:
-                    raise forms.ValidationError("Neplatné přihlašovací údaje.")
-                self.user = user  
-        return cleaned_data
+    if email and password:
+            user = authenticate(email=email, password=password)
+            if user is None:
+                raise forms.ValidationError("Neplatné přihlašovací údaje.")
+            self.user = user  
+
+    return cleaned_data
 
 class RegisterForm(UserCreationForm):
     """
@@ -67,7 +68,7 @@ class RegisterForm(UserCreationForm):
             organization's website.
     """
     birth_date = forms.DateField(label="Datum narození",
-                                 widget=forms.DateInput(attrs={"type": "date"})
+                            widget=forms.DateInput(attrs={"type": "date"})
     )
     organization_name = forms.CharField(label="Název organizace",
                                         required=False
@@ -75,29 +76,29 @@ class RegisterForm(UserCreationForm):
     website = forms.URLField(label="Webová stránka", required=False)
 
     class Meta:
-        model = User
-        fields = [
-            "email",
-            "first_name",
-            "last_name",
-            "birth_date",
-            "sex",
-            "organization_name",
-            "website",
-            "password1",
-            "password2",
-        ]
-        labels = {
-            "email": "Emailová adresa",
-            "first_name": "Křestní jméno",
-            "last_name": "Příjmení",
-            "birth_date": "Datum narození",
-            "sex": "Pohlaví",
-            "organization_name": "Název organizace",
-            "website": "Webová stránka",
-            "password1": "Heslo",
-            "password2": "Potvrzení hesla",
-        }
+            model = User
+            fields = [
+                "email",
+                "first_name",
+                "last_name",
+                "birth_date",
+                "sex",
+                "organization_name",
+                "website",
+                "password1",
+                "password2",
+            ]
+            labels = {
+                "email": "Emailová adresa",
+                "first_name": "Křestní jméno",
+                "last_name": "Příjmení",
+                "birth_date": "Datum narození",
+                "sex": "Pohlaví",
+                "organization_name": "Název organizace",
+                "website": "Webová stránka",
+                "password1": "Heslo",
+                "password2": "Potvrzení hesla",
+            }
 
     def clean_email(self):
         """
@@ -124,7 +125,7 @@ class RegisterForm(UserCreationForm):
         - A value for the birthdate must be provided.
         - The birthdate cannot be a future date.
         - The user's age, calculated from the birthdate, must be 18 years or
-          older.
+        older.
 
         Raises:
             forms.ValidationError: If the birthdate is not provided.
@@ -218,7 +219,7 @@ class OrganizerRegisterForm(UserCreationForm):
             model (type): Reference to the User model used by the form.
             fields (list of str): List of fields included in the form.
             labels (dict): Dictionary mapping field names to their
-                corresponding user-friendly label names.
+            corresponding user-friendly label names.
         """
 
         model = User
