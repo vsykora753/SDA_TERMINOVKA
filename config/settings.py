@@ -39,6 +39,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '8000-vsykora753-sda-terminovk-6k4ljivb0o.app.codeanywhere.com',
+    
     # může se přidat i jiné
 ]
 
@@ -90,7 +91,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "users.context_processors.user_events_context",
+                "users.context_processors.user_events",
                 "users.context_processors.organizer_events",
             ],
         },
@@ -165,5 +166,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://8000-vsykora753-sda-terminovk-6k4ljivb0o.app.codeanywhere.com',
+]
+
 
 
