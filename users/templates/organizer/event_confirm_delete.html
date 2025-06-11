@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+##TODO je třeba odladit -> nefunguje smazání události
+{% block content %}
+  <h1 class="h1">Opravdu chcete smazat událost: "{{ event.name_event }}"?</h1>
+
+  <p>{{ event.date_event|date:"l, j. F Y" }}, {{ event.city }}</p>
+  <p>{{ event.description }}</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Ano, smazat</button>
+    <a href="{% url 'organizer_event_list' %}">Zrušit</a>
+  </form>
+{% endblock %}
