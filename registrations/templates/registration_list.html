@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load filters %}
+#TODO vylepšit vzhled aby odpovídal zbytku stránek udělat css style
+{% block content %}
+<div class="back-link-bar">
+    <a href="{% url 'organizer_dashboard' %}" class="back-link">↵ Zpět na výpis položek pro organizátory</a>
+</div> 
+    <h1 class="h1">Prezenční listina</h1>
+    <div class="">   
+           
+    <table >
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th style="border: 1px solid ; padding: 1px;text-align: left;"class="description">č.řádku</th>
+                <th style="border: 1px solid ; padding: 1px;text-align: left;"class="description">Příjmení</th>
+                <th style="border: 1px solid ; padding: 1px;text-align: left;" class="description">Jméno</th>
+                <th style="border: 1px solid ; padding: 1px;text-align: left;"class="description">Datum narození</th>
+                <th style="border: 1px solid ; padding: 1px;text-align: left;"class="description">Email</th>
+                <th style="border: 1px solid ; padding: 1px;text-align: left;"class="description">Datum registrace</th>
+                <th style="border: 1px solid ; padding: 1px;text-align: left;"class="description">Kategorie</th>
+                <th style="border: 1px solid ; padding: 1px;text-align: left;"class="description">Podpis účastníka</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registration in registrations %}
+            <tr style="background-color: #f2f2f2;">
+                <td style="border: 1px solid ; padding: 1px;text-align: left;">{{ forloop.counter }}</td>
+                <td style="border: 1px solid ; padding: 1px;text-align: left;">{{ registration.id_user.last_name }}</td>
+                <td style="border: 1px solid ; padding: 1px;text-align: left;">{{ registration.id_user.first_name }}</td>                
+                <td style="border: 1px solid ; padding: 1px;text-align: left;">{{ registration.id_user.birth_date|date:"d.m.Y" }}</td>
+                <td style="border: 1px solid ; padding: 1px;text-align: left;">{{ registration.id_user.email }}</td>
+                <td style="border: 1px solid ; padding: 1px;text-align: left;">{{ registration.registration_date|date:"d.m.Y" }}</td>
+                <td style="border: 1px solid ; padding: 1px;text-align: left;">{{ registration.category }}</td>
+                <th style="border: 1px solid ; padding: 1px;text-align: left;"></th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+{% endblock %}
