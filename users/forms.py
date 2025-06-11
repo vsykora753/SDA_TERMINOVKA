@@ -293,6 +293,14 @@ class OrganizerEventForm(forms.ModelForm):
             'propozition',
             'start_fee',
         ]
+        widgets = {
+            'description': forms.Textarea(attrs={
+                'rows': 5,
+                'cols': 80, 
+                'style': 'width: 100%;',
+                'placeholder': 'Popiš událost...'
+            }),
+        }
         labels = {
             'date_event': 'Datum události',
             'name_event': 'Název události',
