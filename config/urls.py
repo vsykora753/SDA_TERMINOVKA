@@ -29,6 +29,7 @@ from users.views import UserRegistrationSuccessView,RoleBasedLoginView
 from users.views import OrganizerRegistrationSuccessView,UserLogoutView
 from users.views import OrganizerEventListView,OrganizerEventCreateView
 from users.views import OrganizerEventEditView,OrganizerEventDeleteView
+from registrations.views import RegistrationListView
 
 
 
@@ -89,6 +90,9 @@ urlpatterns = [
 
     path('organizer/events/<int:pk>/delete/', 
         OrganizerEventDeleteView.as_view(), name='organizer_event_delete'),
+
+    path('event/<int:event_id>/registrations/',
+        RegistrationListView.as_view(), name='registration_list'),
 
 ]
 
