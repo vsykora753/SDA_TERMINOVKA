@@ -1,7 +1,5 @@
 {% load filters %}
-{% include "includes/head.html" %}
 
-{% block content %}
 
 
 <div class="date_event" style="display: flex;font-family: 'Open Sans', sans-serif;color: #4682b4;align-items: center   ;text-transform:uppercase; ">Seznam pořádaných událostí:</div>
@@ -11,7 +9,7 @@
         <a href="{% url 'organizer_event_create'%}" class="date_event a"> + Přidat událost</a>
     </div>         
 </div>
-
+    {% if organizer_events %}
         {% for event in page_obj %}
         
         <div class="dash-container">        
@@ -30,15 +28,14 @@
 
             </div>             
         </div>
-        
-
-        {% empty %}
-        
-            <li>Žádné události nebyly nalezeny.</li>
         {% endfor %}
 
+    {% else %}
+        
+        <li>Žádné události nebyly nalezeny.</li>
+    {% endif %}
+
 
         
 
-{% endblock %}   
 
