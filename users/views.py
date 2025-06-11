@@ -18,6 +18,22 @@ from events.models import Event
 
 
 
+def Myhomepage_view(request):
+    """
+    Redirects users based on their authentication status and role.
+    If the user is authenticated, they are redirected to their respective
+    dashboard based on their role (organizer or regular user).
+    If the user is not authenticated, they are redirected to the events list.
+    """
+    if request.user.is_authenticated:
+        if request.user.role == 'O':
+            return redirect('organizer_dashboard')
+        elif request.user.role == 'R':
+            return redirect('user_dashboard')
+    return redirect('events_list')
+
+
+
 class UserRegisterView(FormView):
     """
     Handles the user registration process.
@@ -318,7 +334,7 @@ def organizer_dashboard(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "organizer/dashboard_organizer.html", {
+    return render(request, "organizer/organizer_dashboard.html", {
         "page_obj": page_obj,
     })
 
