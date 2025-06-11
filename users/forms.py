@@ -24,33 +24,31 @@ class LoginForm(forms.Form):
     password = forms.CharField(label='Heslo', widget=forms.PasswordInput)
 
     def clean(self):
-       """
-       Validates and cleans the form data for user authentication. Ensures
-       that the provided email and password are valid and correspond to an
-       existing user. If both email and password are provided, attempts to
-       authenticate the user. If authentication fails, it raises a validation
-       error. The authenticated user is stored for further processing upon
-       successful validation.
+        """
+        Validates and cleans the form data for user authentication. Ensures
+        that the provided email and password are valid and correspond to an
+        existing user. If both email and password are provided, attempts to
+        authenticate the user. If authentication fails, it raises a validation
+        error. The authenticated user is stored for further processing upon
+        successful validation.
 
-       Raises:
+        Raises:
         forms.ValidationError: If authentication fails due to invalid
             email or password credentials.
 
-       Returns:
+        Returns:
         dict: A dictionary with the cleaned and validated data.
+        """
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email")
+        password = cleaned_data.get("password")
 
-       """
-    cleaned_data = super().clean()
-    email = cleaned_data.get("email")
-    password = cleaned_data.get("password")
-
-    if email and password:
-            user = authenticate(email=email, password=password)
-            if user is None:
-                raise forms.ValidationError("Neplatné přihlašovací údaje.")
-            self.user = user  
-
-    return cleaned_data
+        if email and password:
+                user = authenticate(email=email, password=password)
+                if user is None:
+                    raise forms.ValidationError("Neplatné přihlašovací údaje.")
+                self.user = user  
+        return cleaned_data
 
 class RegisterForm(UserCreationForm):
     """
