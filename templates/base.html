@@ -34,6 +34,8 @@
                 </button>
                 <div class="link_submenu" style="display: none;">
                     <a href="{% url 'organizer_logout' %}" class="logout-button">Odhlásit se</a>
+                    <a href="{% url 'change_password' %}">Změna hesla</a>
+                    
 
                 </div>
             </div>
@@ -93,23 +95,7 @@
     {% endif %}
 
     {% if user.is_authenticated and user.role == 'O' and organizer_events %}
-    <div class="dash-container">  
-
-        <div class="date_event">{{ event.date_event|date:"l, j. F Y" }},  {{ event.city }}</div>
-        <div class="name_event">{{ event.name_event }}</div>
-        <div class="description">{{ event.description|truncate_without_ellipsis:100 }}</div>
-        <div class="date_event basic_info">► Start:  {{event.start_time}} ↔ délka tratě:   {{event.distance|m_2_km}} km ► Kraj:  {{event.region}} ► Startovné: {{event.start_fee|floatformat:0}} ,-</div> 
-        <div class="date_event">
-        <a href="{% url 'organizer_event_update' event.pk %}" class="date_event a"> ✏️ Editovat</a>
-            
-            <form method="post" action="{% url 'organizer_event_delete' event.pk %}" style="display:inline;">
-            {% csrf_token %}
-                <button type="submit" class="link-style" onclick="return confirm('Opravdu chcete smazat tuto událost?')">🗑️ Smazat
-                </button>
-            </form>               
-
-        </div>             
-    </div>
+    
     
     {% endif %}
 
