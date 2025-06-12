@@ -19,6 +19,8 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
+from django.urls import path
+from django.contrib.auth import views as auth_views
 
 # importy pohledu pro  zobrazení událostí, registrace uživatelů a organizátorů
 
@@ -30,6 +32,7 @@ from users.views import OrganizerRegistrationSuccessView,UserLogoutView
 from users.views import OrganizerEventListView,OrganizerEventCreateView
 from users.views import OrganizerEventEditView,OrganizerEventDeleteView
 from registrations.views import RegistrationListView
+
 
 
 
@@ -78,6 +81,12 @@ urlpatterns = [
     path('organizer/logout/', UserLogoutView.as_view(),
         name='organizer_logout'),
 
+    # Změna hesla
+    path('change-password/', auth_views.PasswordChangeView.as_view(
+        template_name='change_password.html'), name='change_password'),
+    path('change-password/done/', auth_views.PasswordChangeDoneView.as_view(
+        template_name='change_password_done.html'), name='password_change_done'),
+    
     # Udalosti organizátora
     path('organizer/events/',OrganizerEventListView.as_view(),
         name='organizer_event_list'),
