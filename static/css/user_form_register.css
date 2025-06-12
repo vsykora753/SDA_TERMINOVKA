@@ -3,10 +3,14 @@
     border-radius: 8px;
     border: 0.1px    #161616;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px 20px;
-    margin: 20px auto;
+    padding: 10px ;
+    margin: 0px auto;
     max-width: 700px;
     transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1px; /* Vzdálenost mezi poli */
+    
 }
 .form_user_register-link {
     text-decoration: none;  /* odstraní podtržení */
@@ -51,4 +55,21 @@ button:hover {
     background-color: #5a9bd5; /* Světlejší modrá při hoveru */
 }
 
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+    
+    table {
+    width: 100%;
+    border-collapse: collapse;
+}
+    
+    th, td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+    
 
