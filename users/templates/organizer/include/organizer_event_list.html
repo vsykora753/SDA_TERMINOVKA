@@ -1,6 +1,6 @@
+
 {% load filters %}
-
-
+{% block content %}
 
 <div class="date_event" style="display: flex;font-family: 'Open Sans', sans-serif;color: #4682b4;align-items: center   ;text-transform:uppercase; ">Seznam pořádaných událostí:</div>
 
@@ -30,7 +30,8 @@
         
         <li>Žádné události nebyly nalezeny.</li>
     {% endif %}
-
+    
+{% endblock %}
 
         
 

@@ -1,14 +1,22 @@
 {% extends "base.html" %}
-##TODO je třeba odladit -> nefunguje smazání události
+
 {% block content %}
-  <h1 class="h1">Opravdu chcete smazat událost: "{{ event.name_event }}"?</h1>
+<div class="dash-container">
+  <h1 class="name_event">Opravdu chcete smazat událost?</h1>
+  <div class="form_user_register">
+    <p class="date_event_basic_info">{{ event.name_event }}</p>
+    <p class="date_event basic_info">{{ event.date_event|date:"l, j. F Y" }}, {{ event.city }}</p>
+    <p class="date_event basic_info">{{ event.description }}</p>
+ </div>
 
-  <p>{{ event.date_event|date:"l, j. F Y" }}, {{ event.city }}</p>
-  <p>{{ event.description }}</p>
-
-  <form method="post">
+<form method="post"></form>
     {% csrf_token %}
-    <button type="submit">Ano, smazat</button>
-    <a href="{% url 'organizer_event_list' %}">Zrušit</a>
+    <button type="submit">Ano, smazat      
+    </button>
+    <button class="dropbtn" type="button">
+        <a  class="user-info" style="color: white;" href="{% url 'organizer_dashboard' %}" >Zrušit</a>
+      </button>
+    
   </form>
-{% endblock %}
+</div>
+{% endblock %}   
