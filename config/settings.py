@@ -27,7 +27,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 load_dotenv()
-SECRET_KEY = os.getenv('SECRET_KEY', default='django-insecure-m*%8ou9_)sh(u%!z9vxdk%ru&2mh0$w_701l04p^apq1g1^7^*')
+SECRET_KEY = os.getenv(
+'SECRET_KEY', default='django-insecure-m*%8ou9_)sh(u%!z9vxdk%ru&2mh0$w_701l04p^apq1g1^7^*')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -38,6 +39,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '8000-vsykora753-sda-terminovk-6k4ljivb0o.app.codeanywhere.com',
+    
     # může se přidat i jiné
 ]
 
@@ -89,6 +91,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "users.context_processors.user_events",
+                "users.context_processors.organizer_events",
             ],
         },
     },
@@ -162,5 +166,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://8000-vsykora753-sda-terminovk-6k4ljivb0o.app.codeanywhere.com',
+]
+
 
 

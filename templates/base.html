@@ -1,76 +1,108 @@
 {% load static %}
+{% load filters %}
 <!DOCTYPE html>
 <html lang="en">
 
 {% include "includes/head.html" %}
+
 <body>
-
 <main>
-
 <div class="container">
     <div class="top-right">
-        {% if user.is_authenticated and user.role == 'R'%}
+
+        {# Přihlášený běžný uživatel #}
+        {% if user.is_authenticated and user.role == 'R' %}
             <div class="dropdown">
                 <button class="dropbtn" type="button">
                     <div class="user-info">Přihlášen uživatel: {{ user.first_name }} {{ user.last_name }}</div>
                     <span class="arrow">▼</span>
                 </button>
-                <div class="link_submenu" style="display: none;">             
+                <div class="link_submenu" style="display: none;">
                     <a href="{% url 'user_logout' %}" class="logout-button">Odhlásit se</a>
-                    
-                    <a href="#">nejlepší výkony</a>
-                    <a href="#">další položka2</a>
+                    <a href="#">Nejlepší výkony</a>
+                    <a href="#">Další položka 2</a>
+
                 </div>
             </div>
-    
-    {% elif user.is_authenticated and user.role == 'O' %}
-        <div class="dropdown">
-            <button class="dropbtn" type="button">
-                <div class="user-info">Přihlášen organizátor: {{ user.organization_name }}</div>
-                <span class="arrow">▼</span>
-            </button>
-            <div class="link_submenu" style="display: none;">
-                <a href="{% url 'organizer_logout' %}" class="logout-button">Odhlásit se</a>
-            </div>
-        </div>
 
-    {% elif not user.is_authenticated  %}
-    <div class="dropdown">
-        <button class="dropbtn" type="button">
-            Registrace <span class="arrow">▼</span>
-        </button>
-        <div class="link_submenu">
-            <div class="link_submenu_item">
-                <a href="{% url 'user_register' %}">Registrovat uživatele</a>
+        {# Přihlášený organizátor #}
+        {% elif user.is_authenticated and user.role == 'O' %}
+            <div class="dropdown">
+                <button class="dropbtn" type="button">
+                    <div class="user-info">Přihlášen organizátor: {{ user.organization_name }}</div>
+                    <span class="arrow">▼</span>
+                </button>
+                <div class="link_submenu" style="display: none;">
+                    <a href="{% url 'organizer_logout' %}" class="logout-button">Odhlásit se</a>
+                    <a href="{% url 'change_password' %}">Změna hesla</a>
+                    
+
+                </div>
             </div>
-            <div class="link_submenu_item">
-                <a href="{% url 'organizer_register' %}">Registrovat organizátora</a>
+
+        {# Nepřihlášený uživatel #}
+        {% else %}
+            <div class="dropdown">
+                <button class="dropbtn" type="button">
+                    Registrace <span class="arrow">▼</span>
+                </button>
+                <div class="link_submenu">
+                    <div class="link_submenu_item">
+                        <a href="{% url 'user_register' %}">Registrovat uživatele</a>
+                    </div>
+                    <div class="link_submenu_item">
+                        <a href="{% url 'organizer_register' %}">Registrovat organizátora</a>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <div class="dropdown">
+                <button class="dropbtn" type="button">
+                    Přihlášení <span class="arrow">▼</span>
+                </button>
+                <div class="link_submenu">
+                    <div class="link_submenu_item">
+                        <a href="{% url 'user_login' %}">Přihlásit uživatele</a>
+                    </div>
+                    <div class="link_submenu_item">
+                        <a href="{% url 'organizer_login' %}">Přihlásit organizátora</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 
-    <div class="dropdown">
-        <button class="dropbtn" type="button">
-            Přihlášení <span class="arrow">▼</span>
-        </button>
-        <div class="link_submenu">
-            <div class="link_submenu_item">
-                <a href="{% url 'user_login' %}">Přihlásit uživatele</a>
-            </div>
-            <div class="link_submenu_item">
-                <a href="{% url 'organizer_login' %}">Přihlásit organizátora</a>
-            </div>
-        </div>
-    </div>
-
-{% endif %}
-    </div>
     <h1 class="h1">Termínovka běžeckých závodů</h1>
-    {% include "includes/nav_bar.html" %} 
+
+    {% include "includes/nav_bar.html" %}
 
     {% block content %}
-    {% endblock %}
-</div>
+    
+    {% if user.is_authenticated and user.role == 'R' and runner_events %}
+    <div class="dash-container">  
+
+        <div class="date_event">{{ event.date_event|date:"l, j. F Y" }},  {{ event.city }}</div>
+        <div class="name_event">{{ event.name_event }}</div>
+        <div class="description">{{ event.description|truncate_without_ellipsis:100 }}</div>
+        <div class="date_event basic_info">► Start:  {{event.start_time}} ↔ délka tratě:   {{event.distance|m_2_km}} km ► Kraj:  {{event.region}} ► Startovné: {{event.start_fee|floatformat:0}} ,-</div> 
+        <div class="date_event">
+        <a href="#" class="date_event a"> ✏️ Přihlásit se</a>
+        <a href="#" class="date_event a"> ❌ Odhlásit se</a>"
+                  
+
+        </div>             
+    </div>
+    {% endif %}
+
+    {% if user.is_authenticated and user.role == 'O' and organizer_events %}
+    
+    
+    {% endif %}
+
+
+{% endblock %}
+    
+
 </div>
 </main>
 </body>

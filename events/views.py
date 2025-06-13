@@ -10,7 +10,7 @@ class EventListView(ListView):
     model = Event
     template_name = 'events_list.html'  
     context_object_name = 'events'
-    ordering = ['date_event']
+    ordering = ['date_event','start_time']
     paginate_by = 6 #zobrazí na stránce 6 událostí
 
 

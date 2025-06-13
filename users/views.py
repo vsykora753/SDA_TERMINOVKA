@@ -1,6 +1,7 @@
 # importy z Djanga
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -11,10 +12,27 @@ from django.core.paginator import Paginator
 from .mixins import OrganizerEventQuerysetMixin
 from .forms import OrganizerEventForm 
 
+
 # formuláře a modely v projektu vytvořené
 
 from .forms import RegisterForm, LoginForm, OrganizerRegisterForm
 from events.models import Event
+
+
+
+def Myhomepage_view(request):
+    """
+    Redirects users based on their authentication status and role.
+    If the user is authenticated, they are redirected to their respective
+    dashboard based on their role (organizer or regular user).
+    If the user is not authenticated, they are redirected to the events list.
+    """
+    if request.user.is_authenticated:
+        if request.user.role == 'O':
+            return redirect('organizer_dashboard')
+        elif request.user.role == 'R':
+            return redirect('user_dashboard')
+    return redirect('events_list')
 
 
 
@@ -119,7 +137,7 @@ class UserRegistrationSuccessView(TemplateView):
 
 
 
-class UserLoginView(FormView):
+class RoleBasedLoginView(FormView):
     """
     Handles user login functionality.
 
@@ -136,7 +154,7 @@ class UserLoginView(FormView):
     """
     template_name = 'user/user_login.html'
     form_class = LoginForm
-    success_url = reverse_lazy('user_dashboard')
+
 
     def form_valid(self, form):
         """
@@ -293,36 +311,6 @@ class OrganizerRegistrationSuccessView(TemplateView):
     
 
 
-class OrganizerLoginView(UserLoginView):
-    """
-    Handles the login view for organized users.
-
-    This class provides a custom login view specifically tailored for
-    organized users, inheriting from a generic user login view. It applies a
-    specific template for the login functionality of organizers.
-
-    Attributes:
-        template_name (str): Path to the HTML template used to render the
-            login page for organizers.
-    """
-
-    template_name = 'organizer/organizer_login.html'
-    form_class = LoginForm
-    success_url = reverse_lazy('organizer_dashboard')
-
-    def form_valid(self, form):
-        user = form.user  # získání autentizovaného uživatele z formuláře
-        login(self.request, user)
-        
-        if user.role == 'R':
-            return HttpResponseRedirect(reverse('user_dashboard'))
-        elif user.role == 'O':
-            return HttpResponseRedirect(reverse('organizer_dashboard'))
-        else:
-            return HttpResponseRedirect(reverse('events_list'))   
-
-
-
 
 
 @login_required(login_url='/login/')
@@ -340,21 +328,16 @@ def organizer_dashboard(request):
         the user is an organizer or a redirect response to the events list
         page otherwise.
     """
-    if request.user.role != 'O':  
-        return redirect('events_list')  
+    if request.user.role != 'O':
+        return redirect('no_access')  # nebo 403
 
-    events = Event.objects.filter(organizer=request.user)
-    paginator = Paginator(events, 6) 
-    page_number = request.GET.get('page')
+    events = Event.objects.filter(organizer=request.user).order_by('date_event','start_time')
+    paginator = Paginator(events,5)
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'organizer/organizer_dashboard.html', {
-        'user': request.user,
-        'organizer': request.user,  
-        'events': events,
-        'page_obj': page_obj,
-        'paginator': paginator,
-        'is_paginated': page_obj.has_other_pages()
+    return render(request, "organizer/organizer_dashboard.html", {
+        "page_obj": page_obj,
     })
 
 
@@ -376,7 +359,7 @@ class OrganizerEventListView(OrganizerEventQuerysetMixin, ListView):
     model = Event
     template_name = 'organizer/include/organizer_event_list.html'
     context_object_name = 'events'
-    ordering = ['start_date']  
+    ordering = ['-date_event','-start_time']  
     paginate_by = 6
     
 
@@ -414,26 +397,20 @@ class OrganizerEventDeleteView(OrganizerEventQuerysetMixin, View):
         model (Model): The model class for the event being deleted.
         template_name (str): The template used to confirm the deletion.
     """
+    template_name = 'organizer/event_confirm_delete.html'
+
+    def get(self, request, pk):
+        
+        event = get_object_or_404(self.get_queryset(), pk=pk)
+        return render(request, self.template_name, {'event': event})
+
     def post(self, request, pk):
-        """
-        Handles the POST request to delete an event.
-        This method retrieves the event by its primary key (pk) and checks if
-        the event exists and belongs to the logged-in organizer. If the event
-        is found, it is deleted, and the user is redirected to the event list
-        page. If the event does not exist or does not belong to the organizer,
-        a 404 error is raised.
-        Args:
-            request: The HTTP request object containing metadata about the
-                request.
-            pk (int): The primary key of the event to be deleted.
-        Returns:
-            HttpResponseRedirect: Redirects to the organizer event list page
-            after successful deletion of the event.
-        """
-        event = Event.objects.get(pk=pk)
-        event = get_object_or_404(Event, pk=pk, organizer=request.user)
+        event = get_object_or_404(self.get_queryset(), pk=pk)
         event.delete()
-        return redirect('organizer_event_list')
+        messages.success(request, 'Událost byla smazána')
+        return redirect('organizer_dashboard')
+    
+
 
 #============ Vytvoření události organizátora ============      
 
@@ -454,7 +431,7 @@ class OrganizerEventCreateView(OrganizerEventQuerysetMixin, FormView):
     
     template_name = 'organizer/create_event.html'
     form_class = OrganizerEventForm  # udělat formulář pro událost
-    success_url = reverse_lazy('organizer_event_list')
+    success_url = reverse_lazy('organizer_dashboard')
 
     def form_valid(self, form):
         """
@@ -465,6 +442,8 @@ class OrganizerEventCreateView(OrganizerEventQuerysetMixin, FormView):
         event = form.save(commit=False)
         event.organizer = self.request.user
         event.save()
+        print("Událost byla úspěšně vytvořena:", event)
+
         return super().form_valid(form)
     
 

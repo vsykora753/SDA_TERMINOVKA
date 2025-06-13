@@ -10,13 +10,57 @@
             <a href="{% url 'organizer_dashboard' %}" class="back-link">↵ Zpět na výpis událostí</a>
         </div>
 
-    <div class="form_user_register">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Uložit změny</button>
-        </form>
-    </div>
+        <div class="form_user_register">
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <label for="{{ form.date_event.id_for_label }}">{{ form.date_event.label }}</label>
+                {{ form.date_event.errors }}
+                {{ form.date_event }}
+                <label for="{{ form.name_event.id_for_label }}">{{ form.name_event.label }}</label>
+                {{ form.name_event.errors }}
+                {{ form.name_event }}
+                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                {{ form.description.errors }}
+                {{ form.description }}
+                <label for="{{ form.start_time.id_for_label }}">{{ form.start_time.label }}</label>
+                {{ form.start_time.errors }}
+                {{ form.start_time }}
+                <label for="{{ form.distance.id_for_label }}">{{ form.distance.label }}</label>
+                {{ form.distance.errors }}
+                {{ form.distance }}
+                <label for="{{ form.country.id_for_label }}">{{ form.country.label }}</label>
+                {{ form.country.errors }}
+                {{ form.country }}
+                <label for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+                {{ form.city.errors }}
+                {{ form.city }}
+                <label for="{{ form.region.id_for_label }}">{{ form.region.label }}</label>
+                {{ form.region.errors }}
+                {{ form.region  }}
+                <label for="{{ form.typ_race.id_for_label }}">{{ form.typ_race.label }}</label>
+                {{ form.typ_race.errors }}
+                {{ form.typ_race }}
+                <label for="{{ form.propozition.id_for_label }}">{{ form.propozition.label }}</label>
+                {{ form.propozition.errors }}
+                {{ form.propozition }}               
+                <label for="{{ form.start_fee.id_for_label }}">{{ form.start_fee.label }}</label>
+                {{ form.start_fee.errors }}
+                {{ form.start_fee }}
+                <label for="{{ form.organizer.id_for_label }}">{{ form.organizer.label }}</label>
+                {{ form.organizer.errors }}
+                {{ form.organizer }}
+
+
+                <button type="submit">Uložit změny</button>
+            </form>
+        </div>
 </main>
 {% endblock %}
 
