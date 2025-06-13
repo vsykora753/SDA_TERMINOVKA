@@ -1,22 +1,22 @@
 {% extends "base.html" %}
-
+{% load filters %}
 {% block content %}
 <div class="dash-container">
-  <h1 class="name_event">Opravdu chcete smazat událost?</h1>
-  <div class="form_user_register">
-    <p class="date_event_basic_info">{{ event.name_event }}</p>
-    <p class="date_event basic_info">{{ event.date_event|date:"l, j. F Y" }}, {{ event.city }}</p>
-    <p class="date_event basic_info">{{ event.description }}</p>
- </div>
+  <h1 class="name_event" color="red" style="color: red;">Opravdu chcete smazat událost?</h1>
+     
+    <div class="date_event">{{ event.date_event|date:"l, j. F Y" }},  {{ event.city }}</div>
+    <div class="name_event">{{ event.name_event }}</div>
+    <div class="description">{{ event.description|truncate_without_ellipsis:100 }}</div>
+    <div class="date_event basic_info">► Start:  {{event.start_time}} ↔ délka tratě:   {{event.distance|m_2_km}} km ► Kraj:  {{event.region}} ► Startovné: {{event.start_fee|floatformat:0}} ,-</div> 
+    <div class="date_event">
+    </div>
 
-<form method="post"></form>
+  <form method="post" action="{% url 'organizer_event_delete' event.pk %}">
     {% csrf_token %}
-    <button type="submit">Ano, smazat      
-    </button>
+    <button type="submit">Ano, smazat</button>
     <button class="dropbtn" type="button">
-        <a  class="user-info" style="color: white;" href="{% url 'organizer_dashboard' %}" >Zrušit</a>
-      </button>
-    
+      <a class="user-info" style="color: white;" href="{% url 'organizer_dashboard' %}">Zrušit</a>
+    </button>
   </form>
 </div>
-{% endblock %}   
+{% endblock %}

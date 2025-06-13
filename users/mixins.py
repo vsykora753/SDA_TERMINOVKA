@@ -8,6 +8,6 @@ class OrganizerEventQuerysetMixin:
         user = self.request.user
         if not user.is_authenticated or user.role != 'O':
             return Event.objects.none()
-        return Event.objects.filter(organizer=self.request.user)
+        return Event.objects.filter(organizer=user)
 
 

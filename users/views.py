@@ -1,6 +1,7 @@
 # importy z Djanga
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -10,6 +11,7 @@ from django.views.generic.edit import FormView
 from django.core.paginator import Paginator
 from .mixins import OrganizerEventQuerysetMixin
 from .forms import OrganizerEventForm 
+
 
 # formuláře a modely v projektu vytvořené
 
@@ -329,8 +331,8 @@ def organizer_dashboard(request):
     if request.user.role != 'O':
         return redirect('no_access')  # nebo 403
 
-    events = Event.objects.filter(organizer=request.user).order_by('-date_event')
-    paginator = Paginator(events, 5)
+    events = Event.objects.filter(organizer=request.user).order_by('date_event','start_time')
+    paginator = Paginator(events,5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
@@ -357,7 +359,7 @@ class OrganizerEventListView(OrganizerEventQuerysetMixin, ListView):
     model = Event
     template_name = 'organizer/include/organizer_event_list.html'
     context_object_name = 'events'
-    ordering = ['start_date']  
+    ordering = ['-date_event','-start_time']  
     paginate_by = 6
     
 
@@ -405,7 +407,8 @@ class OrganizerEventDeleteView(OrganizerEventQuerysetMixin, View):
     def post(self, request, pk):
         event = get_object_or_404(self.get_queryset(), pk=pk)
         event.delete()
-        return redirect('organizer_event_list')
+        messages.success(request, 'Událost byla smazána')
+        return redirect('organizer_dashboard')
     
 
 
@@ -428,7 +431,7 @@ class OrganizerEventCreateView(OrganizerEventQuerysetMixin, FormView):
     
     template_name = 'organizer/create_event.html'
     form_class = OrganizerEventForm  # udělat formulář pro událost
-    success_url = reverse_lazy('organizer_event_list')
+    success_url = reverse_lazy('organizer_dashboard')
 
     def form_valid(self, form):
         """
@@ -439,6 +442,8 @@ class OrganizerEventCreateView(OrganizerEventQuerysetMixin, FormView):
         event = form.save(commit=False)
         event.organizer = self.request.user
         event.save()
+        print("Událost byla úspěšně vytvořena:", event)
+
         return super().form_valid(form)
     
 

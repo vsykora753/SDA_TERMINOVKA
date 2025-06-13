@@ -88,8 +88,10 @@ urlpatterns = [
         template_name='change_password_done.html'), name='password_change_done'),
     
     # Udalosti organizátora
+    
     path('organizer/events/',OrganizerEventListView.as_view(),
         name='organizer_event_list'),
+    
 
     path('organizer/events/create/', 
         OrganizerEventCreateView.as_view(), name='organizer_event_create'),
