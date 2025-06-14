@@ -1,12 +1,10 @@
-from datetime import date, datetime
-
-from dateutil.relativedelta import relativedelta
 from django import forms
-from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
-
 from .models import User
-
+from events.models import Event
+from datetime import date
+from dateutil.relativedelta import relativedelta
+from django.contrib.auth import authenticate
 
 class LoginForm(forms.Form):
     """
@@ -20,10 +18,10 @@ class LoginForm(forms.Form):
         email (forms.EmailField): A field to input the user's email address.
         password (forms.CharField): A field to input the user's password will
             be obscured as it uses the PasswordInput widget.
-    """
 
-    email = forms.EmailField(label="Emailová adresa")
-    password = forms.CharField(label="Heslo", widget=forms.PasswordInput)
+    """
+    email = forms.EmailField(label='Emailová adresa')
+    password = forms.CharField(label='Heslo', widget=forms.PasswordInput)
 
     def clean(self):
         """
@@ -35,24 +33,23 @@ class LoginForm(forms.Form):
         successful validation.
 
         Raises:
-            forms.ValidationError: If authentication fails due to invalid
-                email or password credentials.
+        forms.ValidationError: If authentication fails due to invalid
+        email or password credentials.
 
         Returns:
-            dict: A dictionary with the cleaned and validated data.
+        dict: A dictionary with the cleaned and validated data.
         """
         cleaned_data = super().clean()
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
 
-        if email and password:
+    if email and password:
             user = authenticate(email=email, password=password)
             if user is None:
                 raise forms.ValidationError("Neplatné přihlašovací údaje.")
-            self.user = user
+            self.user = user  
 
-        return cleaned_data
-
+    return cleaned_data
 
 class RegisterForm(UserCreationForm):
     """
@@ -70,9 +67,8 @@ class RegisterForm(UserCreationForm):
         website: An optional field for providing a URL to the user's or
             organization's website.
     """
-
     birth_date = forms.DateField(label="Datum narození",
-                                 widget=forms.DateInput(attrs={"type": "date"})
+                            widget=forms.DateInput(attrs={"type": "date"})
     )
     organization_name = forms.CharField(label="Název organizace",
                                         required=False
@@ -80,45 +76,29 @@ class RegisterForm(UserCreationForm):
     website = forms.URLField(label="Webová stránka", required=False)
 
     class Meta:
-        """
-        Metadata configuration for the User model form.
-
-        This class provides meta-options for defining the fields, labels, and
-        structure of a form related to the User model. It specifies the
-        fields to include in the form, the user-friendly labels for those
-        fields, and is used to customize the form's representation and
-        behavior.
-
-        Attributes:
-            model (Type[User]): The model that this form is based on.
-            fields (list[str]): A list of field names included in the form.
-            labels (dict[str, str]): A dictionary mapping field names to their
-                human-readable labels.
-        """
-
-        model = User
-        fields = [
-            "email",
-            "first_name",
-            "last_name",
-            "birth_date",
-            "sex",
-            "organization_name",
-            "website",
-            "password1",
-            "password2",
-        ]
-        labels = {
-            "email": "Emailová adresa",
-            "first_name": "Křestní jméno",
-            "last_name": "Příjmení",
-            "birth_date": "Datum narození",
-            "sex": "Pohlaví",
-            "organization_name": "Název organizace",
-            "website": "Webová stránka",
-            "password1": "Heslo",
-            "password2": "Potvrzení hesla",
-        }
+            model = User
+            fields = [
+                "email",
+                "first_name",
+                "last_name",
+                "birth_date",
+                "sex",
+                "organization_name",
+                "website",
+                "password1",
+                "password2",
+            ]
+            labels = {
+                "email": "Emailová adresa",
+                "first_name": "Křestní jméno",
+                "last_name": "Příjmení",
+                "birth_date": "Datum narození",
+                "sex": "Pohlaví",
+                "organization_name": "Název organizace",
+                "website": "Webová stránka",
+                "password1": "Heslo",
+                "password2": "Potvrzení hesla",
+            }
 
     def clean_email(self):
         """
@@ -132,8 +112,7 @@ class RegisterForm(UserCreationForm):
         Returns:
             str: The validated email address.
         """
-
-        email = self.cleaned_data.get("email")
+        email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Tento email je již zaregistrovaný.")
         return email
@@ -146,35 +125,32 @@ class RegisterForm(UserCreationForm):
         - A value for the birthdate must be provided.
         - The birthdate cannot be a future date.
         - The user's age, calculated from the birthdate, must be 18 years or
-          older.
+        older.
 
         Raises:
             forms.ValidationError: If the birthdate is not provided.
             forms.ValidationError: If the birthdate is in the future.
             forms.ValidationError: If the user is younger than 18 years old.
 
-        Returns:
+        Returns:Add commentMore actions
             datetime.date: The validated birthdate.
         """
 
-        birth_date = self.cleaned_data.get("birth_date")
-        today = datetime.date.today()  # TODO zjistit potencionální problém
+        birth_date = self.cleaned_data.get('birth_date')
+        today = date.today()
         if not birth_date:
             raise forms.ValidationError("Datum narození je povinné.")
 
         if birth_date > today:
-            raise forms.ValidationError(
-                "Datum narození nemůže být v budoucnosti."
-            )
+            raise forms.ValidationError("Datum narození nemůže být v budoucnosti.")
         if birth_date:
             age = relativedelta(date.today(), birth_date).years
             if age < 18:
-                raise forms.ValidationError(
-                    "Musíte být starší 18 let pro registraci."
-                )
+                raise forms.ValidationError("Musíte být starší 18 let pro registraci.")
         return birth_date
 
     def save(self, commit=True):
+
         """
         Saves the user instance with additional data processing and validation.
 
@@ -192,9 +168,8 @@ class RegisterForm(UserCreationForm):
 
         Returns:
             User: The user instance with updated attributes. If `commit` is
-                True, the instance is saved before being returned.
+                True, the instance is saved before being returned.Add commentMore actions
         """
-
         user = super().save(commit=False)
         user.birth_date = self.cleaned_data.get("birth_date")
         user.organization_name = self.cleaned_data.get("organization_name")
@@ -203,7 +178,7 @@ class RegisterForm(UserCreationForm):
         if commit:
             user.save()
         return user
-
+    
 
 class OrganizerRegisterForm(UserCreationForm):
     """
@@ -224,6 +199,11 @@ class OrganizerRegisterForm(UserCreationForm):
                                         required=True
     )
 
+    organization_name = forms.CharField(
+        label='Název organizace',
+        required=True
+    )
+
     class Meta:
         """
         Meta-information about form fields and their customization settings.
@@ -239,7 +219,7 @@ class OrganizerRegisterForm(UserCreationForm):
             model (type): Reference to the User model used by the form.
             fields (list of str): List of fields included in the form.
             labels (dict): Dictionary mapping field names to their
-                corresponding user-friendly label names.
+            corresponding user-friendly label names.
         """
 
         model = User
@@ -270,8 +250,7 @@ class OrganizerRegisterForm(UserCreationForm):
         Raises:
             forms.ValidationError: If the email is already registered.
         """
-
-        email = self.cleaned_data.get("email")
+        email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Tento email je již zaregistrovaný.")
         return email
@@ -291,10 +270,94 @@ class OrganizerRegisterForm(UserCreationForm):
         Returns:
             User: The user instance, modified with the added or updated fields.
         """
-
         user = super().save(commit=False)
         user.organization_name = self.cleaned_data.get("organization_name")
-        user.role = "O"
+        user.role = "O"  # nastavíme roli organizátora
         if commit:
             user.save()
         return user
+    
+class OrganizerEventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = [
+            'date_event',
+            'name_event',
+            'description',
+            'start_time',
+            'distance',
+            'country',
+            'city',
+            'region',
+            'typ_race',
+            'propozition',
+            'start_fee',
+        ]
+        widgets = {
+            'description': forms.Textarea(attrs={
+                'rows': 5,
+                'cols': 80, 
+                'style': 'width: 100%;',
+                'placeholder': 'Popiš událost...'
+            }),
+        }
+        labels = {
+            'date_event': 'Datum události',
+            'name_event': 'Název události',
+            'description': 'Popis události',
+            'start_time': 'Čas startu',
+            'distance': 'Vzdálenost',
+            'country': 'Země',
+            'city': 'Město',
+            'region': 'Kraj',
+            'typ_race': 'Typ závodu - povrch',
+            'propozition': 'Propozice',
+            'start_fee': 'Startovné',    
+        }
+
+
+    def clean_date_event(self):
+        date_event = self.cleaned_data.get('date_event')
+        if date_event and date_event < date.today():
+            raise forms.ValidationError(
+                "Datum události nemůže být v minulosti. "
+                "Zvolte prosím platné datum."
+            )
+        return date_event
+    
+    def clean_start_time(self):
+        start_time = self.cleaned_data.get('start_time')
+        if start_time:
+            if (start_time.hour < 0 or start_time.hour > 23 or 
+                start_time.minute < 0 or start_time.minute > 59
+            ):
+                raise forms.ValidationError(
+                    "Čas startu musí být v platném formátu (HH:MM)."
+                )
+        return start_time
+
+    def clean_distance(self):
+        distance = self.cleaned_data.get('distance')
+        if distance is not None and distance <= 0:
+            raise forms.ValidationError(
+                "Vzdálenost musí být kladné číslo(v metrech)."
+            )
+        return distance
+    
+    def clean_start_fee(self):
+        start_fee = self.cleaned_data.get('start_fee')
+        if start_fee is not None and start_fee < 0:
+            raise forms.ValidationError(                
+                "Startovné nemůže být záporné číslo."
+            )
+        if start_fee is not None:
+            rounded_fee = round(start_fee/ 10) * 10
+            return rounded_fee
+        
+        return start_fee
+    def clean_region(self):
+        region = self.cleaned_data.get('region')
+        if not region:
+            raise forms.ValidationError("Kraj je povinný.")
+        return region
+    
