@@ -49,6 +49,7 @@ class UserManager(BaseUserManager):
         Raises:
             ValueError: If the email is not provided.
         """
+
         if not email:
             raise ValueError("Uživatel musí mít emailovou adresu.")
         email = self.normalize_email(email)
@@ -129,6 +130,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         REQUIRED_FIELDS (list): A list of fields required for creating a user,
             excluding the username and password.
     """
+
     ROLE_CHOICES = [
         ("R", "Runner"),
         ("O", "Organizátor"),
@@ -137,50 +139,22 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=1, choices=ROLE_CHOICES)
-
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=60)
     birth_date = models.DateField(null=True, blank=True)
     sex = models.CharField(max_length=1, choices=[("M", "Muž"), ("F", "Žena")])
-
     organization_name = models.CharField(max_length=100, null=True, blank=True)
     website = models.URLField(null=True, blank=True)
-
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-
     objects = UserManager()
 
-    USERNAME_FIELD = "email"  # klíčové: email jako uživatelské jméno
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["role", "first_name", "last_name", "birth_date", "sex"]
 
     def __str__(self):
-        """
-        Returns the string representation of the instance.
-
-        This method provides a human-readable string representation of the
-        object, typically used for debugging or displaying the instance in a
-        user-friendly format.
-
-        Returns:
-            str: A string that represents the instance, specifically the email
-            attribute.
-        """
         return self.email
 
     class Meta:
-        """
-        Represents a user entity.
-
-        Represents the user model in the application. It defines the
-        properties related to a user and is used for data management and user
-        representation in the system.
-
-        Attributes:
-            verbose_name (str): Singular name for the user, used for
-                presentation.
-            verbose_name_plural (str): Plural name for the user, used for
-                presentation of multiple users.
-        """
         verbose_name = "uživatel"
         verbose_name_plural = "uživatelé"

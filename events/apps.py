@@ -14,5 +14,6 @@ class EventsConfig(AppConfig):
             for models in this application.
         name (str): The name of the application.
     """
+
     default_auto_field = "django.db.models.BigAutoField"
     name = "events"
