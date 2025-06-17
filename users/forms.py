@@ -43,13 +43,12 @@ class LoginForm(forms.Form):
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
 
-    if email and password:
+        if email and password:
             user = authenticate(email=email, password=password)
             if user is None:
                 raise forms.ValidationError("Neplatné přihlašovací údaje.")
             self.user = user  
-
-    return cleaned_data
+        return cleaned_data
 
 class RegisterForm(UserCreationForm):
     """

@@ -11,7 +11,8 @@ from django.views.generic.edit import FormView
 from django.core.paginator import Paginator
 from .mixins import OrganizerEventQuerysetMixin
 from .forms import OrganizerEventForm 
-
+from registrations.models import Registration
+from datetime import date
 
 # formuláře a modely v projektu vytvořené
 
@@ -127,8 +128,8 @@ class UserRegistrationSuccessView(TemplateView):
                 are typically used to customize the context data.
 
         Returns:
-            dict: A dictionary containing the combined context data, includingAdd commentMore actions
-                the custom success message.
+            dict: A dictionary containing the combined context data, ¨
+            including   the custom success message.
         """
         context = super().get_context_data(**kwargs)
         context['message'] = \
@@ -175,7 +176,7 @@ class RoleBasedLoginView(FormView):
 
             - Redirects to 'user_dashboard' for users with role 'R'.
             - Redirects to 'organizer_dashboard' for users with role 'O'.
-            - Redirects to 'events_list' for users with any other role.Add commentMore actions
+            - Redirects to 'events_list' for users with any other role.
         """
         user = form.user  
         login(self.request, user)
@@ -203,18 +204,66 @@ def user_dashboard(request):
     Returns:
         HttpResponse: The HTTP response object with the rendered dashboard
         page for authorized users, or a redirect to the events list for others.
-    """
-
+    """       
+    # Kontrola, zda je uživatel přihlášen a má roli 'R' (běžec)
     if request.user.role != 'R':
         return redirect('events_list') 
-    return render(
-        request,
-        'user/user_dashboard.html',
-        {'user': request.user}
-    )
+    registrations = Registration.objects.filter(
+        id_user=request.user).select_related('id_event').order_by(
+        'id_event__date_event', 'id_event__start_time')
+    paginator = Paginator(registrations,5)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "user/user_dashboard.html", {
+        "page_obj": page_obj,
+        
+
+    })
+
+@login_required(login_url='/login/')
+def unregister_from_event(request, id_event):  
+    #TODO dodat docstrings a přesunout do registrations/views.py
+    # zatím nefunguje 
+    if request.user.role != 'R':
+        return redirect('events_list')
+
+    registrations= get_object_or_404(
+        Registration, id_event=id_event, id_user=request.user)
+    registrations.delete()
+
+    return redirect('user_dashboard')
+
     
-
-
+class UserEventListView(OrganizerEventQuerysetMixin, ListView):
+    """
+    Displays a list of events organized by the logged-in user.
+    This view inherits from OrganizerEventQuerysetMixin to filter events
+    based on the organizer (the logged-in user). It uses Django's ListView
+    to handle the display of events in a paginated format.
+    Attributes:
+        model (Model): The model class for the events to be listed.
+        template_name (str): The template used to render the event list.
+        context_object_name (str): The name of the context variable that
+            contains the list of events.
+        ordering (list): The order in which events are displayed, sorted by
+            start date.
+        paginate_by (int): The number of events to display per page.
+    """
+    model = Event
+    template_name = 'user/include/user_event_list.html'
+    context_object_name = 'events'
+    ordering = ['-date_event','-start_time']  
+    paginate_by = 6
+    
+    def get_queryset(self):
+        """
+        Returns a queryset of events that are upcoming and ordered by date 
+        and start time.
+        """
+        queryset = super().get_queryset()  
+        return queryset.filter(date_event__gte=date.today()).order_by(
+            'date_event', 'start_time')  
 
 class UserLogoutView(View):
     """
@@ -331,8 +380,9 @@ def organizer_dashboard(request):
     if request.user.role != 'O':
         return redirect('no_access')  # nebo 403
 
-    events = Event.objects.filter(organizer=request.user).order_by('date_event','start_time')
-    paginator = Paginator(events,5)
+    organizer_events = Event.objects.filter(organizer=request.user).order_by(
+        'date_event','start_time')
+    paginator = Paginator(organizer_events,5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
