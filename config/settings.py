@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.urls import reverse_lazy
 
 
 
@@ -158,7 +159,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_URL = '/login/'
+LOGIN_URL = reverse_lazy('user_login')
 LOGIN_REDIRECT_URL = '/' 
 
 AUTH_USER_MODEL = 'users.User'
