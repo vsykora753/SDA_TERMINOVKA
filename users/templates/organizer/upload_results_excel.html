@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h1">Nahrání výsledků pro závod</h1>
+
+<div class="back-link-bar">
+    <a href="{% url 'organizer_dashboard' %}" class="back-link">↵ Zpět na výpis položek pro organizátory</a>
+</div>
+<div class="writing-container" >
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="excel_file" accept=".xlsx" required
+        style="font-family: Arial;
+                font-size: 16px;
+                color: #4682b4;;
+                background-color: #f2f2f2;
+                border: 1px solid #ccc;
+                padding: 8px;
+                border-radius: 6px;">
+    <button type="submit" class="dropbtn">Nahrát výsledky</button>
+    </form>
+</div>
+
+{% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}
+

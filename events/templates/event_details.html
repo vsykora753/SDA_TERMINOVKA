@@ -17,7 +17,7 @@
     <div class="description_detail">{{ event.description }}</div> 
     <div class="date_event basic_info_detail">Propozice: {{ event.propozition }}</div>    
     
-    <a href="{% url 'event_register' event.pk %}" class="btn btn-primary">Přihlásit se do závodu</a>
-    
+    <a href="{% url 'register_for_event' event.id %}" class="btn btn-primary">Přihlásit se do závodu</a>
+ 
 </div>
 {% endblock %}

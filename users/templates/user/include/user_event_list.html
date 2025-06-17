@@ -1,0 +1,32 @@
+{% load filters %}
+{% block content %}
+
+<div class="date_event" style="display: flex;font-family: 'Open Sans', sans-serif;color: #4682b4;align-items: center   ;text-transform:uppercase; ">Seznam přihlášených závodů:
+</div>
+
+ 
+    
+    {% for registration in page_obj %}
+        <div class="dash-container"> 
+
+            <div class="date_event">{{ registration.id_event.date_event|date:"l, j. F Y" }}, {{ registration.id_event.city }}</div>
+            <div class="name_event">{{ registration.id_event.name_event }}</div>
+            <div class="description">{{ registration.id_event.description|truncate_without_ellipsis:100 }}</div>
+            <div class="date_event basic_info">
+            ► Start:  {{registration.id_event.start_time}}
+            ↔ délka tratě:   {{registration.id_event.distance|m_2_km}} km 
+            ► Kraj:  {{registration.id_event.region}} 
+            ► Startovné: {{registration.id_event.start_fee|floatformat:0}} ,-</div> 
+            <div class="date_event">
+            Datum registrace:{{ registration.registration_date|date:"d.m.Y H:i" }}    
+            <a href="{% url 'unregister_from_event' registration.id_event_id %}" class="date_event a"> ❌ Odhlásit se</a>
+            </div> 
+        </div>
+    
+    {% empty %}
+    
+    <li>Žádné události nebyly nalezeny.</li>
+            
+    {% endfor %}
+
+{% endblock %}

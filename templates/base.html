@@ -19,11 +19,12 @@
                 </button>
                 <div class="link_submenu" style="display: none;">
                     <a href="{% url 'user_logout' %}" class="logout-button">Odhlásit se</a>
+                    <a href="{% url 'user_dashboard' %}">Přihlášené závody</a>
                     <a href="#">Nejlepší výkony</a>
-                    <a href="#">Další položka 2</a>
 
                 </div>
             </div>
+            
 
         {# Přihlášený organizátor #}
         {% elif user.is_authenticated and user.role == 'O' %}
@@ -34,6 +35,7 @@
                 </button>
                 <div class="link_submenu" style="display: none;">
                     <a href="{% url 'organizer_logout' %}" class="logout-button">Odhlásit se</a>
+                    <a href="#">Výběr závodů</a> ##TODO nastavit filtr pro výběr událostí
                     <a href="{% url 'change_password' %}">Změna hesla</a>
                     
 
@@ -75,34 +77,10 @@
     <h1 class="h1">Termínovka běžeckých závodů</h1>
 
     {% include "includes/nav_bar.html" %}
-
-    {% block content %}
+{% block content %}
     
-    {% if user.is_authenticated and user.role == 'R' and runner_events %}
-    <div class="dash-container">  
-
-        <div class="date_event">{{ event.date_event|date:"l, j. F Y" }},  {{ event.city }}</div>
-        <div class="name_event">{{ event.name_event }}</div>
-        <div class="description">{{ event.description|truncate_without_ellipsis:100 }}</div>
-        <div class="date_event basic_info">► Start:  {{event.start_time}} ↔ délka tratě:   {{event.distance|m_2_km}} km ► Kraj:  {{event.region}} ► Startovné: {{event.start_fee|floatformat:0}} ,-</div> 
-        <div class="date_event">
-        <a href="#" class="date_event a"> ✏️ Přihlásit se</a>
-        <a href="#" class="date_event a"> ❌ Odhlásit se</a>"
-                  
-
-        </div>             
-    </div>
-    {% endif %}
-
-    {% if user.is_authenticated and user.role == 'O' and organizer_events %}
-    
-    
-    {% endif %}
-
-
 {% endblock %}
-    
-
+    </div>
 </div>
 </main>
 </body>
