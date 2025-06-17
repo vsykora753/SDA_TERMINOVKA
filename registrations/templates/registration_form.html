@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="h1">Registrace na závod: {{ event.name }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="form_user_register">
+        <label for="{{ form.category.id_for_label }}" class="form-label">
+            {{ form.category.label }}
+        </label>
+        {{ form.category }}
+        {% if form.category.help_text %}
+            <div id="categoryHelpText" class="form-text">{{ form.category.help_text }}</div>
+        {% endif %}
+        {% if form.category.errors %}
+            <div class="text-danger">{{ form.category.errors }}</div>
+        {% endif %}
+    
+
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+        <button type="submit" class="btn btn-primary">Registrovat se</button>
+        <button class="dropbtn" type="button">     
+        <a href="{% url 'event_details' event.id %}" 
+            class="user-info"
+            style="color: white; text-decoration: none;">Zpět na detail závodu</a>
+        </button>
+    </div>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form_user_register">
+<h1 class="h1">Úspěšně jste se přihlásil(a) na závod: {{ event.name }}</h1>
+<button class="dropbtn" type="button">     
+    <a href="{% url 'event_details' event.id %}" 
+        class="user-info"
+        style="color: white; text-decoration: none;">Zpět na detail závodu
+    </a>
+</button>
+{% endblock %}
