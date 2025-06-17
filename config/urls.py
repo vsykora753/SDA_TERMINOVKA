@@ -19,21 +19,26 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
-from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.urls import path
 
 # importy pohledu pro  zobrazení událostí, registrace uživatelů a organizátorů
 
-from events.views import EventListView,TerminovkaView,EventDetailView,EventRegisterView
-from users.views import UserRegisterView, OrganizerRegisterView
-from users.views import user_dashboard, organizer_dashboard, Myhomepage_view
-from users.views import UserRegistrationSuccessView,RoleBasedLoginView
-from users.views import OrganizerRegistrationSuccessView,UserLogoutView
-from users.views import OrganizerEventListView,OrganizerEventCreateView
-from users.views import OrganizerEventEditView,OrganizerEventDeleteView
-from registrations.views import RegistrationListView
+from events.views import (EventListView,TerminovkaView,
+                        EventDetailView,EventRegisterView)
+from results.views import upload_results_excel
+from users.views import (UserRegisterView, OrganizerRegisterView,
+                        user_dashboard, 
+                        organizer_dashboard, Myhomepage_view,
+                        unregister_from_event,RoleBasedLoginView,
+                        UserRegistrationSuccessView,
+                        OrganizerRegistrationSuccessView,UserLogoutView,
+                        OrganizerEventListView,OrganizerEventCreateView,
+                        OrganizerEventEditView,OrganizerEventDeleteView)
 
-
+from registrations.views import (RegistrationListView ,register_for_event, 
+                                generate_results_template)
+from results.views import upload_results_excel,results_list
 
 
 
@@ -47,7 +52,8 @@ urlpatterns = [
 
     path('terminovka/', TerminovkaView.as_view(), name='events_search'),
     path('<int:pk>/', EventDetailView.as_view(), name='event_details'),
-    path('<int:pk>/prihlasit/', EventRegisterView.as_view(), name='event_register'),
+    path('<int:pk>/prihlasit/', EventRegisterView.as_view(),
+        name='event_register'),
 
 
     # Uživatelské účty
@@ -62,6 +68,17 @@ urlpatterns = [
     path('user/dashboard/', user_dashboard, name='user_dashboard'),    
     path('user/logout/', UserLogoutView.as_view(), name='user_logout'),
 
+    # uživatelské události     
+    
+    path('user/events/',OrganizerEventListView.as_view(),
+        name='user_event_list'),
+    
+    path('event/<int:event_id>/register_event/',
+        register_for_event, name='register_for_event'),
+
+    path('event/<int:event_id>/unregister/',
+        unregister_from_event, name='unregister_from_event'),
+    
 
     # Organizátoři
     path('register/organizer/', OrganizerRegisterView.as_view(),
@@ -80,6 +97,15 @@ urlpatterns = [
 
     path('organizer/logout/', UserLogoutView.as_view(),
         name='organizer_logout'),
+
+    path('event/<int:event_id>/generate-templates/',
+        generate_results_template, name='generate_results_template'), 
+
+    path('event/<int:event_id>/upload-results/',upload_results_excel,
+        name='upload_results_excel'),  
+
+    path('event/<int:event_id>/results/', results_list, name='results_list'),
+
 
     # Změna hesla
     path('change-password/', auth_views.PasswordChangeView.as_view(
@@ -103,7 +129,8 @@ urlpatterns = [
         OrganizerEventDeleteView.as_view(), name='organizer_event_delete'),
 
     path('event/<int:event_id>/registrations/',
-        RegistrationListView.as_view(), name='registration_list'),
+        RegistrationListView.as_view(), name='registration_list'), 
+    
 
 ]
 

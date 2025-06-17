@@ -1,8 +1,9 @@
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import ListView, DetailView
-from .models import Event,Registration
-from datetime import datetime
+from .models import Event
+from registrations.models import Registration
+from datetime import datetime,date
 
 # Create your views here.
 
@@ -23,14 +24,16 @@ class EventListView(ListView):
         date_from = self.request.GET.get('date_from')
         date_to = self.request.GET.get('date_to')
         
+        if not date_from and not date_to:
+            queryset=queryset.filter(date_event__gte=date.today()).order_by(
+            'date_event', 'start_time')  
+            
         if city:
             queryset=queryset.filter(city__icontains=city)
         if region:
             queryset=queryset.filter(region__icontains=region)
         if name:
             queryset=queryset.filter(name_event__icontains=name)
-
-
         if date_from:
             try:
                 date_from_parsed = datetime.strptime(date_from, "%Y-%m-%d")

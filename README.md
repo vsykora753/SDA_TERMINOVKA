@@ -24,30 +24,30 @@ Termínovka je webová aplikace, která slouží k evidenci a správě závodů 
 ## Funkcionality
 
 #### 1. Hlavní stránka 
-    -[] výpis seznamu událostí seřazených podle data   
-    -[] navigační lišta    
-    -[] vyhledávání událostí
-    -[] registrace a přihlášení uživatele
+    -[x] výpis seznamu událostí seřazených podle data   
+    -[x] navigační lišta    
+    -[x] vyhledávání událostí
+    -[x] registrace a přihlášení uživatele i organizátora
 
 #### 2. Základní funkcionality pro uživatele:
-    -[] registrace uživatele
-    -[] přihlášení/odhlášení uživatele
-        -[] účet uživatele/profil
-            -[] ověření emailu
+    -[x] registrace uživatele
+    -[x] přihlášení/odhlášení uživatele
+        -[x] účet uživatele/profil
+            -[x] ověření emailu
             -[] změna hesla
-            -[] přehled přihlášených závodů
+            -[x] přehled přihlášených závodů
             -[] přehled výsledků
-            -[] registrace na závod
-            -[] odhlášení ze závodů
+            -[x] registrace na závod
+            -[x] odhlášení ze závodů
 
 #### 3. Základní funkcionality pro organizátory:
 
-    -[] role organizátora (typ uživatele nebo samostatný model, skupina-) Nevím co je lepší? (zatím mám jako samostatný model)
+    -[x] role organizátora 
 
-        -[] přidání události
-        -[] úprava události
-        -[] smazání události
-        -[] přehled přihlášených závodníků
+        -[x] přidání události
+        -[x] úprava události
+        -[x] smazání události
+        -[x] přehled přihlášených závodníků
         -[] přidání výsledků závodníků (možnost importu) excel
 
 

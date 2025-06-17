@@ -77,15 +77,4 @@ class Event(models.Model):
         def __str__(self):
             return self.name_event
 
-
-class Registration(models.Model):
-    """
-    Model for user registration to events.
-    fields:
-    - user: ForeignKey to the User model.
-    - event: ForeignKey to the Event model.
-    - registered_at: DateTimeField for the registration timestamp.
-    """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    event = models.ForeignKey('events.Event', on_delete=models.CASCADE)
-    registered_at = models.DateTimeField(auto_now_add=True)        
+ 

@@ -1,5 +1,5 @@
 ## Harmonogram Postup prací:
-
+#TODO upravit na stávají funkce
 ### 1. Vytvoření databáze
 
     -[x] vytvoření tabulky users                ---> ok
@@ -30,19 +30,23 @@
 
  ### 5. Vytvoření šablon pro zobrazení dat
 
-    -[X] vytvoření šablony MAIN base, head, nav_bar.
-    -[X] vytvoření šablony app. EVENT event_details,events_list,terminovka
+    -[x] vytvoření šablony MAIN base, head, nav_bar.
+    -[x] vytvoření šablony app. EVENT event_details,events_list,terminovka
+
 
 
     -[x] vytvoření šablony pro registraci
         [x] šablona pro registraci uživatele     
             [x] user_register.html
-            [] user_dashboard.html  ->> vytvořena zbývá doplnit
-            [x] user_login.html ->> hotovo
-            [x] registration_success.html ->> hotovo 
+            [x] user_dashboard.html  
+            [x] user_login.html 
+            [x] registration_success.html 
         
-    -[x] šablona pro registraci organizátora  
-            []
+        [x] šablona pro registraci organizátora  
+            [x] organizer_register.html
+            [x] organizer_dashboard.html
+            [x] organizer_login.html
+            [x] registration_success.html
 
 
 
@@ -61,19 +65,18 @@
 
 ### 5. Vytvoření formulářů
 
-    -[X] vytvoření formuláře pro registraci
-         -[] vytvoření testu pro registraci
-    -[] vytvoření formuláře pro přihlášení
-         -[] vytvoření testu pro přihlášení
+    -[x] vytvoření formuláře pro registraci         
+    -[x] vytvoření formuláře pro přihlášení
     -[] vytvoření formuláře pro úpravu uživatele
-         -[] vytvoření testu pro úpravu uživatele
-         
-    -[] vytvoření formuláře pro úpravu události
+             
+    -[x] vytvoření formuláře pro úpravu události
     -[] vytvoření formuláře pro úpravu registrace
     -[] vytvoření formuláře pro úpravu platby
     -[] vytvoření formuláře pro úpravu výsledku
 
 ### 6. Vytvoření pohledů
+
+     
 
     -[X] vytvoření pohledu pro registraci
     -[X] vytvoření pohledu pro přihlášení
