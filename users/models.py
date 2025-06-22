@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -53,7 +55,13 @@ class UserManager(BaseUserManager):
         """
         if not email:
             raise ValueError("Uživatel musí mít emailovou adresu.")
-        email = self.normalize_email(email)
+
+        try:
+            email = self.normalize_email(email)
+            validate_email(email)
+        except ValidationError:
+            raise ValueError("Neplatný formát emailu")
+
         user = self.model(email=email, **extra_fields)
         user.set_password(password)  # HASHOVÁNÍ hesla zde
         user.save()
@@ -162,30 +170,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["role", "first_name", "last_name", "birth_date", "sex"]
 
     def __str__(self):
-        """
-        Returns the string representation of the instance.
-        This method provides a human-readable string representation of theAdd commentMore actions
-        object, typically used for debugging or displaying the instance in a
-        user-friendly format.
-
-        Returns:
-            str: A string representation of the instance , specifically the email of attribute.
-        """
         return self.email
 
     class Meta:
-        """
-        Represents a user entity.
-
-        Represents the user model in the application. It defines the
-        properties related to a user and is used for data management and user
-        representation in the system.
-
-        Attributes:
-            verbose_name (str): Singular name for the user, used for
-                presentation.
-            verbose_name_plural (str): Plural name for the user, used for
-                presentation of multiple users.Add commentMore actions
-        """
         verbose_name = "uživatel"
         verbose_name_plural = "uživatelé"
