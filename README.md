@@ -48,7 +48,7 @@ Termínovka je webová aplikace, která slouží k evidenci a správě závodů 
         -[x] úprava události
         -[x] smazání události
         -[x] přehled přihlášených závodníků
-        -[] přidání výsledků závodníků (možnost importu) excel
+        -[x] přidání výsledků závodníků (možnost importu) excel
 
 
 #### 4. Administrace:
