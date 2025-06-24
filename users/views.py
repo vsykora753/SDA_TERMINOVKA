@@ -12,7 +12,7 @@ from django.core.paginator import Paginator
 from .mixins import OrganizerEventQuerysetMixin
 from .forms import OrganizerEventForm 
 from registrations.models import Registration
-from datetime import date
+from datetime import date, datetime
 
 # formuláře a modely v projektu vytvořené
 
@@ -211,25 +211,62 @@ def user_dashboard(request):
     registrations = Registration.objects.filter(
         id_user=request.user).select_related('id_event').order_by(
         'id_event__date_event', 'id_event__start_time')
+    
+    event_ids = registrations.values_list('id_event_id', flat=True)
+    events = Event.objects.filter(id__in=event_ids)
+
+    
+    # Filtrování podle parametrů
+    region = request.GET.get('region')
+    name = request.GET.get('name_event')
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
+
+    if region:
+        events = events.filter(region__icontains=region)
+    if name:
+        events = events.filter(name_event__icontains=name)
+    if date_from:
+        try:
+            parsed_date_from = datetime.strptime(date_from, "%Y-%m-%d")
+            events = events.filter(date_event__gte=parsed_date_from)
+        except ValueError:
+            pass
+    if date_to:
+        try:
+            parsed_date_to = datetime.strptime(date_to, "%Y-%m-%d")
+            events = events.filter(date_event__lte=parsed_date_to)
+        except ValueError:
+            pass
+    
+    regions = events.values_list(
+    'region', flat=True).distinct().order_by('region')
+    
+    registrations = registrations.filter(id_event__in=events).order_by(
+        'id_event__date_event', 'id_event__start_time'
+    )
+    
+    
     paginator = Paginator(registrations,5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     return render(request, "user/user_dashboard.html", {
         "page_obj": page_obj,
+        "regions": regions,
+    
         
 
     })
 
 @login_required(login_url='/login/')
-def unregister_from_event(request, id_event):  
-    #TODO dodat docstrings a přesunout do registrations/views.py
-    # zatím nefunguje 
+def unregister_from_event(request, event_id):  
+    
     if request.user.role != 'R':
         return redirect('events_list')
 
     registrations= get_object_or_404(
-        Registration, id_event=id_event, id_user=request.user)
+        Registration, id_event=event_id, id_user=request.user)
     registrations.delete()
 
     return redirect('user_dashboard')
@@ -379,15 +416,47 @@ def organizer_dashboard(request):
     """
     if request.user.role != 'O':
         return redirect('no_access')  # nebo 403
+    
+    events = Event.objects.filter(
+    organizer=request.user).order_by('date_event', 'start_time')
+    
+    # Filtrování podle parametrů
+    region = request.GET.get('region')
+    name = request.GET.get('name_event')
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
 
-    organizer_events = Event.objects.filter(organizer=request.user).order_by(
-        'date_event','start_time')
-    paginator = Paginator(organizer_events,5)
+    if region:
+        events = events.filter(region__icontains=region)
+    if name:
+        events = events.filter(name_event__icontains=name)
+    if date_from:
+        try:
+            parsed_date_from = datetime.strptime(date_from, "%Y-%m-%d")
+            events = events.filter(date_event__gte=parsed_date_from)
+        except ValueError:
+            pass
+    if date_to:
+        try:
+            parsed_date_to = datetime.strptime(date_to, "%Y-%m-%d")
+            events = events.filter(date_event__lte=parsed_date_to)
+        except ValueError:
+            pass
+
+    
+    paginator = Paginator(events,5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    
+    regions = Event.objects.values_list(
+        'region', flat=True).distinct().order_by('region')
+
     return render(request, "organizer/organizer_dashboard.html", {
         "page_obj": page_obj,
+        "regions": regions,
+    
+    
     })
 
 

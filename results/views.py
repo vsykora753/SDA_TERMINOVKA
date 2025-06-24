@@ -11,7 +11,7 @@ from registrations.models import Registration
 User = get_user_model()
 
 def upload_results_excel(request, event_id):
-    # TODO upravit docstrings
+    # TODO upravit docstrings a 79 znaků
     event = get_object_or_404(Event, id=event_id)
 
     if request.method == 'POST' and request.FILES.get('excel_file'):
@@ -19,7 +19,8 @@ def upload_results_excel(request, event_id):
 
         if not excel_file.name.endswith('.xlsx'):
             messages.error(request, "Soubor musí být ve formátu .xlsx.")
-            return render(request, 'organizer/upload_results_excel.html', {'event': event})
+            return render(request, 
+                    'organizer/upload_results_excel.html', {'event': event})
 
         try:
             df = pd.read_excel(excel_file)
@@ -27,7 +28,8 @@ def upload_results_excel(request, event_id):
         
             required_columns = ['email', 'result_time', 'id_event_id']
             if not all(col in df.columns for col in required_columns):
-                messages.error(request, f"Soubor musí obsahovat sloupce: {', '.join(required_columns)}.")
+                messages.error(
+                request, f"Soubor musí obsahovat sloupce: {', '.join(required_columns)}.")
                 return render(request, 'organizer/upload_results_excel.html', {'event': event})
 
             errors = []

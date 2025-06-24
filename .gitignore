@@ -11,3 +11,10 @@ env/
 .vscode/
 /.idea
 databaze.db
+/event/migrations/
+/payments/migrations/
+/registrations/migrations/
+/results/migrations/
+/users/migrations/
+
+

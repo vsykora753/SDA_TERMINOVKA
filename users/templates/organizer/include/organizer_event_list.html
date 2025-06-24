@@ -21,8 +21,8 @@
             <a href="{% url 'organizer_event_update' event.pk %}" class="date_event a" style="margin-right: 10px;"> ✏️ Editovat</a>
             <a href="{% url 'organizer_event_delete' event.pk %}" class="date_event a" style="margin-right: 10px;">🗑️ Smazat</a>                
             <a href="{% url 'registration_list' event.id %}" class="date_event a" style="margin-right: 10px;">📝 Prezenční listina</a>
-            <a href="{% url 'results_list' event.id %}" class="date_event a" style="margin-right: 10px;">🏅Výsledková listina</a><!--# TODO zobrazení výsledkové listiny-->
-            <a href="{% url 'upload_results_excel' event.id %}" class="date_event a" style="margin-right: 10px;">📤Nahrát výsledky</a> <!--# TODO připravit functionalitu-->
+            <a href="{% url 'results_list' event.id %}" class="date_event a" style="margin-right: 10px;">🏅Výsledková listina</a>
+            <a href="{% url 'upload_results_excel' event.id %}" class="date_event a" style="margin-right: 10px;">📤Nahrát výsledky</a>
 
             </div>             
         </div>

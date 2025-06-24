@@ -1,0 +1,17 @@
+<form method="get" class="search-form-bar">
+
+    <select name="region">
+        <option value="">-- Vyber kraj --</option>
+        {% for reg in regions %}
+            <option value="{{ reg }}" {% if request.GET.region == reg %}selected{% endif %}>
+                {{ reg }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <input type="text" name="name_event" placeholder="Název závodu" value="{{ request.GET.name_event }}">
+    <input type="date" name="date_from"  value="{{ request.GET.date_from }}">
+    <input type="date" name="date_to" value="{{ request.GET.date_to }}">
+    <button type="submit">Hledat</button>
+
+</form>

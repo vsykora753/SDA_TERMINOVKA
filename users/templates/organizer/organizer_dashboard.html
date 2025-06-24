@@ -1,15 +1,12 @@
 {% extends "base.html" %}
-
-
 {% load filters %}
-
 {% block content %}
 
 
 <div class="date_event">Vítejte, {{ user.organization_name }}</div>
 
+{% include "includes/search_bar.html" %}
 {% include "organizer/include/organizer_event_list.html" %}
-
 {% include "includes/pagination.html" %}
         
 

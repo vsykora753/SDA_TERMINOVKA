@@ -44,7 +44,7 @@ class Event(models.Model):
     )
     
     
-    propozition = models.CharField(
+    propozition = models.URLField(
     max_length=100,
     null=True,
     blank=True,
