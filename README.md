@@ -34,16 +34,19 @@ Termínovka je webová aplikace, která slouží k evidenci a správě závodů 
     -[x] přihlášení/odhlášení uživatele
         -[x] účet uživatele/profil
             -[x] ověření emailu
-            -[] změna hesla
+            -[x] změna hesla
             -[x] přehled přihlášených závodů
-            -[] přehled výsledků
+            -[x] přehled výsledků
             -[x] registrace na závod
             -[x] odhlášení ze závodů
 
 #### 3. Základní funkcionality pro organizátory:
 
     -[x] role organizátora 
+        -[x] registrace organizátora
+        -[x] přihlášení/odhlášení organizátora
 
+        -[x] změna hesla
         -[x] přidání události
         -[x] úprava události
         -[x] smazání události
