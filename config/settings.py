@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "results",
     "payments", 
     "registrations",
+    "articles",
 
     
 ]
