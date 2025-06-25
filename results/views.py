@@ -26,7 +26,7 @@ def upload_results_excel(request, event_id):
             df = pd.read_excel(excel_file)
 
         
-            required_columns = ['email', 'result_time', 'id_event_id']
+            required_columns = ['email', 'result_time', 'id_event_id','year']
             if not all(col in df.columns for col in required_columns):
                 messages.error(
                 request, f"Soubor musí obsahovat sloupce: {', '.join(required_columns)}.")
@@ -39,6 +39,7 @@ def upload_results_excel(request, event_id):
                 email = str(row['email']).strip().lower()
                 event_id_row = row['id_event_id']
                 result_time = row['result_time']
+                year = int(row['year'])
 
                 # 🔍 Ověření uživatele podle e-mailu
                 try:
@@ -66,7 +67,8 @@ def upload_results_excel(request, event_id):
                 results_to_create.append(Result(
                     id_user=user,
                     id_event=event,
-                    result_time=result_time
+                    result_time=result_time,
+                    year=year,
                 ))
 
             
@@ -109,4 +111,5 @@ def results_list(request, event_id):
     return render(request, 'results/results_list.html', {
         'event': event,
         'results': results
+        
     })
