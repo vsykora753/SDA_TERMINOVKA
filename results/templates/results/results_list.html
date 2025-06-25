@@ -26,7 +26,7 @@
             <td>{{ result.id_user.email }}</td>
             <td>{{ result.category }}</td>
             <td>{{ result.category_rank }}</td>
-            <td>{{ result.result_time }}</td>
+            <td>{{ result.result_time|time:"H:i:s" }}</td>
         </tr>
         {% endfor %}
     </tbody>
