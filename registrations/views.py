@@ -8,7 +8,7 @@ from django.shortcuts import render
 import pandas as pd
 from django.http import HttpResponse
 from io import BytesIO
-
+from datetime import datetime
 
 
 class RegistrationListView(ListView):
@@ -98,6 +98,7 @@ def generate_results_template(request, event_id):
             'jméno': f"{user.first_name} {user.last_name}",
             'email': user.email,
             'kategorie': reg.category,
+            'year':datetime.now().year,
             'id_event_id': event.id,
             'result_time': ''
         })

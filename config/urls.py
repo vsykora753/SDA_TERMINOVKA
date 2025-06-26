@@ -38,7 +38,8 @@ from users.views import (UserRegisterView, OrganizerRegisterView,
 
 from registrations.views import (RegistrationListView ,register_for_event, 
                                 generate_results_template)
-from results.views import upload_results_excel,results_list
+from results.views import (upload_results_excel,results_list,
+                            leaderboard_by_distance,best_performances_by_user)
 
 
 
@@ -48,12 +49,14 @@ urlpatterns = [
     # Události
     path('', Myhomepage_view, name='home'),
     path('events/', EventListView.as_view(), name='events_list'),
-    
-
     path('terminovka/', TerminovkaView.as_view(), name='events_search'),
     path('<int:pk>/', EventDetailView.as_view(), name='event_details'),
     path('<int:pk>/prihlasit/', EventRegisterView.as_view(),
         name='event_register'),
+    path('zebricek/<int:distance_km>/', leaderboard_by_distance,
+        name='leaderboard_by_distance'),
+    path('moje-vykony/<int:distance_km>/', best_performances_by_user,
+        name='best_performances'),
 
 
     # Uživatelské účty

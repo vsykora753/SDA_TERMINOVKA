@@ -1,12 +1,12 @@
-from django.shortcuts import render
 import pandas as pd
 import datetime
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from .models import Event, Result
-from django.db.models import Prefetch
 from registrations.models import Registration
+from django.core.paginator import Paginator
 
 User = get_user_model()
 
@@ -112,4 +112,49 @@ def results_list(request, event_id):
         'event': event,
         'results': results
         
+    })
+def leaderboard_by_distance(request, distance_km):
+    """
+    Displays the ranking of runners for a given distance in
+    kilometers (e.g., 5, 10, 21, 42).Sorted by the best time
+    (results across different races).
+    """
+    distance_m = distance_km * 1000
+    events = Event.objects.filter(distance=distance_m)
+    results = Result.objects.filter(id_event__in=events).select_related(
+    'id_user', 'id_event').order_by('result_time')
+
+    paginator = Paginator(results, 20)  # 20 záznamů na stránku
+    page_number = request.GET.get("page")  # např. ?page=2
+    page_obj = paginator.get_page(page_number)  # bezpečně získá stránku
+
+    
+    for i, result in enumerate(page_obj.object_list):
+        result.rank = (page_obj.start_index() - 1) + i + 1
+
+    return render(request, 'results/leaderboard.html', {
+        'results': page_obj.object_list, 
+        'page_obj': page_obj, 
+        'distance_km': distance_km,
+    })
+@login_required
+def best_performances_by_user(request, distance_km):
+    """
+    Zobrazí nejlepší výkony přihlášeného běžce pro danou vzdálenost (např. 5 km).
+    Výsledky jsou řazeny podle času vzestupně (nejrychlejší první).
+    """
+    distance_m = distance_km * 1000
+    user = request.user
+    events = Event.objects.filter(distance=distance_m)
+    results = Result.objects.filter(id_user=user, id_event__in=events).select_related(
+        'id_event').order_by('result_time')
+
+    paginator = Paginator(results, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'results/best_performances.html', {
+        'results': page_obj.object_list,
+        'page_obj': page_obj,
+        'distance_km': distance_km,
     })

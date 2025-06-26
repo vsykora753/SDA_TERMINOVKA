@@ -22,7 +22,7 @@
                     <a href="{% url 'user_logout' %}" class="logout-button">Odhlásit se</a>
                     <a href="{% url 'user_dashboard' %}">Přihlášené závody</a>    
                     <a href="{% url 'events_search' %}">Termínovka</a>                    
-                    <a href="#">Nejlepší výkony</a> <!-- #TODO přidat funkcionalitu s nejlepšími výkony na 5km , 10 km, 1/2 maraton -->
+                    <a href="{% url 'best_performances' 5 %}">Nejlepší výkony</a> <!-- #TODO přidat funkcionalitu s nejlepšími výkony na 5km , 10 km, 1/2 maraton -->
                     <a href="{% url 'change_password' %}">Změna hesla</a>
                 </div>
             </div>

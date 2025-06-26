@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load filters %}
+
+{% block content %}
+
+<h2>Žebříček pro {{ distance_km }} km</h2>
+<!-- TODO udělat lepší grafiku -->
+<div class="distance-switcher">
+    <strong>Zobrazit žebříček pro:</strong>
+    <ul>
+        <li><a href="{% url 'leaderboard_by_distance' 5 %}">5 km</a></li>
+        <li><a href="{% url 'leaderboard_by_distance' 10 %}">10 km</a></li>
+        <li><a href="{% url 'leaderboard_by_distance' 21 %}">Půl maraton</a></li>
+        <li><a href="{% url 'leaderboard_by_distance' 42 %}">maraton</a></li>
+    </ul>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Pořadí</th>
+            <th>Jméno</th>
+            <th>Přijmení</th>
+            <th>Závod</th>
+            <th>Ročník</th>
+            <th>Datum</th>
+            <th>Čas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in results %}
+        <tr>
+            <td>{{ r.rank }}</td>
+            <td>{{ r.id_user.first_name }}</td>
+            <td>{{ r.id_user.last_name }}</td>
+            <td>{{ r.id_event.name_event }}</td>
+            <td>{{ r.year }}</td>
+            <td>{{ r.id_event.date_event|date:"d.m.Y" }}</td>
+            <td>{{ r.result_time|time:"H:i:s" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">Žádné výsledky.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+    {% include "includes/pagination.html" %}
+{% endblock %}    
