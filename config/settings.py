@@ -40,6 +40,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '8000-vsykora753-sda-terminovk-6k4ljivb0o.app.codeanywhere.com',
+    'sykorka75.eu.pythonanywhere.com',
     
     # může se přidat i jiné
 ]
