@@ -4,6 +4,31 @@
 
 /* Pro malé obrazovky (mobil) */
 @media (max-width: 600px) {
+    .container {
+        width: 95%;
+        max-width: none;
+        padding: 10px;
+        margin: 10px auto;
+    }
+    .top-right {
+        position: static;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 10px;
+        max-width: 100%;
+    }
+
+    .top-right a {
+        font-size: 12px;
+    }
+
+    .h1, p {
+        font-size: 16px;
+        text-align: center;
+    }
+
     .navbar {
         flex-direction: column;
         flex-wrap: wrap;
@@ -15,6 +40,8 @@
         flex-direction: column;
         gap: 5px;
     }
+
+
 }
 
 
@@ -54,7 +81,7 @@ p {
     position: relative; /* Nastavení referenčního bodu pro absolutní pozicování */
     max-width: 70%; /* Dynamická šířka */
     width: 100%; /* Šířka bude automaticky přizpůsobena */
-    height: auto; /* Zabrání fixní výšce *
+    height: auto; /* Zabrání fixní výšce */
     display: flex;
     flex-direction: column; /* Uspořádání řádků pod sebe */
     justify-content: flex-start; /* Zarovnání nahoře */
