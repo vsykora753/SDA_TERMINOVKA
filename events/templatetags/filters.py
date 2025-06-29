@@ -22,3 +22,17 @@ def format_HHMM(value):
         return value.strftime('%H:%M')
     return 'No time provided'
 
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
+@register.filter
+def to(value, arg):
+    return range(value, arg)
+
+@register.filter
+def get_index(list_, index):
+    try:
+        return list_[index]
+    except:
+        return None
