@@ -10,11 +10,11 @@ env/
 .venv/
 .vscode/
 /.idea
-databaze.db
-/event/migrations/
+/events/migrations/
 /payments/migrations/
 /registrations/migrations/
 /results/migrations/
 /users/migrations/
-
+/articles/migrations/
+databaze.db
 
