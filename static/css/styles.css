@@ -10,22 +10,44 @@
         padding: 10px;
         margin: 10px auto;
     }
+
     .top-right {
-        position: static;
+        position: static; /* už neabsolutní */
+        width: 100%;
+        display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        margin-top: 10px;
-        max-width: 100%;
+        gap: 10px;
+        margin: 10px 0;
     }
 
-    .top-right a {
-        font-size: 12px;
+    .dropbtn {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
     }
 
-    .h1, p {
-        font-size: 16px;
+    .link_submenu {
+        width: 100%;
+        text-align: center;
+    }
+
+    .link_submenu a,
+    .link_submenu_item a {
+        font-size: 14px;
+        display: block;
+        padding: 5px 0;
+    }
+
+    .h1 {
+        font-size: 20px;
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    p {
+        font-size: 14px;
         text-align: center;
     }
 
