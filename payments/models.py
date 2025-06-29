@@ -1,27 +1,59 @@
 from django.db import models
-from events.models import Event
-from django.contrib.auth.models import User
-from django.conf import settings
-# Create your models here.
+import qrcode
+from io import BytesIO
+from django.core.files.base import ContentFile
+
 
 class Payment(models.Model):
-    id = models.AutoField(primary_key=True,auto_created=True)
-    id_user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='payments',verbose_name='id_uživatele',default=1)
-    id_event = models.ForeignKey(Event,on_delete=models.CASCADE,related_name='payments',verbose_name='id_události',default=1)
-    id_registration = models.ForeignKey('registrations.Registration',on_delete=models.CASCADE,related_name='payments',verbose_name='id_registrace',default=1)
-    payment_amount = models.DecimalField(max_digits=10,decimal_places=2,verbose_name='Částka')
-    payment_status = models.CharField(max_length=15,choices=[('Paid', 'Zaplaceno'), ('Unpaid', 'Nezaplaceno')],verbose_name='Stav platby')
-    payment_date = models.DateField(verbose_name='Datum platby')
-    QR_code = models.CharField(max_length=255,verbose_name='QR kód')
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    variable_symbol = models.CharField(max_length=10, default=0000000000)
+    account_number = models.CharField(max_length=24, default="1234567890")
+    bank_code = models.CharField(max_length=4, default="0100")
+    qr_code = models.ImageField(upload_to='qr_codes/', blank=True, null=True)
 
+    def create_spayd_string(self):
+        """Vytvoří SPAYD string podle české specifikace pro QR platby"""
+        # Formátování částky na 2 desetinná místa
+        amount = f"{float(self.amount):.2f}"
+
+        # Sestavení základních údajů pro platbu
+        account = f"CZ{self.account_number}{self.bank_code}"
+
+        # Sestavení SPAYD stringu
+        spayd_parts = [
+            "SPD*1.0",  # Verze SPAYD
+            f"ACC:{account}",  # Číslo účtu
+            f"AM:{amount}",  # Částka
+            "CC:CZK",  # Měna
+            f"VS:{self.variable_symbol}"  # Variabilní symbol
+        ]
+
+        return "*".join(spayd_parts)
+
+    def generate_qr_code(self):
+        # Vytvoření QR kódu z SPAYD stringu
+        spayd_string = self.create_spayd_string()
+        qr_image = qrcode.make(spayd_string)
+
+        # Uložení QR kódu do BytesIO
+        buffer = BytesIO()
+        qr_image.save(buffer, format='PNG')
+
+        # Vytvoření názvu souboru
+        filename = f'qr_payment_{self.variable_symbol}.png'
+
+        # Uložení do modelu
+        self.qr_code.save(
+            filename,
+            ContentFile(buffer.getvalue()),
+            save=False
+        )
+        self.save()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not self.qr_code:
+            self.generate_qr_code()
 
     def __str__(self):
-        return f"{self.id_user} - {self.id_event} - {self.payment_amount} - {self.payment_status} - {self.payment_date} - {self.QR_code}"
-   
-    class Meta:
-        ordering = ['payment_date']
-        unique_together = ('id_user', 'id_event')
-        verbose_name = 'Platba'
-        verbose_name_plural = 'Platby'
-
-
+        return f"Platba {self.amount} Kč (VS: {self.variable_symbol})"
