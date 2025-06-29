@@ -4,53 +4,6 @@
 
 /* Pro malé obrazovky (mobil) */
 @media (max-width: 600px) {
-    .container {
-        width: 95%;
-        max-width: none;
-        padding: 10px;
-        margin: 10px auto;
-    }
-
-    .top-right {
-        position: static; /* už neabsolutní */
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        margin: 10px 0;
-    }
-
-    .dropbtn {
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
-    }
-
-    .link_submenu {
-        width: 100%;
-        text-align: center;
-    }
-
-    .link_submenu a,
-    .link_submenu_item a {
-        font-size: 14px;
-        display: block;
-        padding: 5px 0;
-    }
-
-    .h1 {
-        font-size: 20px;
-        text-align: center;
-        margin: 10px 0;
-    }
-
-    p {
-        font-size: 14px;
-        text-align: center;
-    }
-
     .navbar {
         flex-direction: column;
         flex-wrap: wrap;
@@ -62,10 +15,7 @@
         flex-direction: column;
         gap: 5px;
     }
-
-
 }
-
 
 /* Pro střední obrazovky (tablety) */
 @media (max-width: 900px) {
@@ -103,9 +53,7 @@ p {
     position: relative; /* Nastavení referenčního bodu pro absolutní pozicování */
     max-width: 70%; /* Dynamická šířka */
     width: 100%; /* Šířka bude automaticky přizpůsobena */
-    height: auto; /* Zabrání fixní výšce */
-    display: flex;
-    flex-direction: column; /* Uspořádání řádků pod sebe */
+    height: auto; /* Zabrání fixní výšce */    
     justify-content: flex-start; /* Zarovnání nahoře */
     align-items: center; /* Zarovnání na střed */
     border: #4682b4 10px double;
