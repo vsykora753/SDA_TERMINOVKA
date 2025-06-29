@@ -9,12 +9,20 @@ class Registration(models.Model):
 
     id = models.AutoField(primary_key=True,auto_created=True)
     id_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,on_delete=models.CASCADE,
-        related_name='registrations',verbose_name='id_uživatele',default=1)
-    id_event = models.ForeignKey(
-        Event,on_delete=models.CASCADE,
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.CASCADE,
         related_name='registrations',
-        verbose_name='id_události',default=1)
+        verbose_name='id_uživatele',
+        # default=1
+        )
+    id_event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name='registrations',
+        verbose_name='id_události',
+        # default=1
+    )
     registration_date = models.DateTimeField(
         auto_now_add=True,verbose_name='Datum registrace')
     

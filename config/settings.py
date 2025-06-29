@@ -56,14 +56,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     'django_extensions',
+    'payments.apps.PaymentsConfig',
+    'qrcode',
 
 
     # Přidané vlastní aplikace
     "users",
     "events",
     "results",
-    "payments", 
     "registrations",
     "articles",
 
@@ -82,6 +84,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "config.urls"
+
+MEDIA_URL = '/media/qr_codes/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 TEMPLATES = [
     {
@@ -174,5 +179,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://8000-vsykora753-sda-terminovk-6k4ljivb0o.app.codeanywhere.com',
 ]
 
+# Payments settings
+BANK_ACCOUNT = '1234567890/0100'
+PAYMENT_CURRENCY = 'CZK'
 
 

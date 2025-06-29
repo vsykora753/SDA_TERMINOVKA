@@ -134,6 +134,6 @@ urlpatterns = [
     path('event/<int:event_id>/registrations/',
         RegistrationListView.as_view(), name='registration_list'), 
     
-
+    path('payments/', include('payments.urls', namespace='payments')),
 ]
 

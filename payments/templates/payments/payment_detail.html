@@ -1,0 +1,31 @@
+{% extends 'payments/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2>Detail platby</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Platební údaje</h4>
+                    <p><strong>Částka:</strong> {{ payment.amount }} Kč</p>
+                    <p><strong>Variabilní symbol:</strong> {{ payment.variable_symbol }}</p>
+                    <p><strong>Číslo účtu:</strong> {{ payment.account_number }}/{{ payment.bank_code }}</p>
+                </div>
+                <div class="col-md-6 text-center">
+                    {% if payment.qr_code %}
+                    <h4>QR kód pro platbu</h4>
+                    <img src="{{ payment.qr_code.url }}" alt="QR kód platby" class="img-fluid">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'payments:payment-list' %}" class="btn btn-secondary">Zpět na seznam</a>
+            <a href="{% url 'payments:payment-delete' payment.pk %}" class="btn btn-danger">Smazat platbu</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'payments/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h3>Potvrzení smazání</h3>
+            <p>Opravdu chcete smazat platbu s částkou {{ payment.amount }} Kč (VS: {{ payment.variable_symbol }})?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Ano, smazat</button>
+                <a href="{% url 'payments:payment-list' %}" class="btn btn-secondary">Ne, zpět</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

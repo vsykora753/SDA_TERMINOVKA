@@ -54,9 +54,7 @@ p {
     position: relative; /* Nastavení referenčního bodu pro absolutní pozicování */
     max-width: 70%; /* Dynamická šířka */
     width: 100%; /* Šířka bude automaticky přizpůsobena */
-    height: auto; /* Zabrání fixní výšce *
-    display: flex;
-    flex-direction: column; /* Uspořádání řádků pod sebe */
+    height: auto; /* Zabrání fixní výšce */
     justify-content: flex-start; /* Zarovnání nahoře */
     align-items: center; /* Zarovnání na střed */
     border: #4682b4 10px double;
