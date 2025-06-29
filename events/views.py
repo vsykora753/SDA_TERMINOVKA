@@ -8,6 +8,10 @@ from datetime import datetime,date
 # Create your views here.
 
 class EventListView(ListView):
+    """
+    Displays a paginated list of upcoming races with optional filtering
+    by city, region, event name, and date range.
+    """
     model = Event
     template_name = 'events_list.html'  
     context_object_name = 'events'
@@ -16,6 +20,10 @@ class EventListView(ListView):
 
 
     def get_queryset(self):
+        """
+        Returns the filtered queryset of events based on GET parameters.
+        If no date range is specified, only future events are shown.
+        """
         queryset= super().get_queryset()
 
         city = self.request.GET.get('city')
@@ -50,6 +58,10 @@ class EventListView(ListView):
         return queryset 
 
     def get_context_data(self, **kwargs):
+        """
+        Adds a list of available regions to the context
+        for use in the filtering form.
+        """
         context = super().get_context_data(**kwargs)
         context['regions'] = Event.objects.values_list(
         'region', flat=True
@@ -58,18 +70,31 @@ class EventListView(ListView):
 
     
 class TerminovkaView(EventListView):
+    """
+    Alternate event list view using the 'terminovka' template layout.
+    Inherits all filtering and pagination logic from EventListView.
+    """
     template_name = "terminovka.html" 
 
 class EventDetailView(DetailView):
+    """
+    Displays the details of a specific race (event).
+    """
     model = Event
     template_name = 'event_details.html'
     context_object_name = 'event'    
 
 
 class EventRegisterView(View):
+    """
+    Handles user registration for a selected race.
+    If the user isn't already registered, a new entry is created.
+    """
     def post(self, request, pk):
         event = Event.objects.get(pk=pk)
-        if not Registration.objects.filter(user=request.user, event=event).exists():
+        if not Registration.objects.filter(
+            user=request.user, 
+            event=event).exists():
             Registration.objects.create(user=request.user, event=event)
         return redirect('event_details', pk=pk)
         

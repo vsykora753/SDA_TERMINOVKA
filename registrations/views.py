@@ -64,7 +64,7 @@ def register_for_event(request, event_id):
         return render(request, 'already_registered.html', {'event': event})
 
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = RegistrationForm(request.POST,user=request.user)
         if form.is_valid():
             registration = form.save(commit=False)
             registration.id_user = request.user
@@ -73,7 +73,7 @@ def register_for_event(request, event_id):
             return render(request,
             'registration_success.html', {'event': event})
     else:
-        form = RegistrationForm()
+        form = RegistrationForm(user=request.user)
 
     return render(request, 'registration_form.html', {
         'form': form,

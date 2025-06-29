@@ -75,6 +75,4 @@ class Event(models.Model):
         ordering = ['date_event']
 
         def __str__(self):
-            return self.name_event
-
- 
+            return self.name_event 

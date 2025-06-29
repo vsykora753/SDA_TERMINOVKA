@@ -11,7 +11,7 @@ from django.core.paginator import Paginator
 User = get_user_model()
 
 def upload_results_excel(request, event_id):
-    # TODO upravit docstrings a 79 znaků
+
     event = get_object_or_404(Event, id=event_id)
 
     if request.method == 'POST' and request.FILES.get('excel_file'):
@@ -29,8 +29,13 @@ def upload_results_excel(request, event_id):
             required_columns = ['email', 'result_time', 'id_event_id','year']
             if not all(col in df.columns for col in required_columns):
                 messages.error(
-                request, f"Soubor musí obsahovat sloupce: {', '.join(required_columns)}.")
-                return render(request, 'organizer/upload_results_excel.html', {'event': event})
+                request, 
+                    f"Soubor musí obsahovat sloupce: "
+                    f"{', '.join(required_columns)}."
+                    )
+                return render(
+                    request, 'organizer/upload_results_excel.html', 
+                    {'event': event})
 
             errors = []
             results_to_create = []
@@ -45,22 +50,33 @@ def upload_results_excel(request, event_id):
                 try:
                     user = User.objects.get(email=email)
                 except User.DoesNotExist:
-                    errors.append(f"Řádek {index+2}: Uživatel s e-mailem {email} neexistuje.")
+                    errors.append(
+                        f"Řádek {index+2}:"
+                        f"Uživatel s e-mailem {email} neexistuje."
+                        )
                     continue
 
                 # Ověření události
                 if event_id_row != event.id:
-                    errors.append(f"Řádek {index+2}: ID události ({event_id_row}) neodpovídá aktuální události ({event.id}).")
+                    errors.append(
+                        f"Řádek {index+2}: "
+                        f"ID události ({event_id_row}) "
+                        f" neodpovídá aktuální události ({event.id})."
+                        )
                     continue
 
                 # Čas ve správném formátu
                 try:
                     if isinstance(result_time, str):
-                        result_time = datetime.datetime.strptime(result_time, '%H:%M:%S').time()
+                        result_time = datetime.datetime.strptime(
+                            result_time, '%H:%M:%S').time()
                     elif isinstance(result_time, pd.Timestamp):
                         result_time = result_time.time()
                 except Exception:
-                    errors.append(f"Řádek {index+2}: Chybný formát času: {result_time}")
+                    errors.append(
+                        f"Řádek {index+2}:"
+                        f"Chybný formát času: {result_time}"
+                        )
                     continue
 
                 # Uložení výsledku
@@ -77,22 +93,28 @@ def upload_results_excel(request, event_id):
                     messages.error(request, error)
             else:
                 Result.objects.bulk_create(results_to_create)
-                messages.success(request, f"Úspěšně nahráno {len(results_to_create)} výsledků.")
+                messages.success(request, 
+                    f"Úspěšně nahráno {len(results_to_create)} výsledků."
+                    )
 
         except Exception as e:
             messages.error(request, f"Chyba při zpracování souboru: {str(e)}")
 
-    return render(request, 'organizer/upload_results_excel.html', {'event': event})
+    return render(request, 'organizer/upload_results_excel.html',
+                {'event': event})
 
 
 def results_list(request, event_id):
-    #TODO docstring + úprava 79 znaků
+
     event = get_object_or_404(Event, id=event_id)
 
-    registrations = Registration.objects.filter(id_event=event).select_related('id_user')
+    registrations = Registration.objects.filter(
+                id_event=event).select_related('id_user')
     registration_map = {r.id_user_id: r.category for r in registrations}
 
-    results = list(Result.objects.filter(id_event=event).select_related('id_user').order_by('result_time'))
+    results = list(Result.objects.filter(
+                id_event=event).select_related('id_user').
+                order_by('result_time'))
 
     for i, result in enumerate(results):
         result.overall_rank = i + 1  # Celkové pořadí
@@ -139,22 +161,21 @@ def leaderboard_by_distance(request, distance_km):
     })
 @login_required
 def best_performances_by_user(request, distance_km):
-    """
-    Zobrazí nejlepší výkony přihlášeného běžce pro danou vzdálenost (např. 5 km).
-    Výsledky jsou řazeny podle času vzestupně (nejrychlejší první).
-    """
-    distance_m = distance_km * 1000
     user = request.user
-    events = Event.objects.filter(distance=distance_m)
-    results = Result.objects.filter(id_user=user, id_event__in=events).select_related(
-        'id_event').order_by('result_time')
+    all_results = {}
 
-    paginator = Paginator(results, 20)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    for km in [5, 10, 21, 42]:
+        events = Event.objects.filter(distance=km * 1000)
+        results = Result.objects.filter(
+                id_user=user, id_event__in=events).select_related(
+                'id_event').order_by('result_time')[:10]
+        all_results[km] = list(results)  
+
+    max_len = max(len(all_results.get(km, [])) for km in [5, 10, 21, 42])
 
     return render(request, 'results/best_performances.html', {
-        'results': page_obj.object_list,
-        'page_obj': page_obj,
+        'results_by_distance': all_results,
         'distance_km': distance_km,
+        'distances': [5, 10, 21, 42],
+        'range_max_len': range(max_len),
     })
