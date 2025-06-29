@@ -5,41 +5,38 @@
 <div class="back-link-bar">
     <a href="{% url 'organizer_dashboard' %}" class="back-link">↵ Zpět na výpis položek pro organizátory</a>
 </div> 
-    <h1 class="h1"> 📝 Prezenční listina</h1>
-    <a style="color: #4682b4;text-align:left;font-size: 18px;" href="{% url 'generate_results_template' event.id %} ">📥 Stáhnout rozšířenou šablonu výsledků (Excel)
-    </a>
-    
+
+<h1 class="h1"> 📝 Prezenční listina</h1>
+<a style="color: #4682b4;text-align:left;font-size: 18px;" href="{% url 'generate_results_template' event.id %}">📥 Stáhnout rozšířenou šablonu výsledků (Excel)</a>
+
 {% if registrations %}
+    <!-- Hlavička -->
     
-    <table >
-        <thead>
-            <tr style="color: #4682b4;text-align:left;">
-                <th>č.řádku</th>
-                <th>Příjmení</th>
-                <th>Jméno</th>
-                <th>Datum narození</th>
-                <th>Email</th>
-                <th>Datum registrace</th>
-                <th>Kategorie</th>
-                <th>Podpis účastníka</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for registration in registrations %}
-            <tr style="color: #4682b4;text-align:left;">
-                <td>{{ forloop.counter }}</td>
-                <td>{{ registration.id_user.last_name }}</td>
-                <td>{{ registration.id_user.first_name }}</td>                
-                <td>{{ registration.id_user.birth_date|date:"d.m.Y" }}</td>
-                <td>{{ registration.id_user.email }}</td>
-                <td>{{ registration.registration_date|date:"d.m.Y" }}</td>
-                <td>{{ registration.category }}</td>
-                <th></th>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="flex-table-header">
+        <div style="flex: 0.3;text-align:left;">č.řádku</div>
+        <div style="flex: 1;text-align:left;">Příjmení</div>
+        <div style="flex: 1;text-align:left;">Jméno</div>
+        <div style="flex: 1;text-align:left;">Datum narození</div>
+        <div style="flex: 2;text-align:left;">Email</div>
+        <div style="flex: 1;text-align:left;">Datum registrace</div>
+        <div style="flex: 1;text-align:left;">Kategorie</div>
+        <div style="flex: 1;text-align:left;">Podpis účastníka</div>
+    </div>
+
+    <!-- Data -->
+    {% for registration in registrations %}
+        <div class="flex-table-row">
+            <div style="flex: 0.3;text-align:left;">{{ forloop.counter }}</div>
+            <div style="flex: 1;">{{ registration.id_user.last_name }}</div>
+            <div style="flex: 1;">{{ registration.id_user.first_name }}</div>
+            <div style="flex: 1;">{{ registration.id_user.birth_date|date:"d.m.Y" }}</div>
+            <div style="flex: 2;">{{ registration.id_user.email }}</div>
+            <div style="flex: 1;">{{ registration.registration_date|date:"d.m.Y" }}</div>
+            <div style="flex: 1;">{{ registration.category }}</div>
+            <div style="flex: 1;">&nbsp;</div>
+        </div>
+    {% endfor %}
 {% else %}
-<p>Zatím tu není žádná registrace.</p>
+    <p>Zatím tu není žádná registrace.</p>
 {% endif %}
 {% endblock %}

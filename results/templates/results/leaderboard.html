@@ -2,45 +2,45 @@
 {% load filters %}
 
 {% block content %}
+<h1 class="h1" style="margin-bottom: 2rem">Žebříček pro {{ distance_km }} km</h1>
 
-<h2>Žebříček pro {{ distance_km }} km</h2>
-<!-- TODO udělat lepší grafiku -->
-<div class="distance-switcher">
-    <strong>Zobrazit žebříček pro:</strong>
-    <ul>
-        <li><a href="{% url 'leaderboard_by_distance' 5 %}">5 km</a></li>
-        <li><a href="{% url 'leaderboard_by_distance' 10 %}">10 km</a></li>
-        <li><a href="{% url 'leaderboard_by_distance' 21 %}">Půl maraton</a></li>
-        <li><a href="{% url 'leaderboard_by_distance' 42 %}">maraton</a></li>
-    </ul>
+<div class="flex-table">
+    <!-- Hlavička s odkazy -->
+    <div class="flex-table-header flex-distance-header">
+        <div class="distance-link" style="flex: 1;"><a href="{% url 'leaderboard_by_distance' 5 %}">5 km</a></div>
+        <div class="distance-link" style="flex: 1;"><a href="{% url 'leaderboard_by_distance' 10 %}">10 km</a></div>
+        <div class="distance-link" style="flex: 1;"><a href="{% url 'leaderboard_by_distance' 21 %}">Půlmaraton</a></div>
+        <div class="distance-link" style="flex: 1;"><a href="{% url 'leaderboard_by_distance' 42 %}">Maraton</a></div>
+    </div>
+
+    <!-- Hlavička s popisky -->
+    <div class="flex-table-header">
+        <div style="flex: 1;border: 1px solid #4682b4;">Pořadí</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">Jméno</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">Příjmení</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">Závod</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">Ročník</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">Datum</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">Čas</div>
+    </div>
+
+    <!-- Data -->
+    {% for r in results %}
+    <div class="flex-table-row">
+        <div style="flex: 1;border: 1px solid #4682b4;">{{ r.rank }}</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">{{ r.id_user.first_name }}</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">{{ r.id_user.last_name }}</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">{{ r.id_event.name_event }}</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">{{ r.year }}</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">{{ r.id_event.date_event|date:"d.m.Y" }}</div>
+        <div style="flex: 1;border: 1px solid #4682b4;">{{ r.result_time|time:"H:i:s" }}</div>
+    </div>
+    {% empty %}
+    <div class="flex-table-row">
+        <div style="flex: 1 0 100%; text-align: center;">Žádné výsledky.</div>
+    </div>
+    {% endfor %}
 </div>
-<table>
-    <thead>
-        <tr>
-            <th>Pořadí</th>
-            <th>Jméno</th>
-            <th>Přijmení</th>
-            <th>Závod</th>
-            <th>Ročník</th>
-            <th>Datum</th>
-            <th>Čas</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for r in results %}
-        <tr>
-            <td>{{ r.rank }}</td>
-            <td>{{ r.id_user.first_name }}</td>
-            <td>{{ r.id_user.last_name }}</td>
-            <td>{{ r.id_event.name_event }}</td>
-            <td>{{ r.year }}</td>
-            <td>{{ r.id_event.date_event|date:"d.m.Y" }}</td>
-            <td>{{ r.result_time|time:"H:i:s" }}</td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="5">Žádné výsledky.</td></tr>
-        {% endfor %}
-    </tbody>
-</table>
-    {% include "includes/pagination.html" %}
-{% endblock %}    
+
+{% include "includes/pagination.html" %}
+{% endblock %}
