@@ -17,11 +17,13 @@ class Registration(models.Model):
         verbose_name='id_události',default=1)
     registration_date = models.DateTimeField(
         auto_now_add=True,verbose_name='Datum registrace')
-    category = models.CharField(max_length=7,
-        choices=[('M40', 'Muži do 40 let '), ('V', 'Veteráni'), 
-        ('W40', 'Ženy do 40 let'), ('W0', 'Veteránky'), 
-        ('Junior', 'Dorostenci')], verbose_name='Kategorie'    ) 
     
+    category = models.ForeignKey(
+    'Category',
+    on_delete=models.CASCADE,
+    verbose_name='Kategorie',
+    related_name='registrations'
+)
     def __str__(self):
             return f"{self.id_user} - {self.id_event}"
             
@@ -30,3 +32,27 @@ class Registration(models.Model):
         unique_together = ('id_user', 'id_event')
         verbose_name = 'Registrace'
         verbose_name_plural = 'Registrace'
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=50, 
+        verbose_name='Název kategorie')
+    min_age = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='Minimální věk'
+        )
+    max_age = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='Maximální věk'
+        )
+    gender = models.CharField(
+        max_length=1, 
+        choices=[('M', 'Muž'), ('F', 'Žena'), ('X', 'Nezáleží')], 
+        default='X'
+        )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Kategorie'
+        verbose_name_plural = 'Kategorie'
+
