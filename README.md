@@ -5,7 +5,9 @@ zdrojový kód pro SDA terminovku:
 https://github.com/vsykora753/SDA_TERMINOVKA
 
 ## Popis projektu
-Termínovka je webová aplikace, která slouží k evidenci a správě závodů v běhu. Uživatelé se mohou registrovat, přihlašovat a odhlašovat ze závodů,umožňuje vyhledávání a zobrazení detailů závodů, jako jsou datum, místo konání, typ závodu a další informace. Uživatelé mohou také sledovat své přihlášky a výsledky závodů, které absolvovali.
+Termínovka je webová aplikace, která slouží organizátorům pořádaných akcí k evidenci a správě závodů v běhu. Přihlášení uživatelé se mohou přihlašovat a odhlašovat ze závodů,mohou vyhledávat závody pomocí formuláře dle kraje,názvu akce, data konání. Po účasti na závodech a zpracování výsledkové listiny organizátora závodu, vidí své nejlepší výkony na trati (5,10,21,42)km.
+Organizátor může své události editovat. Má přehled o uživatelích, kteří se na závod přihlásili. Je schopen vygenerovat prezenční, startovní listinu. Aplikace umožňuje nahrání výsledků závodu formou excelové souboru.
+
 
 ## Instalace
 #### 1. Naklonujte repozitář:
@@ -24,34 +26,43 @@ Termínovka je webová aplikace, která slouží k evidenci a správě závodů 
 ## Funkcionality
 
 #### 1. Hlavní stránka 
-    -[x] výpis seznamu událostí seřazených podle data   
-    -[x] navigační lišta    
-    -[x] vyhledávání událostí
+    -[x] výpis seznamu událostí seřazených podle data, pouze událostí v budoucnu
+    -[x] navigační lišta   
+        -[x] vyhledávání událostí
+        -[x] zobrazení žebříčků běžců a jejich celkové pořadí 
+             dle dosaženého času na (5,10,21,42) km.
     -[x] registrace a přihlášení uživatele i organizátora
 
+
 #### 2. Základní funkcionality pro uživatele:
-    -[x] registrace uživatele
-    -[x] přihlášení/odhlášení uživatele
-        -[x] účet uživatele/profil
-            -[x] ověření emailu
-            -[x] změna hesla
+    -[x] role uživatele role (R)
+        -[x] registrace uživatele
+        -[x] přihlášení/odhlášení uživatele
+        -[x] účet uživatele/profil:
+            -[x] zobrazení nástěnky uživatele s rolí R (běžec) po přihlášení
             -[x] přehled přihlášených závodů
-            -[x] přehled výsledků
-            -[x] registrace na závod
-            -[x] odhlášení ze závodů
+            -[x] přehled nejlepších výkonů pro přihlášeného uživatele
+            -[x] změna hesla
+            -[x] termínovka - zobrazení závodů k přihlášení
+            -[x] registrace na závod (doplnění kategorie)
+            -[x] odhlášení ze závodu
+           
 
 #### 3. Základní funkcionality pro organizátory:
 
-    -[x] role organizátora 
+    -[x] role organizátora  role (O)
         -[x] registrace organizátora
         -[x] přihlášení/odhlášení organizátora
-
-        -[x] změna hesla
-        -[x] přidání události
-        -[x] úprava události
-        -[x] smazání události
-        -[x] přehled přihlášených závodníků
-        -[x] přidání výsledků závodníků (možnost importu) excel
+        -[x] účet organizátora/profil:
+            -[x] zobrazení nástěnky organizátora s rolí O (organizátor) po přihlášení
+            -[x] přehled pořádaných běžeckých závodů            
+            -[x] přidání události
+            -[x] úprava události
+            -[x] smazání události
+            -[x] prezenční listina (startovní listina)
+            -[x] šablona startovní listiny (excel.soubor), sloužící 
+                 zároveň pro nahrání výsledkové listiny po zapsání dosaženého času
+            -[x] změna hesla
 
 
 #### 4. Administrace:
@@ -107,9 +118,15 @@ Termínovka je webová aplikace, která slouží k evidenci a správě závodů 
     -[x] registration_date,  datetime     
     -[x] category,           varchar(7)
     
+#### 4. Kategorie (category)
+    -[x] fields:
+    -[x] id,                integer
+    -[x] name,              varchar(50)
+    -[x] min_age,           integer
+    -[x] max_age,           integer
+    -[x] gender             varchar(1)            
 
-
-#### 4. Výsledky (results)
+#### 5. Výsledky (results)
     -[x] fields:
     -[x] id,            integer
     -[x] id_user,       integer (references to user_user.id table)
@@ -119,7 +136,7 @@ Termínovka je webová aplikace, která slouží k evidenci a správě závodů 
 
 
 
-#### 5. Platby (payments)
+#### 6. Platby (payments)
     -[x] fields:
     -[x] id,                 integer
     -[x] id_user,            integer (references to user_user.id table)
