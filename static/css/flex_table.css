@@ -1,0 +1,63 @@
+.flex-table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 20px;
+
+}
+
+.flex-table-header,
+.flex-table-row {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    
+}
+
+.flex-table-header {
+    background-color: rgba(255, 255, 255, 0.1); /* Průhledné bílé pozadí */
+    color: #4682b4;
+    font-weight: bold;
+    
+
+}
+
+.flex-table-header div,
+.flex-table-row div {
+    flex: 1;
+    padding: 8px 12px;
+    text-align: left;
+    color: #4682b4;
+    
+    
+}
+
+.flex-table-row:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.1); /* Průhledné bílé pozadí */
+}
+
+.flex-table-row:hover {
+    background-color:rgba(255, 255, 255, 0.5); /* Průhledné bílé pozadí */
+}
+
+/* Odkazy jako hlavička */
+.flex-distance-header {
+    background-color: rgba(255, 255, 255, 0.1); /* Průhledné bílé pozadí */
+    font-weight: normal;
+    justify-content: space-between;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.flex-distance-header a {
+    color: #4682b4;
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+
+}
+
+.flex-distance-header a:hover {
+    text-decoration: underline;
+}

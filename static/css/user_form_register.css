@@ -35,7 +35,7 @@
     border: 0.4px solid #dbd9d9;
     border-radius: 5px;
     font-size: 1rem;
-    width: 100%; /* Celá šířka pole */
+    /*width: 100%; /* Celá šířka pole */
     box-sizing: border-box;
     
 }
