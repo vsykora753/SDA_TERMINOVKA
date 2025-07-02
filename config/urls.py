@@ -15,125 +15,208 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-
 from django.contrib import admin
-from django.conf import settings
-from django.urls import path, include
+from django.urls import include, path
 from django.contrib.auth import views as auth_views
-from django.urls import path
 
 # importy pohledu pro  zobrazení událostí, registrace uživatelů a organizátorů
 
-from events.views import (EventListView,TerminovkaView,
-                        EventDetailView,EventRegisterView)
-from results.views import upload_results_excel
-from users.views import (UserRegisterView, OrganizerRegisterView,
-                        user_dashboard, 
-                        organizer_dashboard, Myhomepage_view,
-                        unregister_from_event,RoleBasedLoginView,
-                        UserRegistrationSuccessView,
-                        OrganizerRegistrationSuccessView,UserLogoutView,
-                        OrganizerEventListView,OrganizerEventCreateView,
-                        OrganizerEventEditView,OrganizerEventDeleteView)
+from events.views import (
+    EventDetailView,
+    EventListView,
+    EventRegisterView,
+    TerminovkaView
+)
+from users.views import (
+    Myhomepage_view,
+    organizer_dashboard,
+    OrganizerEventCreateView,
+    OrganizerEventDeleteView,
+    OrganizerEventEditView,
+    OrganizerEventListView,
+    OrganizerRegisterView,
+    OrganizerRegistrationSuccessView,
+    RoleBasedLoginView,
+    unregister_from_event,
+    user_dashboard,
+    UserLogoutView,
+    UserRegisterView,
+    UserRegistrationSuccessView,
+)
 
-from registrations.views import (RegistrationListView ,register_for_event, 
-                                generate_results_template)
-from results.views import (upload_results_excel,results_list,
-                            leaderboard_by_distance,best_performances_by_user)
-
+from registrations.views import (
+    generate_results_template,
+    RegistrationListView,
+    register_for_event,
+)
+from results.views import (
+    best_performances_by_user,
+    leaderboard_by_distance,
+    results_list,
+    upload_results_excel,
+)
 
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path(
+        "admin/",
+        admin.site.urls
+    ),
 
     # Události
-    path('', Myhomepage_view, name='home'),
-    path('events/', EventListView.as_view(), name='events_list'),
-    path('terminovka/', TerminovkaView.as_view(), name='events_search'),
-    path('<int:pk>/', EventDetailView.as_view(), name='event_details'),
-    path('<int:pk>/prihlasit/', EventRegisterView.as_view(),
-        name='event_register'),
-    path('zebricek/<int:distance_km>/', leaderboard_by_distance,
-        name='leaderboard_by_distance'),
-    path('moje-vykony/<int:distance_km>/', best_performances_by_user,
-        name='best_performances'),
-
+    path(
+        '', Myhomepage_view,
+        name='home'
+    ),
+    path(
+        'events/',
+        EventListView.as_view(),
+        name='events_list'
+    ),
+    path(
+        'terminovka/',
+        TerminovkaView.as_view(),
+        name='events_search'
+    ),
+    path(
+        '<int:pk>/',
+        EventDetailView.as_view(),
+        name='event_details'),
+    path(
+        '<int:pk>/prihlasit/',
+        EventRegisterView.as_view(),
+        name='event_register'
+    ),
+    path(
+        'zebricek/<int:distance_km>/',
+        leaderboard_by_distance,
+        name='leaderboard_by_distance'
+    ),
+    path(
+        'moje-vykony/<int:distance_km>/',
+        best_performances_by_user,
+        name='best_performances'
+    ),
 
     # Uživatelské účty
-    path('register/user/', UserRegisterView.as_view(), name='user_register'),
-    path('registrace/uzivatel/uspesna/', UserRegistrationSuccessView.as_view(),
-        name='user_registration_success'),
-
-    path('login/user/', RoleBasedLoginView.as_view(
+    path(
+        'register/user/',
+        UserRegisterView.as_view(),
+        name='user_register'
+    ),
+    path(
+        'registrace/uzivatel/uspesna/',
+        UserRegistrationSuccessView.as_view(),
+        name='user_registration_success'
+    ),
+    path(
+        'login/user/',
+        RoleBasedLoginView.as_view(
         template_name='user/user_login.html'),
-        name='user_login'),
+        name='user_login'
+    ),
+    path(
+        'user/dashboard/',
+        user_dashboard,
+        name='user_dashboard'
+    ),
+    path(
+        'user/logout/',
+        UserLogoutView.as_view(),
+        name='user_logout'
+    ),
 
-    path('user/dashboard/', user_dashboard, name='user_dashboard'),    
-    path('user/logout/', UserLogoutView.as_view(), name='user_logout'),
-
-    # uživatelské události     
-    
-    path('user/events/',OrganizerEventListView.as_view(),
-        name='user_event_list'),
-    
-    path('event/<int:event_id>/register_event/',
-        register_for_event, name='register_for_event'),
-
-    path('event/<int:event_id>/unregister/',
-        unregister_from_event, name='unregister_from_event'),
-    
+    # Uživatelské události
+    path(
+        'user/events/',
+        OrganizerEventListView.as_view(),
+        name='user_event_list'
+    ),
+    path(
+        'event/<int:event_id>/register_event/',
+        register_for_event,
+        name='register_for_event'
+    ),
+    path(
+        'event/<int:event_id>/unregister/',
+        unregister_from_event,
+        name='unregister_from_event'
+    ),
 
     # Organizátoři
-    path('register/organizer/', OrganizerRegisterView.as_view(),
-        name='organizer_register'),
-
-    path('login/organizer/', RoleBasedLoginView.as_view(
-        template_name='organizer/organizer_login.html'),
-        name='organizer_login'),
-
-    path('registrace/organizator/uspesna/', 
+    path(
+        'register/organizer/',
+        OrganizerRegisterView.as_view(),
+        name='organizer_register'
+    ),
+    path(
+        'login/organizer/',
+        RoleBasedLoginView.as_view(
+            template_name='organizer/organizer_login.html'
+        ),
+        name='organizer_login'
+    ),
+    path(
+        'registrace/organizator/uspesna/',
         OrganizerRegistrationSuccessView.as_view(),
-        name='organizer_registration_success'),
-
+        name='organizer_registration_success'
+    ),
     path('organizer/dashboard/', organizer_dashboard,
         name='organizer_dashboard'),
-
     path('organizer/logout/', UserLogoutView.as_view(),
         name='organizer_logout'),
-
     path('event/<int:event_id>/generate-templates/',
-        generate_results_template, name='generate_results_template'), 
-
+        generate_results_template, name='generate_results_template'),
     path('event/<int:event_id>/upload-results/',upload_results_excel,
-        name='upload_results_excel'),  
-
+        name='upload_results_excel'),
     path('event/<int:event_id>/results/', results_list, name='results_list'),
 
-
     # Změna hesla
-    path('change-password/', auth_views.PasswordChangeView.as_view(
-    template_name ='change_password.html' ), name='change_password'),
-    path('change-password/done/', auth_views.PasswordChangeDoneView.as_view(
-    template_name='change_password_done.html'), name='password_change_done'),
+    path(
+        'change-password/',
+        auth_views.PasswordChangeView.as_view(
+            template_name ='change_password.html'
+        ),
+        name='change_password'
+    ),
+    path(
+        'change-password/done/',
+        auth_views.PasswordChangeDoneView.as_view(
+            template_name='change_password_done.html'
+        ),
+        name='password_change_done'
+    ),
     
     # Udalosti organizátora
-    
-    path('organizer/events/',OrganizerEventListView.as_view(),
-        name='organizer_event_list'),
-    
-
+    path(
+        'organizer/events/',
+        OrganizerEventListView.as_view(),
+        name='organizer_event_list'
+    ),
     path('organizer/events/create/', 
-        OrganizerEventCreateView.as_view(), name='organizer_event_create'),
+        OrganizerEventCreateView.as_view(),
+         name='organizer_event_create'
+         ),
+    path(
+        'organizer/events/<int:pk>/update/',
+        OrganizerEventEditView.as_view(),
+        name='organizer_event_update'
+    ),
+    path(
+        'organizer/events/<int:pk>/delete/',
+        OrganizerEventDeleteView.as_view(),
+        name='organizer_event_delete'
+    ),
+    path(
+        'event/<int:event_id>/registrations/',
+        RegistrationListView.as_view(),
+        name='registration_list'
+    ),
 
-    path('organizer/events/<int:pk>/update/', OrganizerEventEditView.as_view(),
-        name='organizer_event_update'), 
-
-    path('organizer/events/<int:pk>/delete/', 
-        OrganizerEventDeleteView.as_view(), name='organizer_event_delete'),
-
-    path('event/<int:event_id>/registrations/',
-        RegistrationListView.as_view(), name='registration_list'), 
-    
-    path('payments/', include('payments.urls', namespace='payments')),
+    # Platby
+    path(
+        'payments/',
+        include('payments.urls', namespace='payments')
+    ),
 ]
 

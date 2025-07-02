@@ -16,8 +16,6 @@ from dotenv import load_dotenv
 from django.urls import reverse_lazy
 
 
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,8 +43,6 @@ ALLOWED_HOSTS = [
     # může se přidat i jiné
 ]
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -61,15 +57,12 @@ INSTALLED_APPS = [
     'payments.apps.PaymentsConfig',
     'qrcode',
 
-
     # Přidané vlastní aplikace
     "users",
     "events",
     "results",
     "registrations",
     "articles",
-
-    
 ]
 
 MIDDLEWARE = [
@@ -108,7 +101,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -118,7 +110,6 @@ DATABASES = {
         "NAME": BASE_DIR / "databaze.db",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -138,20 +129,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'cs'
 TIME_ZONE = 'Europe/Prague'
 
-
 TIME_ZONE = "UTC"
 
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -172,7 +160,6 @@ LOGIN_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'users.User'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-
 ]
 
 CSRF_TRUSTED_ORIGINS = [
