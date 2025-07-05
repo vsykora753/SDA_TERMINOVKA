@@ -43,7 +43,7 @@ class EventTests(TestCase):
             country='Česká republika',
             city='Praha',
             region='hlavní město Praha',
-            typ_race='Silnice',
+            race_type='Silnice',
             organizer=self.user
         )
 
@@ -66,7 +66,7 @@ class EventTests(TestCase):
             country='Česká republika',
             city='Praha',
             region='hlavní město Praha',
-            typ_race='Neplatný typ',
+            race_type='Neplatný typ',
             organizer=self.user
         )
 
@@ -88,7 +88,7 @@ class EventTests(TestCase):
             country='Česká republika',
             city='Praha',
             region='hlavní město Praha',
-            typ_race='Silnice',
+            race_type='Silnice',
             organizer=self.user
         )
 
@@ -110,7 +110,7 @@ class EventTests(TestCase):
             country='Česká republika',
             city='Praha',
             region='hlavní město Praha',
-            typ_race='Silnice',
+            race_type='Silnice',
             organizer=self.user
         )
 
@@ -123,7 +123,7 @@ class EventTests(TestCase):
             country='Česká republika',
             city='Praha',
             region='hlavní město Praha',
-            typ_race='Silnice',
+            race_type='Silnice',
             organizer=self.user
         )
 
