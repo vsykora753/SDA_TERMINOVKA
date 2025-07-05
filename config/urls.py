@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 
-# importy pohledu pro  zobrazení událostí, registrace uživatelů a organizátorů
+# View imports for displaying events, user and organizer registrations
 
 from events.views import (
     EventDetailView,
@@ -28,7 +28,7 @@ from events.views import (
     TerminovkaView
 )
 from users.views import (
-    Myhomepage_view,
+    my_homepage_view,
     organizer_dashboard,
     OrganizerEventCreateView,
     OrganizerEventDeleteView,
@@ -63,9 +63,9 @@ urlpatterns = [
         admin.site.urls
     ),
 
-    # Události
+    # Events
     path(
-        '', Myhomepage_view,
+        '', my_homepage_view,
         name='home'
     ),
     path(
@@ -98,7 +98,7 @@ urlpatterns = [
         name='best_performances'
     ),
 
-    # Uživatelské účty
+    # User accounts
     path(
         'register/user/',
         UserRegisterView.as_view(),
@@ -126,7 +126,7 @@ urlpatterns = [
         name='user_logout'
     ),
 
-    # Uživatelské události
+    # User events
     path(
         'user/events/',
         OrganizerEventListView.as_view(),
@@ -143,7 +143,7 @@ urlpatterns = [
         name='unregister_from_event'
     ),
 
-    # Organizátoři
+    # Organizers
     path(
         'register/organizer/',
         OrganizerRegisterView.as_view(),
@@ -161,17 +161,33 @@ urlpatterns = [
         OrganizerRegistrationSuccessView.as_view(),
         name='organizer_registration_success'
     ),
-    path('organizer/dashboard/', organizer_dashboard,
-        name='organizer_dashboard'),
-    path('organizer/logout/', UserLogoutView.as_view(),
-        name='organizer_logout'),
-    path('event/<int:event_id>/generate-templates/',
-        generate_results_template, name='generate_results_template'),
-    path('event/<int:event_id>/upload-results/',upload_results_excel,
-        name='upload_results_excel'),
-    path('event/<int:event_id>/results/', results_list, name='results_list'),
+    path(
+        'organizer/dashboard/',
+        organizer_dashboard,
+        name='organizer_dashboard'
+    ),
+    path(
+        'organizer/logout/',
+        UserLogoutView.as_view(),
+        name='organizer_logout'
+    ),
+    path(
+        'event/<int:event_id>/generate-templates/',
+        generate_results_template,
+        name='generate_results_template'
+    ),
+    path(
+        'event/<int:event_id>/upload-results/',
+        upload_results_excel,
+        name='upload_results_excel'
+    ),
+    path(
+        'event/<int:event_id>/results/',
+        results_list,
+        name='results_list'
+    ),
 
-    # Změna hesla
+    # Change password
     path(
         'change-password/',
         auth_views.PasswordChangeView.as_view(
@@ -187,7 +203,7 @@ urlpatterns = [
         name='password_change_done'
     ),
     
-    # Udalosti organizátora
+    # Organizer events
     path(
         'organizer/events/',
         OrganizerEventListView.as_view(),
@@ -213,10 +229,9 @@ urlpatterns = [
         name='registration_list'
     ),
 
-    # Platby
+    # Payments
     path(
         'payments/',
         include('payments.urls', namespace='payments')
     ),
 ]
-

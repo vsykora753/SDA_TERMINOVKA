@@ -1,12 +1,27 @@
 from django.core.exceptions import ValidationError
-from django.test import TestCase
 from django.contrib.auth import get_user_model
-from events.models import Event
+from django.test import TestCase
 from django.utils import timezone
+
+from events.models import Event
 
 
 class EventTests(TestCase):
+    """
+    Tests the correct behavior of the Event model.
+
+    Verifies:
+        - creating a new event with expected fields
+        - validating an invalid race type
+        - default values for optional fields
+        - sorting instances by event date
+    """
+
     def setUp(self):
+        """
+        Creates a test user with the organizer role (role='O').
+        """
+
         self.user = get_user_model().objects.create_user(
             email='organizator@test.com',
             password='testpass123',
@@ -14,7 +29,11 @@ class EventTests(TestCase):
         )
 
     def test_create_event(self):
-        """Test vytvoření události"""
+        """
+        Verifies that the event is created successfully and its key fields
+        match the specified values.
+        """
+
         event = Event.objects.create(
             date_event=timezone.now().date(),
             name_event='Testovací závod',
@@ -30,10 +49,14 @@ class EventTests(TestCase):
 
         self.assertEqual(event.name_event, 'Testovací závod')
         self.assertEqual(event.distance, 10)
-        self.assertEqual(event.typ_race, 'Silnice')
+        self.assertEqual(event.race_type, 'Silnice')
 
     def test_invalid_race_type(self):
-        """Test validace dat"""
+        """
+        Verify that entering an invalid value for the plant type will throw a
+        ValidationError during full_clean().
+        """
+
         event = Event(
             date_event=timezone.now().date(),
             name_event='Test závod',
@@ -43,7 +66,7 @@ class EventTests(TestCase):
             country='Česká republika',
             city='Praha',
             region='hlavní město Praha',
-            typ_race='Neplatný typ',  # neplatná hodnota
+            typ_race='Neplatný typ',
             organizer=self.user
         )
 
@@ -51,7 +74,11 @@ class EventTests(TestCase):
             event.full_clean()
 
     def test_optional_fields(self):
-        """Test volitelných polí"""
+        """
+        Verifies that the optional proposition and entry fee fields are None
+        if they are not specified.
+        """
+
         event = Event.objects.create(
             date_event=timezone.now().date(),
             name_event='Test závod',
@@ -65,11 +92,15 @@ class EventTests(TestCase):
             organizer=self.user
         )
 
-        self.assertIsNone(event.propozition)
+        self.assertIsNone(event.proposition)
         self.assertIsNone(event.start_fee)
 
     def test_event_ordering(self):
-        """Testy řazení události"""
+        """
+        Verifies that the result of Event.objects.all() is sorted ascending by
+        date_event.
+        """
+
         event1 = Event.objects.create(
             date_event='2025-07-01',
             name_event='Pozdější závod',

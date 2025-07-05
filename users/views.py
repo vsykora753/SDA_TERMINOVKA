@@ -1,4 +1,5 @@
-# importy z Djanga
+from datetime import date, datetime
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -9,25 +10,34 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, UpdateView
 from django.views.generic.edit import FormView
 from django.core.paginator import Paginator
+
 from .mixins import OrganizerEventQuerysetMixin
-from .forms import OrganizerEventForm 
-from registrations.models import Registration
-from datetime import date, datetime
-
-# formuláře a modely v projektu vytvořené
-
-from .forms import RegisterForm, LoginForm, OrganizerRegisterForm
+from .forms import (
+    LoginForm,
+    OrganizerEventForm,
+    OrganizerRegisterForm,
+    RegisterForm,
+)
 from events.models import Event
+from registrations.models import Registration
 
 
-
-def Myhomepage_view(request):
+def my_homepage_view(request):
     """
-    Redirects users based on their authentication status and role.
-    If the user is authenticated, they are redirected to their respective
-    dashboard based on their role (organizer or regular user).
-    If the user is not authenticated, they are redirected to the events list.
+    Redirects the authenticated user to the appropriate dashboard or to the
+    event list if not logged in.
+
+    Args:
+        request: HTTP request from the client.
+
+    Returns:
+        HttpResponseRedirect: Redirect to one of the URLs:
+
+        - 'organizer_dashboard' for organizers (role='O')
+        - 'user_dashboard' for runners (role='R')
+        - 'events_list' for anonymous users
     """
+
     if request.user.is_authenticated:
         if request.user.role == 'O':
             return redirect('organizer_dashboard')
@@ -36,187 +46,131 @@ def Myhomepage_view(request):
     return redirect('events_list')
 
 
-
 class UserRegisterView(FormView):
     """
-    Handles the user registration process.
-
-    This view provides functionality for users to register an account using a
-    form. Upon successful registration, the user is logged in automatically,
-    and they are redirected to a success page.
+    Processes the registration of a new user (role 'R').
 
     Attributes:
-        template_name (str): Path to the HTML template used for rendering the
-            user registration form.
-        form_class (type): The form class used for user registration.
-        success_url (str): The URL to which the user is redirected upon
-            successful registration.
+        template_name: Path to the template with the registration form.
+        form_class: Class of the RegisterForm form.
+        success_url: URL after successful registration.
     """
+
     template_name = 'user/user_register.html'
     form_class = RegisterForm
     success_url = reverse_lazy('user_registration_success')
 
-
-
     def form_valid(self, form):
         """
-        Handles the logic required when a submitted form is valid. Saves the
-        user, logs them in using the provided form details, and then redirects
-        to a success URL.
+        Saves a new user and logs them in.
 
         Args:
-            form: The submitted and validated form instance containing user
-                information.
+            form: Valid form data.
 
         Returns:
-            HttpResponseRedirect: A redirect response to the success URL
-                defined by the parent class.Add commentMore actions
+            Standard FormView redirect.
         """
+
         user = form.save()
         login(self.request, user)
         return super().form_valid(form)
 
     def form_invalid(self, form):
         """
-        Handles the invalid form submission within a view by extending the
-        behavior of the parent class.
-
-        This method is called when the submitted form fails validation. It
-        ensures that the functionality defined in the parent class is
-        preserved for handling an invalid form scenario.
+        Returns a form with error messages back to the client.
 
         Args:
-            form: The form instance that failed validation and triggered this
-            method.
+            form: Form with invalid data.
 
         Returns:
-            HttpResponse: The HTTP response returned by the parent class's
-            form_invalid implementation.
+            Response with the form and errors.
         """
+
         return super().form_invalid(form)
-    
 
 
 class UserRegistrationSuccessView(TemplateView):
     """
-    Handles the view for the user registration success page.
-
-    This class-based view renders the template for the user registration
-    success page and provides a context that includes a user-friendly message
-    notifying the user about the successful registration. The view can be
-    subclassed or customized further if needed.
-
-    Attributes:
-        template_name (str): The path to the template file used for the
-            registration success page.
+    Displays a page confirming successful runner registration.
     """
 
     template_name = 'user/registration_success.html'
 
     def get_context_data(self, **kwargs):
         """
-        Retrieves the context data for the view and adds a custom success
-        message.
-
-        This method extends the context data provided by the superclass and
-        injects a custom message. The added message is intended to notify
-        users of a successful registration and provide further instructions
-        regarding the next steps.
-
-        Args:
-            **kwargs: Arbitrary keyword arguments passed to the method. These
-                are typically used to customize the context data.
+        Adds a message to the context about successful registration.
 
         Returns:
-            dict: A dictionary containing the combined context data, ¨
-            including   the custom success message.
+            Template context with key 'message' (dict).
         """
+
         context = super().get_context_data(**kwargs)
         context['message'] = \
             'Registrace byla úspěšná! Nyní se můžete přihlásit jako běžec.'
         return context
 
 
-
 class RoleBasedLoginView(FormView):
     """
-    Handles user login functionality.
-
-    This class-based view is responsible for rendering the login form,
-    processing the login request, and redirecting to the appropriate dashboard
-    or page based on the user's role. It extends the FormView, using the
-    LoginForm to authenticate users.
+    Processes user login and redirects based on a role.
 
     Attributes:
-        template_name (str): The template used to render the login page.
-        form_class (type): The form class used for login functionality.
-        success_url (str): The URL to which the user is redirected upon
-            successful login.
+        template_name: Path to the login form template.
+        form_class: LoginForm class.
     """
+
     template_name = 'user/user_login.html'
     form_class = LoginForm
 
-
     def form_valid(self, form):
         """
-        Handles the form validation process and manages user redirection based
-        on their role after successful login.
-
-        This method validates the provided form, logs in the user, and
-        redirects them to the appropriate dashboard or endpoint according to
-        their specified role.
+        Logs in the user and redirects to the dashboard according to their
+        role.
 
         Args:
-            form: The form instance containing the user authentication and
-            role data.
+            form: Form with valid login details.
 
         Returns:
-            HttpResponseRedirect: Redirects the user to an appropriate URL
-            based on their role:
-
-            - Redirects to 'user_dashboard' for users with role 'R'.
-            - Redirects to 'organizer_dashboard' for users with role 'O'.
-            - Redirects to 'events_list' for users with any other role.
+            - 'user_dashboard' for runners
+            - 'organizer_dashboard' for organizers
+            - 'events_list' for unknown roles
         """
-        user = form.user  
+
+        user = form.user
         login(self.request, user)
-        
+
         if user.role == 'R':
             return HttpResponseRedirect(reverse('user_dashboard'))
         elif user.role == 'O':
             return HttpResponseRedirect(reverse('organizer_dashboard'))
         else:
-            return HttpResponseRedirect(reverse('events_list'))     
-
-    
+            return HttpResponseRedirect(reverse('events_list'))
 
 
 @login_required(login_url='/login/')
 def user_dashboard(request):
     """
-    Renders the user dashboard page for users with a specific role. If the
-    user does not have the required role, they are redirected to the events
-    list page.
+    Displays the runner's dashboard with their registrations and allows
+    filtering by region, name and date.
 
     Args:
-        request: The HTTP request object containing metadata about the request.
+        request: HTTP request with GET parameters region, name_event,
+        date_from, date_to, page.
 
     Returns:
-        HttpResponse: The HTTP response object with the rendered dashboard
-        page for authorized users, or a redirect to the events list for others.
-    """       
-    # Kontrola, zda je uživatel přihlášen a má roli 'R' (běžec)
+        Rendered HTML template 'user/user_dashboard.html' with context
+        page_obj: paginated list of Registration and list of available regions.
+    """
+
     if request.user.role != 'R':
-        return redirect('events_list') 
+        return redirect('events_list')
     registrations = Registration.objects.filter(
         id_user=request.user).select_related('id_event').order_by(
         'id_event__date_event', 'id_event__start_time')
-    
+
     event_ids = registrations.values_list('id_event_id', flat=True)
     events = Event.objects.filter(id__in=event_ids)
 
-    
-    # Filtrování podle parametrů
     region = request.GET.get('region')
     name = request.GET.get('name_event')
     date_from = request.GET.get('date_from')
@@ -228,7 +182,10 @@ def user_dashboard(request):
         events = events.filter(name_event__icontains=name)
     if date_from:
         try:
-            parsed_date_from = datetime.strptime(date_from, "%Y-%m-%d")
+            parsed_date_from = datetime.strptime(
+                date_from,
+                "%Y-%m-%d"
+            )
             events = events.filter(date_event__gte=parsed_date_from)
         except ValueError:
             pass
@@ -238,189 +195,172 @@ def user_dashboard(request):
             events = events.filter(date_event__lte=parsed_date_to)
         except ValueError:
             pass
-    
+
     regions = events.values_list(
-    'region', flat=True).distinct().order_by('region')
-    
-    registrations = registrations.filter(id_event__in=events).order_by(
-        'id_event__date_event', 'id_event__start_time'
-    )
-    
-    
-    paginator = Paginator(registrations,5)
+        'region', flat=True).distinct().order_by('region')
+
+    registrations = registrations.filter(
+        id_event__in=events).order_by(
+        'id_event__date_event', 'id_event__start_time')
+
+    paginator = Paginator(registrations, 5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "user/user_dashboard.html", {
-        "page_obj": page_obj,
-        "regions": regions,
-    
-        
+    return render(
+        request,
+        "user/user_dashboard.html",
+        {
+            "page_obj": page_obj,
+            "regions": regions,
+        }
+    )
 
-    })
 
 @login_required(login_url='/login/')
-def unregister_from_event(request, event_id):  
-    
+def unregister_from_event(request, event_id):
+    """
+    Unregisters a runner from a specific event and redirects back.
+
+    Args:
+        request: HTTP request from the organizer.
+        event_id: Primary key of the Event to unregister from.
+
+    Returns:
+        Redirect to 'user_dashboard'.
+
+    Raises:
+        Http404: If registration does not exist.
+    """
+
     if request.user.role != 'R':
         return redirect('events_list')
 
-    registrations= get_object_or_404(
-        Registration, id_event=event_id, id_user=request.user)
+    registrations = get_object_or_404(
+        Registration,
+        id_event=event_id,
+        id_user=request.user
+    )
     registrations.delete()
 
     return redirect('user_dashboard')
 
-    
+
 class UserEventListView(OrganizerEventQuerysetMixin, ListView):
     """
-    Displays a list of events organized by the logged-in user.
-    This view inherits from OrganizerEventQuerysetMixin to filter events
-    based on the organizer (the logged-in user). It uses Django's ListView
-    to handle the display of events in a paginated format.
+    Displays a list of upcoming events available to the runner.
+
     Attributes:
-        model (Model): The model class for the events to be listed.
-        template_name (str): The template used to render the event list.
-        context_object_name (str): The name of the context variable that
-            contains the list of events.
-        ordering (list): The order in which events are displayed, sorted by
-            start date.
-        paginate_by (int): The number of events to display per page.
+        model: Event
+        template_name: Template to be inserted into the runner's dashboard.
+        context_object_name: Name in context ('events').
+        paginate_by: Number of events per page.
     """
+
     model = Event
     template_name = 'user/include/user_event_list.html'
     context_object_name = 'events'
-    ordering = ['-date_event','-start_time']  
+    ordering = ['-date_event', '-start_time']
     paginate_by = 6
-    
+
     def get_queryset(self):
         """
-        Returns a queryset of events that are upcoming and ordered by date 
-        and start time.
+        Returns:
+            A queryset of events from today's date in ascending order.
         """
-        queryset = super().get_queryset()  
-        return queryset.filter(date_event__gte=date.today()).order_by(
-            'date_event', 'start_time')  
+
+        queryset = super().get_queryset()
+        return queryset.filter(
+            date_event__gte=date.today()).order_by(
+            'date_event', 'start_time')
+
 
 class UserLogoutView(View):
     """
-    Handles user logout functionality.
-
-    This class defines the behavior for logging out a user from the system and
-    redirecting them to a specified page afterward. It extends from the base
-    View class and provides a specific implementation for the GET HTTP method.
-
+    Logs out the user and redirects to the event list.
     """
-    def get(self, request, *args, **kwargs):
-        logout(request)
-        return redirect('events_list')  # přesměrování po odhlášení
-    
 
+    def get(self, request, *args, **kwargs):
+        """
+        Processes a GET request for logout.
+
+        Returns:
+            Redirect to 'events_list'.
+        """
+
+        logout(request)
+        return redirect('events_list')
 
 
 class OrganizerRegisterView(FormView):
     """
-    Handles the registration process for organizers.Add commentMore actions
-
-    This class represents a view that provides the registration functionality
-    for organizers. It renders a registration form, processes form
-    submissions, and logs in the newly registered user upon successful
-    registration. This view inherits from Django's FormView, leveraging its
-    built-in mechanics for form handling and redirection.
+    Processes the registration of a new organizer (role 'O').
 
     Attributes:
-        template_name (str): The template used to render the registration form.
-        form_class (type): The form class used to handle organizer
-            registration.
-        success_url (str): The URL to redirect to upon successful form
-            submission.
+        template_name: Organizer registration form template.
+        form_class: OrganizerRegisterForm class.
+        success_url: URL after successful registration.
     """
+
     template_name = 'organizer/organizer_register.html'
     form_class = OrganizerRegisterForm
     success_url = reverse_lazy('organizer_registration_success')
 
     def form_valid(self, form):
         """
-        Handles the validation and login process when a form submission is
-        successful.
-
-        The method saves the form, logs in the newly created user, and then
-        proceeds with the default behavior of the parent class's form_valid
-        method.
-
-        Args:
-            form: A valid form instance that has passed all validations.
+        Saves the organizer and logs them in.
 
         Returns:
-            HttpResponse: The HTTP response indicating form submission was
-            successful.
+            Redirect according to FormView logic.
         """
+
         user = form.save()
         login(self.request, user)
         return super().form_valid(form)
-    
 
 
 class OrganizerRegistrationSuccessView(TemplateView):
     """
-    View for displaying a success message after an organizer's registration.
-
-    This class-based view is intended to provide feedback to users upon the
-    successful registration of an organizer. It renders a specific template
-    with a context that includes a success message.
-
-    Attributes:
-        template_name (str): Path to the template used for rendering the view.
+    Displays confirmation of successful organizer registration.
     """
+
     template_name = 'organizer/registration_success.html'
 
     def get_context_data(self, **kwargs):
         """
-        Retrieves the context data for a template, enhancing it with
-        additional information specific to the view.
-
-        This method extends the default context data with a custom message
-        that indicates successful registration of the organizer.
-
-        Args:
-            **kwargs: Arbitrary keyword arguments passed to the view to help
-                in generating the context data.
+        Adds a message to the context about successful registration.
 
         Returns:
-            dict: A dictionary containing the context data, including a
-            custom message for successful registration.
+            Context with key 'message'.
         """
+
         context = super().get_context_data(**kwargs)
         context['message'] = ('Registrace organizátora byla úspěšná! '
-                            'Nyní se můžete přihlásit.')
+                              'Nyní se můžete přihlásit.')
         return context
-    
-
-
 
 
 @login_required(login_url='/login/')
 def organizer_dashboard(request):
     """
-    Renders the organizer dashboard view if the requesting user has the role
-    of an organizer ('O'). If the user is not an organizer, they are
-    redirected to the events list page instead.
+    Displays the organizer dashboard, allowing them to track and filter their
+    own events.
 
     Args:
-        request: The HTTP request object containing metadata about the request.
+        request: HTTP request with GET parameters for filtering.
 
     Returns:
-        HttpResponse: Rendered HTML response for the organizer dashboard if
-        the user is an organizer or a redirect response to the events list
-        page otherwise.
+        Template 'organizer/organizer_dashboard.html' with page_obj and
+        regions context.
     """
+
     if request.user.role != 'O':
         return redirect('no_access')  # nebo 403
-    
+
     events = Event.objects.filter(
-    organizer=request.user).order_by('date_event', 'start_time')
-    
-    # Filtrování podle parametrů
+        organizer=request.user).order_by(
+        'date_event', 'start_time'
+    )
     region = request.GET.get('region')
     name = request.GET.get('name_event')
     date_from = request.GET.get('date_from')
@@ -443,62 +383,52 @@ def organizer_dashboard(request):
         except ValueError:
             pass
 
-    
-    paginator = Paginator(events,5)
+    paginator = Paginator(events, 5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    
     regions = Event.objects.values_list(
         'region', flat=True).distinct().order_by('region')
 
-    return render(request, "organizer/organizer_dashboard.html", {
-        "page_obj": page_obj,
-        "regions": regions,
-    
-    
-    })
+    return render(
+        request,
+        "organizer/organizer_dashboard.html",
+        {
+            "page_obj": page_obj,
+            "regions": regions,
+        }
+    )
 
 
 class OrganizerEventListView(OrganizerEventQuerysetMixin, ListView):
     """
-    Displays a list of events organized by the logged-in user.
-    This view inherits from OrganizerEventQuerysetMixin to filter events
-    based on the organizer (the logged-in user). It uses Django's ListView
-    to handle the display of events in a paginated format.
+    Displays the organizer's events with pagination.
+
     Attributes:
-        model (Model): The model class for the events to be listed.
-        template_name (str): The template used to render the event list.
-        context_object_name (str): The name of the context variable that
-            contains the list of events.
-        ordering (list): The order in which events are displayed, sorted by
-            start date.
-        paginate_by (int): The number of events to display per page.
+        model: Event
+        template_name: Organizer's event list template.
+        context_object_name: 'events'
+        paginate_by: Number of items per page.
     """
+
     model = Event
     template_name = 'organizer/include/organizer_event_list.html'
     context_object_name = 'events'
-    ordering = ['-date_event','-start_time']  
+    ordering = ['-date_event', '-start_time']
     paginate_by = 6
-    
-
 
 
 class OrganizerEventEditView(OrganizerEventQuerysetMixin, UpdateView):
     """
-    View for editing an existing event by the organizer.
-    This class-based view allows the organizer to modify the details of an
-    existing event. It inherits from OrganizerEventQuerysetMixin to ensure
-    that only events created by the logged-in organizer are accessible for
-    editing. The view uses Django's UpdateView to handle the form submission
-    and validation process.
+    Allows the organizer to edit an existing event.
+
     Attributes:
-        
-        model (Model): The model class for the event being edited.
-        fields (list): The fields of the event model that can be edited.
-        template_name (str): The template used to render the event edit form.
-        success_url (str): The URL to redirect to upon successful form
+        model: Event
+        fields: Model fields to edit ('__all__').
+        template_name: Template for editing the event.
+        success_url: URL after saving changes.
     """
+
     model = Event
     fields = '__all__'
     template_name = 'organizer/create_event.html'
@@ -507,64 +437,71 @@ class OrganizerEventEditView(OrganizerEventQuerysetMixin, UpdateView):
 
 class OrganizerEventDeleteView(OrganizerEventQuerysetMixin, View):
     """
-    View for deleting an event created by the organizer.
-    This class-based view handles the deletion of an event that was created
-    by the organizer. It ensures that only the organizer who created the event
-    can delete it. The view uses Django's generic View class to implement the
-    deletion logic.
-    Attributes:
-        model (Model): The model class for the event being deleted.
-        template_name (str): The template used to confirm the deletion.
+    Confirms and deletes the selected event by the organizer.
     """
+
     template_name = 'organizer/event_confirm_delete.html'
 
     def get(self, request, pk):
-        
+        """
+        Displays a confirmation page before deleting.
+
+        Args:
+            pk: The event ID to delete.
+
+        Returns:
+            A template with the event details.
+        """
+
         event = get_object_or_404(self.get_queryset(), pk=pk)
         return render(request, self.template_name, {'event': event})
 
     def post(self, request, pk):
+        """
+        Deletes the event and displays a success message.
+
+        Args:
+            pk: The ID of the event to delete.
+
+        Returns:
+            Redirect to 'organizer_dashboard'.
+        """
+
         event = get_object_or_404(self.get_queryset(), pk=pk)
         event.delete()
         messages.success(request, 'Událost byla smazána')
         return redirect('organizer_dashboard')
-    
 
-
-#============ Vytvoření události organizátora ============      
 
 class OrganizerEventCreateView(OrganizerEventQuerysetMixin, FormView):
     """
-    View for creating a new event by the organizer. 
-    This class-based view allows the organizer to create a new event using a
-    form. It inherits from OrganizerEventQuerysetMixin to ensure that only
-    events created by the logged-in organizer are accessible. The view uses
-    Django's FormView to handle the form submission and validation process.
+    Handles the creation of a new event by the organizer.
+
     Attributes:
-        template_name (str): The template used to render the event creation
-            form.
-        form_class (type): The form class used for creating the event.
-        success_url (str): The URL to redirect to upon successful form
-            submission.
+        template_name: Event creation form template.
+        form_class: OrganizerEventForm class.
+        success_url: URL after the event is successfully saved.
     """
-    
+
     template_name = 'organizer/create_event.html'
     form_class = OrganizerEventForm  # udělat formulář pro událost
     success_url = reverse_lazy('organizer_dashboard')
 
     def form_valid(self, form):
         """
-        Handles the logic when a submitted form is valid. Saves the event  
-        instance, associates it with the logged-in organizer.
-        
+        With valid data, it assigns an organizer, saves the event, and
+        redirects.
+
+        Args:
+            form: Valid event form.
+
+        Returns:
+            Standard FormView redirect.
         """
+
         event = form.save(commit=False)
         event.organizer = self.request.user
         event.save()
         print("Událost byla úspěšně vytvořena:", event)
 
         return super().form_valid(form)
-    
-
-
-

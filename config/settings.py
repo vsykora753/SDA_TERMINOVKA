@@ -24,27 +24,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
 load_dotenv()
 SECRET_KEY = os.getenv(
-'SECRET_KEY', default='django-insecure-m*%8ou9_)sh(u%!z9vxdk%ru&2mh0$w_701l04p^apq1g1^7^*')
-
+    'SECRET_KEY',
+    default='django-insecure-m*%8ou9_)sh(u%!z9vxdk%ru&2mh0$w_701l04p^apq1g1^7^*'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '8000-vsykora753-sda-terminovk-6k4ljivb0o.app.codeanywhere.com',
     'sykorka75.eu.pythonanywhere.com',
-    
-    # může se přidat i jiné
 ]
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -57,7 +53,7 @@ INSTALLED_APPS = [
     'payments.apps.PaymentsConfig',
     'qrcode',
 
-    # Přidané vlastní aplikace
+    # Added custom applications
     "users",
     "events",
     "results",
@@ -73,7 +69,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -169,5 +164,3 @@ CSRF_TRUSTED_ORIGINS = [
 # Payments settings
 BANK_ACCOUNT = '1234567890/0100'
 PAYMENT_CURRENCY = 'CZK'
-
-
