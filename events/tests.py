@@ -4,6 +4,8 @@ from django.test import TestCase
 from django.utils import timezone
 
 from events.models import Event
+from users.models import User
+from registrations.models import Registration, Category
 
 
 class EventTests(TestCase):
@@ -130,3 +132,92 @@ class EventTests(TestCase):
         events = Event.objects.all()
         self.assertEqual(events[0], event2)
         self.assertEqual(events[1], event1)
+
+    def test_event_without_name_is_invalid(self):
+        """
+        Verify that Event model validation fails if the name_event field is
+        not populated.
+        """
+
+        event = Event(
+            date_event='2025-07-06',
+            description='Popis',
+            start_time='10:00',
+            distance=10,
+            country='Česká republika',
+            city='Praha',
+            region='hlavní město Praha',
+            race_type='Silnice',
+            organizer=self.user
+        )
+        with self.assertRaises(ValidationError):
+            event.full_clean()
+
+
+class RegistrationModelTest(TestCase):
+    """
+    Tests the validation of the Registration model.
+
+    Verifies that a valid registration cannot be created without a user or an
+    event.
+    """
+
+    def setUp(self):
+        """
+        Prepares common objects for all tests:
+
+        - user (self.user)
+        - event (self. Event)
+        """
+
+        self.user = User.objects.create(email='test@example.com')
+        self.event = Event.objects.create(
+            name_event='Test Event',
+            date_event='2025-07-06',
+            description='Testovací popis',
+            start_time='10:00',
+            distance=10,
+            country='Česká republika',
+            city='Praha',
+            region='hlavní město Praha',
+            race_type='Silnice',
+            organizer=self.user
+        )
+        self.category = Category.objects.create(name='Test kategorie')
+
+    def test_registration_without_user_is_invalid(self):
+        """
+        Verify that registration without an assigned user will throw a
+        ValidationError when calling full_clean().
+        """
+
+        registration = Registration(id_event=self.event)
+        with self.assertRaises(ValidationError):
+            registration.full_clean()
+
+    def test_registration_without_event_is_invalid(self):
+        """
+        Verify that registration without an associated event will throw a
+        ValidationError when calling full_clean().
+        """
+        
+        registration = Registration(id_user=self.user)
+        with self.assertRaises(ValidationError):
+            registration.full_clean()
+
+    def test_registration_unique_constraint(self):
+        """
+        Verify that a user cannot register for the same event twice.
+        """
+
+        Registration.objects.create(
+            id_user=self.user,
+            id_event=self.event,
+            category=self.category
+        )
+        with self.assertRaises(Exception):
+            Registration.objects.create(
+                id_user=self.user,
+                id_event=self.event,
+                category=self.category
+            )
